@@ -4,7 +4,6 @@ plugins {
     id "org.sonarqube" version "4.4.1.3373"
 }
 
-
 android {
     namespace 'se2.group3.gameoflife.frontend'
     compileSdk 34
@@ -70,4 +69,5 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    testRuntimeOnly libs.junit.vintage.engine
 }
