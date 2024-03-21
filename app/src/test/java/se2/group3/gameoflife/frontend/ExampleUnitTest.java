@@ -1,4 +1,4 @@
-package com.example.gameoflife.frontend;
+package se2.group3.gameoflife.frontend;
 
 import org.junit.Test;
 
