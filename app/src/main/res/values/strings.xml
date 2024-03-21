@@ -4,4 +4,5 @@
     <string name="enter_username">Enter username:</string>
     <string name="Username">Username</string>
     <string name="check_username">Check username</string>
+    <string name="contentDescriptionLogoBig">The picture shows the text "the Game of" and the word LIFE in colorful letters.</string>
 </resources>

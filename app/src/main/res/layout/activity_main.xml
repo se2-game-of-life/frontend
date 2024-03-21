@@ -11,6 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="373dp"
         android:layout_height="100dp"
+        android:contentDescription="@string/contentDescriptionLogoBig"
         android:src="@drawable/logoBig"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
