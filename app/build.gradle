@@ -6,11 +6,11 @@ plugins {
 
 
 android {
-    namespace 'com.example.gameoflife.frontend'
+    namespace 'se2.group3.gameoflife.frontend'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.gameoflife.frontend"
+        applicationId "se2.group3.gameoflife.frontend"
         minSdk 29
         targetSdk 34
         versionCode 1
