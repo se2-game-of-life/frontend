@@ -17,7 +17,14 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            library("activity", "androidx.activity:activity:1.2.3")
+            // Define other libraries here
+        }
+    }
 }
+
 
 rootProject.name = "frontend"
 include ':app'
