@@ -12,4 +12,10 @@ public class Client extends Thread{
     }
 
 
+
+    public String getResponse(){
+        return response;
+    }
+
+
 }
