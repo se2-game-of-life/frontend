@@ -66,6 +66,10 @@ sonar {
 dependencies {
     implementation libs.appcompat
     implementation libs.material
+    implementation libs.okhttp
+    implementation libs.stomp.protocol.android
+    implementation libs.rxjava
+    implementation libs.rxandroid
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
