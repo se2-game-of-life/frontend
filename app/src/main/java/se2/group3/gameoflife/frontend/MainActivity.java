@@ -11,7 +11,16 @@ import androidx.annotation.Nullable;
 
 import java.util.regex.Pattern;
 
+/**
+ * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
+ */
+
 public class MainActivity extends Activity {
+
+    /**
+     * Function of the button is defined.
+     * The player is prompted to choose a user name. This must consist of letters and can contain 0 or more digits at the end. If the user name is correct, the player is directed to the next screen. If the user name is incorrect, the player is asked to choose a new one.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
