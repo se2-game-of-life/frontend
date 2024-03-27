@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 
     /**
      * Function of the button is defined.
-     * The player is prompted to choose a user name. If the user name is correct, the player is directed to the next screen. If the user name is incorrect, the player is asked to choose a new one.
+     * The player is prompted to choose a user name. If the username is correct, the player is directed to the next screen. If the username is incorrect, the player is asked to choose a new one.
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
