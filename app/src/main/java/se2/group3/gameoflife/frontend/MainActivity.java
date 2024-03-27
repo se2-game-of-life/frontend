@@ -33,10 +33,11 @@ public class MainActivity extends Activity {
                 TextView user = findViewById(R.id.enterUsername);
                 String username = user.getText().toString();
                 String usernameRegex = "^[a-zA-Z]+[0-9]*$";
+                TextView textUser = findViewById(R.id.textUsername);
                 if (Pattern.matches(usernameRegex, username)){
+                    textUser.setText("Correct username.");
                     goToNextActivity();
                 } else{
-                    TextView textUser = findViewById(R.id.textUsername);
                     textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
                 }
             }
