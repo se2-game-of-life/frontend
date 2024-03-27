@@ -32,9 +32,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 TextView user = findViewById(R.id.enterUsername);
                 String username = user.getText().toString();
-                String usernameRegex = "^[a-zA-Z]+[0-9]*$";
                 TextView textUser = findViewById(R.id.textUsername);
-                if (Pattern.matches(usernameRegex, username)){
+                if (checkUsername(username)){
                     textUser.setText("Correct username.");
                     goToNextActivity();
                 } else{
@@ -42,6 +41,11 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    public boolean checkUsername(String username){
+        String usernameRegex = "^[a-zA-Z]+[0-9]*$";
+        return Pattern.matches(usernameRegex, username);
     }
 
     /**
