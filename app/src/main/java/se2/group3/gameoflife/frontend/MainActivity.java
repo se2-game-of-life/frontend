@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 
     /**
      * Function of the button is defined.
-     * The player is prompted to choose a user name. This must consist of letters and can contain 0 or more digits at the end. If the user name is correct, the player is directed to the next screen. If the user name is incorrect, the player is asked to choose a new one.
+     * The player is prompted to choose a user name. If the user name is correct, the player is directed to the next screen. If the user name is incorrect, the player is asked to choose a new one.
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +43,10 @@ public class MainActivity extends Activity {
         });
     }
 
+    /**
+     * method to check if username is valid
+     * The username must consist of letters and can contain 0 or more digits at the end.
+     */
     public boolean checkUsername(String username){
         String usernameRegex = "^[a-zA-Z]+[0-9]*$";
         return Pattern.matches(usernameRegex, username);
