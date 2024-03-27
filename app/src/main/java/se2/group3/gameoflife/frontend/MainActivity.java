@@ -32,12 +32,12 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 TextView user = findViewById(R.id.enterUsername);
                 String username = user.getText().toString();
-                String usernameRegex = "^[a-zA-Z0-9]+$";
+                String usernameRegex = "^[a-zA-Z]+[0-9]*$";
                 if (Pattern.matches(usernameRegex, username)){
                     goToNextActivity();
                 } else{
                     TextView textUser = findViewById(R.id.textUsername);
-                    textUser.setText("Please choose a username consisting only of letters and digits.");
+                    textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
                 }
             }
         });
