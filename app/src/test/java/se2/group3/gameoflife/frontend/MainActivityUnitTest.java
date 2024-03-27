@@ -24,6 +24,11 @@ public class MainActivityUnitTest {
         assertTrue(activity.checkUsername(name));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"", "01", "70", "!", ":)", "Ana!", "0Jo"})
+    public void testInCorrectUsernames(String name) {
+        assertFalse(activity.checkUsername(name));
+    }
 
     @AfterEach
     public void breakDown(){
