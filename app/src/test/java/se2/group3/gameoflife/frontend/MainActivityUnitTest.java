@@ -18,6 +18,12 @@ public class MainActivityUnitTest {
         activity = new MainActivity();
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"Johanna01", "Thomas", "Flo007", "Anastasiia3", "Aya"})
+    public void testCorrectUsernames(String name){
+        assertTrue(activity.checkUsername(name));
+    }
+
 
     @AfterEach
     public void breakDown(){
