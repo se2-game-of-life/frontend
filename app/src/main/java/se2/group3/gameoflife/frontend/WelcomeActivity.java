@@ -34,7 +34,6 @@ public class WelcomeActivity extends Activity {
                 String username = user.getText().toString();
                 TextView textUser = findViewById(R.id.textUsername);
                 if (checkUsername(username)){
-                    textUser.setText("Correct username.");
                     goToNextActivity();
                 } else{
                     textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
