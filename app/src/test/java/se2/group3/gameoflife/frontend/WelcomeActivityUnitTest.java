@@ -9,13 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class MainActivityUnitTest {
-    private MainActivity activity;
+public class WelcomeActivityUnitTest {
+    private WelcomeActivity activity;
 
 
     @BeforeEach
     public void setUp() {
-        activity = new MainActivity();
+        activity = new WelcomeActivity();
     }
 
     @ParameterizedTest

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
  */
 
-public class MainActivity extends Activity {
+public class WelcomeActivity extends Activity {
 
     /**
      * Function of the button is defined.
@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_welcome);
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
