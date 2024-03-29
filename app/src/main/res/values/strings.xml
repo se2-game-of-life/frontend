@@ -5,4 +5,6 @@
     <string name="Username">Username</string>
     <string name="check_username">Check username</string>
     <string name="contentDescriptionLogoBig">The picture shows the text "the Game of" and the word LIFE in colorful letters.</string>
+    <string name="createGame">CREATE A GAME</string>
+    <string name="joinGame">JOIN A GAME</string>
 </resources>
