@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
      * Is used to change the activity
      */
     public void goToNextActivity(){
-        Intent intent = new Intent(this, MainActivity2.class);
+        Intent intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
     }
 
