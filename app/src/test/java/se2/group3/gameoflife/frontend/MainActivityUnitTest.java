@@ -1,21 +1,21 @@
 package se2.group3.gameoflife.frontend;
 
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class WelcomeActivityUnitTest {
-    private WelcomeActivity activity;
+public class MainActivityUnitTest {
+    private MainActivity activity;
 
 
     @BeforeEach
     public void setUp() {
-        activity = new WelcomeActivity();
+        activity = new MainActivity();
     }
 
     @ParameterizedTest

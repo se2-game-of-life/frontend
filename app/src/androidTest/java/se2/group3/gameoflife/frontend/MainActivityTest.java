@@ -35,11 +35,11 @@ import org.junit.runner.RunWith;
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class WelcomeActivityTest {
+public class MainActivityTest {
 
     @Rule
-    public ActivityScenarioRule<WelcomeActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(WelcomeActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void welcomeActivityTest() {
