@@ -1,4 +1,4 @@
-package se2.group3.gameoflife.frontend;
+package se2.group3.gameoflife.frontend.activities;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import se2.group3.gameoflife.frontend.R;
 
 public class LobbyActivity extends AppCompatActivity {
 

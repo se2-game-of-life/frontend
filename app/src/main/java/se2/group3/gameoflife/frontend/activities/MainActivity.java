@@ -1,4 +1,4 @@
-package se2.group3.gameoflife.frontend;
+package se2.group3.gameoflife.frontend.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import java.util.regex.Pattern;
+
+import se2.group3.gameoflife.frontend.R;
 
 /**
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.

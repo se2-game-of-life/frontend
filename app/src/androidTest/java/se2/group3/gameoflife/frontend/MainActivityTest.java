@@ -29,6 +29,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import se2.group3.gameoflife.frontend.activities.MainActivity;
+
 /**
  * This test serves as a UI test to check whether the desired message appears on the screen if the user name is entered incorrectly.
  * The example used: Flo!
