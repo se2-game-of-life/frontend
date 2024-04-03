@@ -10,9 +10,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.WebSocketClient;
 
 /**
@@ -83,6 +89,24 @@ public class MainActivity extends Activity {
         // TODO handle received messages
         Log.d("Network", message);
         textUser.setText(message);
+    }
+
+    /**
+     * This method is used to convert a player object into a JSON string that
+     * can later be communicated to the server.
+     */
+    private void createJSON(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        PlayerDTO player = new PlayerDTO(username);
+        try{
+            player_JSON = objectMapper.writeValueAsString(player);
+        } catch (StreamWriteException sw) {
+            sw.printStackTrace();
+        } catch (DatabindException db) {
+            db.printStackTrace();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
     }
 
 
