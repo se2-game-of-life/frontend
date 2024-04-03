@@ -31,6 +31,8 @@ public class MainActivity extends Activity {
     TextView textUser;
     String username = null;
     String player_JSON = null;
+    ObjectMapper objectMapper;
+    PlayerDTO player;
 
     /**
      * Function of the button is defined.
@@ -88,9 +90,9 @@ public class MainActivity extends Activity {
 
 
     private void messageReceivedFromServer(String message) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         try {
-            PlayerDTO player = objectMapper.readValue(message, PlayerDTO.class);
+            player = objectMapper.readValue(message, PlayerDTO.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -104,8 +106,8 @@ public class MainActivity extends Activity {
      * can later be communicated to the server.
      */
     private void createJSON(){
-        ObjectMapper objectMapper = new ObjectMapper();
-        PlayerDTO player = new PlayerDTO(username);
+        objectMapper = new ObjectMapper();
+        player = new PlayerDTO(username);
         try{
             player_JSON = objectMapper.writeValueAsString(player);
         } catch (StreamWriteException sw) {
