@@ -70,7 +70,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.okhttp
-    implementation libs.json.simple
+    implementation libs.jackson.databind
     testImplementation libs.junit
     testImplementation libs.junit.jupiter
     androidTestImplementation libs.ext.junit
