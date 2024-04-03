@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,12 +13,17 @@ import androidx.annotation.Nullable;
 import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.networking.WebSocketClient;
 
 /**
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
  */
 
 public class MainActivity extends Activity {
+    WebSocketClient networkHandler;
+    TextView textUser;
+    String username = null;
+    String player_JSON = null;
 
     /**
      * Function of the button is defined.
@@ -33,8 +39,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 TextView user = findViewById(R.id.enterUsername);
-                String username = user.getText().toString();
-                TextView textUser = findViewById(R.id.textUsername);
+                username = user.getText().toString();
+                textUser = findViewById(R.id.textUsername);
                 if (checkUsername(username)){
                     goToNextActivity();
                 } else{
@@ -59,6 +65,24 @@ public class MainActivity extends Activity {
     public void goToNextActivity(){
         Intent intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Code from Demo App to establish communication
+     */
+    private void connectToWebSocketServer() {
+        // register a handler for received messages when setting up the connection
+        networkHandler.connectToServer(this::messageReceivedFromServer);
+    }
+
+    private void sendMessage() {
+        networkHandler.sendMessageToServer("test message");
+    }
+
+    private void messageReceivedFromServer(String message) {
+        // TODO handle received messages
+        Log.d("Network", message);
+        textUser.setText(message);
     }
 
 
