@@ -82,8 +82,9 @@ public class MainActivity extends Activity {
     }
 
     private void sendMessage() {
-        networkHandler.sendMessageToServer("test message");
+        networkHandler.sendMessageToServer(player_JSON);
     }
+
 
     private void messageReceivedFromServer(String message) {
         // TODO handle received messages
