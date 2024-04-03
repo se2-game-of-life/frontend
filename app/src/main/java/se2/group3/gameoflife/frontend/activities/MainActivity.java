@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -87,9 +88,15 @@ public class MainActivity extends Activity {
 
 
     private void messageReceivedFromServer(String message) {
-        // TODO handle received messages
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            PlayerDTO player = objectMapper.readValue(message, PlayerDTO.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         Log.d("Network", message);
-        textUser.setText(message);
+        //textUser.setText(message);
     }
 
     /**
