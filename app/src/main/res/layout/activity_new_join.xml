@@ -38,4 +38,34 @@
         android:layout_marginStart="510dp"
         android:layout_marginTop="60dp"/>
 
+    <Button
+        android:id="@+id/buttonCreateNewGame"
+        android:layout_width="238dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="300dp"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="CREATE A GAME"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonJoinGame"
+        android:layout_width="238dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="524dp"
+        android:layout_marginTop="300dp"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="JOIN A GAME"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
