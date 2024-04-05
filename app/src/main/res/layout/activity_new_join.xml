@@ -8,4 +8,14 @@
     tools:context=".activities.NewJoin"
     android:background="@drawable/background">
 
+    <ImageView
+        android:id="@+id/buttonReturnToUser"
+        android:layout_width="48dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/button_return"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
