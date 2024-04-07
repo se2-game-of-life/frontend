@@ -22,7 +22,7 @@ import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
 public class LobbyActivity extends AppCompatActivity {
 
-    private final static String TAG = "LobbyActivity";
+    private static final String TAG = "LobbyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
