@@ -22,34 +22,42 @@
         android:id="@+id/imageNewGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="80dp"
         android:src="@drawable/new_gaame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageJoinGame"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageJoinGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/join_gaame"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="510dp"
-        android:layout_marginTop="60dp"/>
 
     <Button
         android:id="@+id/buttonCreateNewGame"
         android:layout_width="238dp"
         android:layout_height="46dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginStart="92dp"
         android:background="@drawable/oval_button"
         android:fontFamily="@font/inter_extra_bold"
         android:fontWeight="800"
         android:text="CREATE A GAME"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonJoinGame"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.841" />
+
+    <ImageView
+        android:id="@+id/imageJoinGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="404dp"
+        android:layout_marginEnd="80dp"
+        android:src="@drawable/join_gaame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,15 +65,19 @@
         android:id="@+id/buttonJoinGame"
         android:layout_width="238dp"
         android:layout_height="46dp"
-        android:layout_marginStart="524dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginStart="420dp"
+        android:layout_marginEnd="88dp"
         android:background="@drawable/oval_button"
         android:fontFamily="@font/inter_extra_bold"
         android:fontWeight="800"
         android:text="JOIN A GAME"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.841" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
