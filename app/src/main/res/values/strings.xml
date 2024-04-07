@@ -5,6 +5,16 @@
     <string name="Username">Username</string>
     <string name="check_username">Check username</string>
     <string name="contentDescriptionLogoBig">The picture shows the text "the Game of" and the word LIFE in colorful letters.</string>
-    <string name="createGame">CREATE A GAME</string>
-    <string name="joinGame">JOIN A GAME</string>
+    <string name="createGame">CREATE GAME</string>
+    <string name="joinGame">JOIN GAME</string>
+    <string name="enterYourLobbyCode">ENTER YOUR LOBBY CODE</string>
+    <string name="line">----</string>
+    <string name="go">GO!</string>
+    <string name="X">X</string>
+    <string name="start">START</string>
+    <string name="ID0000">ID: 0000</string>
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+    <string name="player3">Player 3</string>
+    <string name="player4">Player 4</string>
 </resources>

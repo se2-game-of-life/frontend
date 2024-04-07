@@ -48,7 +48,7 @@
                 android:fontStyle="normal"
                 android:fontWeight="800"
                 android:gravity="center_horizontal"
-                android:hint="----"
+                android:hint="@string/line"
                 android:inputType="text"
                 android:maxLength="10"
                 android:textColor="#000000"
@@ -65,7 +65,7 @@
                 android:background="@drawable/button_background"
                 android:fontFamily="@font/inter_extra_bold"
                 android:fontWeight="800"
-                android:text="GO!"
+                android:text="@string/go"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp" />
 
@@ -85,7 +85,7 @@
             android:layout_marginBottom="291dp"
             android:background="@drawable/x_button_background"
             android:fontFamily="@font/inter_extra_bold"
-            android:text="X"
+            android:text="@string/X"
             android:textColor="#3355A5"
             android:textSize="30sp"
             android:textStyle="bold" />
