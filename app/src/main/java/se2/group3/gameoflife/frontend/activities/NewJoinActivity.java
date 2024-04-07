@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import se2.group3.gameoflife.frontend.R;
 
-public class NewJoin extends AppCompatActivity {
+public class NewJoinActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +28,14 @@ public class NewJoin extends AppCompatActivity {
         findViewById(R.id.buttonReturnToUser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewJoin.this, MainActivity.class);
+                Intent intent = new Intent(NewJoinActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewJoin.this, StartGame.class);
+                Intent intent = new Intent(NewJoinActivity.this, StartGameActivity.class);
                 startActivity(intent);
             }
         });

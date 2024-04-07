@@ -18,13 +18,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.PopupWindow"
+            android:name=".activities.PopupWindowActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.StartGame"
+            android:name=".activities.StartGameActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.NewJoin"
+            android:name=".activities.NewJoinActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"

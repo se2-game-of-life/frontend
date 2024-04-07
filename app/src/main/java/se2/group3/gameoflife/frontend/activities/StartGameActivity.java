@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import se2.group3.gameoflife.frontend.R;
 
-public class StartGame extends AppCompatActivity {
+public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class StartGame extends AppCompatActivity {
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartGame.this, NewJoin.class);
+                Intent intent = new Intent(StartGameActivity.this, NewJoinActivity.class);
                 startActivity(intent);
             }
         });

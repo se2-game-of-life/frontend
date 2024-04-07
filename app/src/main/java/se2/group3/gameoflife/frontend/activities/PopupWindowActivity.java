@@ -20,7 +20,7 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ResponseHandler;
 import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
-public class PopupWindow extends AppCompatActivity {
+public class PopupWindowActivity extends AppCompatActivity {
 
     private static final String TAG = "LobbyActivity";
 
