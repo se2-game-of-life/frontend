@@ -20,7 +20,7 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ResponseHandler;
 import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
-public class LobbyActivity extends AppCompatActivity {
+public class PopupWindow extends AppCompatActivity {
 
     private static final String TAG = "LobbyActivity";
 
@@ -28,7 +28,7 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_lobby);
+        setContentView(R.layout.activity_popup_window);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.StartGame"
+    android:background="@drawable/background">
+
+    <ImageView
+        android:id="@+id/buttonReturnToLobby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_return"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/player1Button"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="-4dp"
+        android:background="@drawable/button_background_player1"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="PLAYER 1"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonReturnToLobby" />
+
+    <Button
+        android:id="@+id/player2Button"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_background_player2"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="PLAYER 2"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.181"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player1Button" />
+
+    <Button
+        android:id="@+id/player3Button"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_background_player3"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="PLAYER 3"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player2Button" />
+
+    <Button
+        android:id="@+id/player4Button"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_background_player4"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="PLAYER 4"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.181"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player3Button" />
+
+    <Button
+        android:id="@+id/StartButton"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="268dp"
+        android:background="@drawable/button_background_start"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="START"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.833"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="426dp"
+        android:layout_height="197dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
