@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +56,16 @@ public class LobbyActivity extends AppCompatActivity {
         findViewById(R.id.buttonJoinGame).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                joinLobby(0L, new PlayerDTO("Test Player 2 Name"));
+                setContentView(R.layout.activity_join_game);
+                findViewById(R.id.GObutton).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText lobbyID = findViewById(R.id.lobbyCodeEntry);
+                        joinLobby(0L, new PlayerDTO("Test Player 2 Name"));
+                        Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
     }
