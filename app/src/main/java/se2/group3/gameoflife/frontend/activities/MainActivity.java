@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
     private static WebsocketClient networkHandler;
     TextView textUser;
     String username = null;
-    String player_JSON = null;
+    String playerJSON = null;
     ObjectMapper objectMapper;
     PlayerDTO player;
 
