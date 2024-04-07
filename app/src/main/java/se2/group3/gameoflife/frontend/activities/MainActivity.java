@@ -9,12 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
