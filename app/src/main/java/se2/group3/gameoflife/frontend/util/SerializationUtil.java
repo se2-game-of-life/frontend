@@ -14,23 +14,14 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 public class SerializationUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String TAG = "Serialization";
+    private static final String TAG = "Networking";
 
-    public static String toJsonString(Object object){
-        try{
-             return objectMapper.writeValueAsString(object);
-        } catch (IOException e) {
-            Log.e(TAG, "Error mapping object to json string!", e.getCause());
-            return null;
-        }
+    public static String toJsonString(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
+
     }
 
-    public static <T> Object toObject(String message, Class<T> messageType) {
-        try {
-            return objectMapper.readValue(message, messageType);
-        } catch (JsonProcessingException e) {
-            Log.e(TAG, "Error deserializing string to java object!", e.getCause());
-            return null;
-        }
+    public static <T> Object toObject(String message, Class<T> messageType) throws JsonProcessingException {
+        return objectMapper.readValue(message, messageType);
     }
 }

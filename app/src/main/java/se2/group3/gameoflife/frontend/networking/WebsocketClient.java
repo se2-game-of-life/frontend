@@ -4,6 +4,8 @@ package se2.group3.gameoflife.frontend.networking;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -46,7 +48,7 @@ public class WebsocketClient {
                 });
     }
  
-    public Disposable send(String destination, Object payload) {
+    public Disposable send(String destination, Object payload) throws JsonProcessingException {
         return stompClient.send(destination, SerializationUtil.toJsonString(payload))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
