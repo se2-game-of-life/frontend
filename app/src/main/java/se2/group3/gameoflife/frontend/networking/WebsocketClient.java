@@ -29,9 +29,15 @@ public class WebsocketClient {
         Log.d(TAG, "STOMP client disconnected!");
     }
 
-    public void connect() {
+    public void connect(String uuid) {
         stompClient.connect();
         Log.d(TAG, "STOMP client connected!");
+
+        try {
+            send("/topic/setIdentifier", uuid);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Disposable subscribe(String topic, ResponseHandler handler) {
