@@ -1,13 +1,18 @@
 package se2.group3.gameoflife.frontend.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlayerDTO {
-    @JsonSerialize
-    private final String name;
+    private final String playerName;
 
-    public PlayerDTO(String name) {
-        this.name = name;
+    @JsonCreator
+    public PlayerDTO(@JsonProperty("playerName") String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 }
+

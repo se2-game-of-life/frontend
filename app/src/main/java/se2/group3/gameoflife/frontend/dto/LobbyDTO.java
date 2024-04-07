@@ -1,26 +1,25 @@
 package se2.group3.gameoflife.frontend.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LobbyDTO {
-
-    @JsonSerialize
     private long lobbyID;
 
-    @JsonSerialize
     private PlayerDTO host;
 
-    public LobbyDTO(long lobbyID, PlayerDTO host) {
+    @JsonCreator
+    public LobbyDTO(@JsonProperty("lobbyID") long lobbyID, @JsonProperty("host") PlayerDTO host) {
         this.lobbyID = lobbyID;
         this.host = host;
     }
 
-    public void setLobbyID(long lobbyID) {
-        this.lobbyID = lobbyID;
+    public long getLobbyID() {
+        return this.lobbyID;
     }
 
-    public void setHost(PlayerDTO host) {
-        this.host = host;
+    public PlayerDTO getHost() {
+        return this.host;
     }
 
 }
