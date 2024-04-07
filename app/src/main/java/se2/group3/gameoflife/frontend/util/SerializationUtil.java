@@ -9,6 +9,10 @@ public class SerializationUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final String TAG = "Networking";
 
+    private SerializationUtil(){
+        throw new UnsupportedOperationException();
+    }
+
     public static String toJsonString(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
 
