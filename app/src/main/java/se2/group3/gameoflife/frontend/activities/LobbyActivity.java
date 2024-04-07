@@ -53,6 +53,10 @@ public class LobbyActivity extends AppCompatActivity {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
                 }
             }
+
+            /**
+             * Error handling yet missing. Will be implemented in the next sprint.
+             */
             @Override
             public void handleError() {}
         };
@@ -77,6 +81,10 @@ public class LobbyActivity extends AppCompatActivity {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
                 }
             }
+
+            /**
+             *Error handling yet missing. Will be implemented in the next sprint.
+             */
             @Override
             public void handleError() {}
         };
