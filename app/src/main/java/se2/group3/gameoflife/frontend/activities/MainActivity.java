@@ -20,14 +20,15 @@ import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.networking.WebSocketClient;
+import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 /**
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
  */
 
 public class MainActivity extends Activity {
-    WebSocketClient networkHandler;
+
+    private static WebsocketClient networkHandler;
     TextView textUser;
     String username = null;
     String player_JSON = null;
@@ -42,6 +43,10 @@ public class MainActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //connect to the server
+        networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
+        networkHandler.connect();
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
@@ -76,48 +81,7 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    /**
-     * Code from Demo App to establish communication
-     */
-    private void connectToWebSocketServer() {
-        // register a handler for received messages when setting up the connection
-        networkHandler.connectToServer(this::messageReceivedFromServer);
+    public static WebsocketClient getNetworkHandler() {
+        return networkHandler;
     }
-
-    private void sendMessage() {
-        networkHandler.sendMessageToServer(player_JSON);
-    }
-
-
-    private void messageReceivedFromServer(String message) {
-        objectMapper = new ObjectMapper();
-        try {
-            player = objectMapper.readValue(message, PlayerDTO.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("Network", message);
-        //textUser.setText(message);
-    }
-
-    /**
-     * This method is used to convert a player object into a JSON string that
-     * can later be communicated to the server.
-     */
-    private void createJSON(){
-        objectMapper = new ObjectMapper();
-        player = new PlayerDTO(username);
-        try{
-            player_JSON = objectMapper.writeValueAsString(player);
-        } catch (StreamWriteException sw) {
-            sw.printStackTrace();
-        } catch (DatabindException db) {
-            db.printStackTrace();
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-    }
-
-
 }
