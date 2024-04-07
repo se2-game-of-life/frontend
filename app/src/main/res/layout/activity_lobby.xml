@@ -19,36 +19,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageNewGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:src="@drawable/new_gaame"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageJoinGame"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonCreateNewGame"
-        android:layout_width="238dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="92dp"
-        android:background="@drawable/oval_button"
-        android:fontFamily="@font/inter_extra_bold"
-        android:fontWeight="800"
-        android:text="CREATE A GAME"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonJoinGame"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.841" />
-
-    <ImageView
         android:id="@+id/imageJoinGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,27 +27,56 @@
         android:src="@drawable/join_gaame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.516" />
+
+    <ImageView
+        android:id="@+id/imageNewGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/new_gaame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.516" />
+
+    <Button
+        android:id="@+id/buttonCreateNewGame"
+        android:layout_width="238dp"
+        android:layout_height="46dp"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="CREATE A GAME"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageNewGame"
+        app:layout_constraintEnd_toEndOf="@+id/imageNewGame"
+        app:layout_constraintStart_toStartOf="@+id/imageNewGame"
+        app:layout_constraintTop_toTopOf="@+id/imageNewGame"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/buttonJoinGame"
         android:layout_width="238dp"
         android:layout_height="46dp"
-        android:layout_marginStart="420dp"
-        android:layout_marginEnd="88dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
         android:background="@drawable/oval_button"
         android:fontFamily="@font/inter_extra_bold"
         android:fontWeight="800"
         android:text="JOIN A GAME"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.841" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageJoinGame"
+        app:layout_constraintEnd_toEndOf="@+id/imageJoinGame"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imageJoinGame"
+        app:layout_constraintTop_toTopOf="@+id/imageJoinGame"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
