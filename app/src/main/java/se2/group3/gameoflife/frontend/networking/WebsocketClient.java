@@ -1,7 +1,6 @@
 package se2.group3.gameoflife.frontend.networking;
 
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
