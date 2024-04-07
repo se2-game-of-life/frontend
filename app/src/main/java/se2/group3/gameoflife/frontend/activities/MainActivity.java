@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
@@ -44,9 +45,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String uuid = UUID.randomUUID().toString();
+
         //connect to the server
         networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
-        networkHandler.connect();
+        networkHandler.connect(uuid);
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
