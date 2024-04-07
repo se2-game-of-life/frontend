@@ -60,6 +60,7 @@ sonar {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property "sonar.coverage.exclusions", "src/main/java/se2/group3/gameoflife/frontend/activities/**"
     }
 }
 
@@ -70,7 +71,11 @@ dependencies {
     implementation libs.stomp.protocol.android
     implementation libs.rxjava
     implementation libs.rxandroid
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.jackson.databind
     testImplementation libs.junit
+    testImplementation libs.junit.jupiter
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     testRuntimeOnly libs.junit.vintage.engine
