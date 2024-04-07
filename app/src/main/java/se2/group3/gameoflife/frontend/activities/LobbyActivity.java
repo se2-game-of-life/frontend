@@ -1,8 +1,9 @@
 package se2.group3.gameoflife.frontend.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +21,7 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ResponseHandler;
 import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
-public class PopupWindowActivity extends AppCompatActivity {
+public class LobbyActivity extends AppCompatActivity {
 
     private static final String TAG = "LobbyActivity";
 
@@ -28,18 +29,35 @@ public class PopupWindowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_popup_window);
+        setContentView(R.layout.activity_lobby);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        Button createLobbyButton = findViewById(R.id.createButton);
-        createLobbyButton.setOnClickListener(v -> createLobby(new PlayerDTO("Test Player Name")));
+        findViewById(R.id.buttonReturnToUser).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.buttonCreateNewGame).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLobby(new PlayerDTO("Test Player Name"));
+                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        Button joinGameButton = findViewById(R.id.joinButton);
-        joinGameButton.setOnClickListener(v -> joinLobby(0L, new PlayerDTO("Test Player 2 Name")));
+        findViewById(R.id.buttonJoinGame).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinLobby(0L, new PlayerDTO("Test Player 2 Name"));
+            }
+        });
     }
 
     private void joinLobby(long lobbyID, PlayerDTO player) {

@@ -28,7 +28,7 @@ public class StartGameActivity extends AppCompatActivity {
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartGameActivity.this, NewJoinActivity.class);
+                Intent intent = new Intent(StartGameActivity.this, LobbyActivity.class);
                 startActivity(intent);
             }
         });
