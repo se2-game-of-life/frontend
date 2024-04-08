@@ -82,4 +82,8 @@ public class MainActivity extends Activity {
     public static WebsocketClient getNetworkHandler() {
         return networkHandler;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
