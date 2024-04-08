@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,14 +61,14 @@ public class LobbyActivity extends AppCompatActivity {
                 findViewById(R.id.GObutton).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
-//                        String lobbyIDString = lobbyIDText.toString();
-//                        if (!lobbyIDString.isEmpty()){
-//                            Long lobbyID = Long.getLong(lobbyIDString);
-                            joinLobby(1L, new PlayerDTO(MainActivity.getUsername()));
+                          EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
+                          String lobbyIDString = lobbyIDText.getText().toString();
+                          if (!lobbyIDString.isEmpty()){
+                            Long lobbyID = Long.getLong(lobbyIDString);
+                            joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
                             Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
                             startActivity(intent);
-//                        }
+                        }
                     }
                 });
             }
