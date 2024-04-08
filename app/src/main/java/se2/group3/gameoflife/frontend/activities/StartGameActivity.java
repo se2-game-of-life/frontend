@@ -25,7 +25,6 @@ import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
 public class StartGameActivity extends AppCompatActivity {
     private static final String TAG = "StartGameActivity";
-    private boolean waiting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class StartGameActivity extends AppCompatActivity {
         findViewById(R.id.StartButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                waiting = false;
+
                 //todo: change to gameplay activity
             }
         });
