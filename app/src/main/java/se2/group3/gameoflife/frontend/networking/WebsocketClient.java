@@ -1,6 +1,8 @@
 package se2.group3.gameoflife.frontend.networking;
 
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.uuid;
+
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,12 +31,12 @@ public class WebsocketClient {
         Log.d(TAG, "STOMP client disconnected!");
     }
 
-    public void connect(String uuid) {
+    public void connect() {
         stompClient.connect();
         Log.d(TAG, "STOMP client connected!");
 
         try {
-            send("/topic/setIdentifier", uuid);
+            send("/app/setIdentifier", uuid);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

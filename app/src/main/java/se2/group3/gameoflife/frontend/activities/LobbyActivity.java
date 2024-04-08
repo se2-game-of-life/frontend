@@ -24,7 +24,7 @@ import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
 public class LobbyActivity extends AppCompatActivity {
 
-    private static final String TAG = "LobbyActivity";
+    private static final String TAG = "Networking";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class LobbyActivity extends AppCompatActivity {
             public void handleError() {}
         };
 
-        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies", lobbyResponseHandler);
+        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies/" + MainActivity.uuid, lobbyResponseHandler);
 
         try {
             Disposable sendSubscription = MainActivity.getNetworkHandler().send("/app/lobby/create", player);

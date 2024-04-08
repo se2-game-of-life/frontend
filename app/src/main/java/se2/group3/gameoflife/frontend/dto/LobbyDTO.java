@@ -4,14 +4,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LobbyDTO {
-    private long lobbyID;
 
-    private PlayerDTO host;
+    private final long lobbyID;
+    private final PlayerDTO host;
+    private final PlayerDTO[] players;
 
     @JsonCreator
-    public LobbyDTO(@JsonProperty("lobbyID") long lobbyID, @JsonProperty("host") PlayerDTO host) {
+    public LobbyDTO(@JsonProperty("lobbyID") long lobbyID, @JsonProperty("host") PlayerDTO host, @JsonProperty("players") PlayerDTO[] players) {
         this.lobbyID = lobbyID;
         this.host = host;
+        this.players = players;
     }
 
     public long getLobbyID() {
@@ -19,7 +21,10 @@ public class LobbyDTO {
     }
 
     public PlayerDTO getHost() {
-        return this.host;
+        return host;
     }
 
+    public PlayerDTO[] getPlayers() {
+        return players;
+    }
 }
