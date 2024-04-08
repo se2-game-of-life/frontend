@@ -25,6 +25,7 @@ import se2.group3.gameoflife.frontend.util.SerializationUtil;
 public class LobbyActivity extends AppCompatActivity {
 
     private static final String TAG = "Networking";
+    private static LobbyDTO lobbyDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void handleMessage(String msg) {
                 try {
-                    LobbyDTO lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
+                    lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
                     Log.d(TAG, "Lobby: " + lobbyDTO.getHost());
                 } catch (JsonProcessingException e) {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
@@ -107,7 +108,7 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void handleMessage(String msg) {
                 try {
-                    LobbyDTO lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
+                    lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
                     Log.d(TAG, "Lobby: " + lobbyDTO.getLobbyID());
                 } catch (JsonProcessingException e) {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
@@ -128,5 +129,9 @@ public class LobbyActivity extends AppCompatActivity {
         } catch (JsonProcessingException e) {
             Log.e(TAG, "Error converting PlayerDTO into json string!", e.getCause());
         }
+    }
+
+    public static LobbyDTO getLobbyDTO() {
+        return lobbyDTO;
     }
 }

@@ -35,28 +35,9 @@ public class StartGameActivity extends AppCompatActivity {
             return insets;
         });
 
-        ResponseHandler getLobbyIDResponseHandler = new ResponseHandler() {
-            @Override
-            public void handleMessage(String msg) {
-                try {
-                    LobbyDTO lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
-                    Log.d(TAG, "Lobby: " + lobbyDTO.getLobbyID());
-                    TextView lobbyID = findViewById(R.id.lobbyID);
-                    lobbyID.setText("ID: " + lobbyDTO.getLobbyID());
-                } catch (JsonProcessingException e) {
-                    Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
-                }
-            }
-
-            /**
-             * Error handling yet missing. Will be implemented in the next sprint.
-             */
-            @Override
-            public void handleError() {}
-        };
-
-        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies", getLobbyIDResponseHandler);
-
+        TextView lobbyID = findViewById(R.id.lobbyID);
+        LobbyDTO lobbyDTO = LobbyActivity.getLobbyDTO();
+        lobbyID.setText("ID: " + lobbyDTO.getLobbyID());
 
 
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(new View.OnClickListener() {
