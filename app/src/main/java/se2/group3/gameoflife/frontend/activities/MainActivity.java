@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
     private static WebsocketClient networkHandler;
     public static String uuid = UUID.randomUUID().toString();
     TextView textUser;
-    String username = null;
+    static String username = null;
     String playerJSON = null;
     ObjectMapper objectMapper;
     PlayerDTO player;
