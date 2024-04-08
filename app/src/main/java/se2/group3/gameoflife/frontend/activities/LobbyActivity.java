@@ -65,9 +65,11 @@ public class LobbyActivity extends AppCompatActivity {
                           String lobbyIDString = lobbyIDText.getText().toString();
                           if (!lobbyIDString.isEmpty()){
                             Long lobbyID = Long.getLong(lobbyIDString);
-                            joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
-                            Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                            startActivity(intent);
+                            if (lobbyID != null){
+                                joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
+                                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                                startActivity(intent);
+                            }
                         }
                     }
                 });
