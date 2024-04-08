@@ -117,10 +117,7 @@ public class LobbyActivity extends AppCompatActivity {
             public void handleError() {}
         };
 
-        //one of these works
-        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobby/" + MainActivity.uuid, lobbyResponseHandler);
-        Disposable topicSubscription1 = MainActivity.getNetworkHandler().subscribe("/user/" + MainActivity.uuid + "/topic/lobbies", lobbyResponseHandler
-        );
+        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies/" + MainActivity.uuid, lobbyResponseHandler);
 
         try {
             Disposable sendSubscription = MainActivity.getNetworkHandler().send("/app/lobby/create", player);
