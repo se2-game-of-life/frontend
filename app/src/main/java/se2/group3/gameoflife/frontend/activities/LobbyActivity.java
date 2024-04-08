@@ -64,12 +64,10 @@ public class LobbyActivity extends AppCompatActivity {
                           EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
                           String lobbyIDString = lobbyIDText.getText().toString();
                           if (!lobbyIDString.isEmpty()){
-                            Long lobbyID = Long.getLong(lobbyIDString);
-                            if (lobbyID != null){
-                                joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
-                                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                                startActivity(intent);
-                            }
+                            long lobbyID = Long.parseLong(lobbyIDString);
+                            joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
+                            Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -96,7 +94,7 @@ public class LobbyActivity extends AppCompatActivity {
             public void handleError() {}
         };
 
-        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies", lobbyJoinResponseHandler);
+        Disposable topicSubscription = MainActivity.getNetworkHandler().subscribe("/topic/lobbies/" + lobbyID, lobbyJoinResponseHandler);
 
         try {
             Disposable sendSubscription = MainActivity.getNetworkHandler().send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player));
