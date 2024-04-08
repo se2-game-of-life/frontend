@@ -60,10 +60,14 @@ public class LobbyActivity extends AppCompatActivity {
                 findViewById(R.id.GObutton).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText lobbyID = findViewById(R.id.lobbyCodeEntry);
-                        joinLobby(0L, new PlayerDTO("Test Player 2 Name"));
-                        Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                        startActivity(intent);
+                        EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
+                        String lobbyIDString = lobbyIDText.toString();
+                        if (!lobbyIDString.isEmpty()){
+                            Long lobbyID = Long.getLong(lobbyIDString);
+                            joinLobby(lobbyID, new PlayerDTO("Test Player 2 Name"));
+                            Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
             }
