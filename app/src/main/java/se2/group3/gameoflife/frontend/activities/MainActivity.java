@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
         return networkHandler;
     }
 
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
 }
