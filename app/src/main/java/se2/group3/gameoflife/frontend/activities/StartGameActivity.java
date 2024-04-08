@@ -20,7 +20,6 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 public class StartGameActivity extends AppCompatActivity {
     private static final String TAG = "StartGameActivity";
     private boolean waiting = true;
-    private int numberPlayers = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class StartGameActivity extends AppCompatActivity {
         lobbyID.setText("ID: " + lobbyDTO.getLobbyID());
 
         while(waiting){
-            numberPlayers = lobbyDTO.getPlayers().length;
+            int numberPlayers = lobbyDTO.getPlayers().length;
             PlayerDTO[] players = lobbyDTO.getPlayers();
             for (int i = 1; i <= numberPlayers; i++){
                 switch(i){
