@@ -2,7 +2,6 @@ package se2.group3.gameoflife.frontend.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,15 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import io.reactivex.disposables.Disposable;
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.networking.ResponseHandler;
-import se2.group3.gameoflife.frontend.util.SerializationUtil;
+
 
 public class StartGameActivity extends AppCompatActivity {
     private static final String TAG = "StartGameActivity";
