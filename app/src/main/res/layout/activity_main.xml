@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
+    android:background="@drawable/background1"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity"
-    android:background="@drawable/background">
+    tools:context=".activities.MainActivity">
 
 
     <Button
@@ -54,7 +54,7 @@
         android:layout_width="342dp"
         android:layout_height="121dp"
         android:contentDescription="@string/contentDescriptionLogoBig"
-        android:src="@drawable/gof_logo_wob"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

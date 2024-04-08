@@ -15,10 +15,16 @@
         android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/Theme.Frontend"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".activities.LobbyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.StartGameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"

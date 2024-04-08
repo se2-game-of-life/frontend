@@ -67,11 +67,17 @@ sonar {
 dependencies {
     implementation libs.appcompat
     implementation libs.material
+    implementation libs.okhttp
+    implementation libs.stomp.protocol.android
+    implementation libs.rxjava
+    implementation libs.rxandroid
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.jackson.databind
     testImplementation libs.junit
     testImplementation libs.junit.jupiter
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     testRuntimeOnly libs.junit.vintage.engine
+    implementation libs.jackson.databind
 }
