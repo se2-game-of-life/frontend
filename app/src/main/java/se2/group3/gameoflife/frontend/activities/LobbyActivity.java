@@ -49,8 +49,6 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createLobby(new PlayerDTO(MainActivity.getUsername()));
-                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -66,8 +64,6 @@ public class LobbyActivity extends AppCompatActivity {
                           if (!lobbyIDString.isEmpty()){
                             long lobbyID = Long.parseLong(lobbyIDString);
                             joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
-                            Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                            startActivity(intent);
                         }
                     }
                 });
@@ -80,8 +76,10 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void handleMessage(String msg) {
                 try {
+                    Log.d(TAG, "Received Lobby Data!");
                     lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
-                    Log.d(TAG, "Lobby: " + lobbyDTO.getHost());
+                    Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                    startActivity(intent);
                 } catch (JsonProcessingException e) {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
                 }
@@ -110,6 +108,9 @@ public class LobbyActivity extends AppCompatActivity {
                 try {
                     lobbyDTO = (LobbyDTO) SerializationUtil.toObject(msg, LobbyDTO.class);
                     Log.d(TAG, "Lobby: " + lobbyDTO.getLobbyID());
+
+                    Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                    startActivity(intent);
                 } catch (JsonProcessingException e) {
                     Log.e(TAG, "Error processing incoming LobbyDTO!", e.getCause());
                 }
