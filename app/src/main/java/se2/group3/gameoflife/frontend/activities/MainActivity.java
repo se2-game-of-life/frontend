@@ -25,11 +25,13 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 public class MainActivity extends Activity {
 
     private static WebsocketClient networkHandler;
+    public static String uuid = UUID.randomUUID().toString();
     TextView textUser;
     String username = null;
     String playerJSON = null;
     ObjectMapper objectMapper;
     PlayerDTO player;
+
 
     /**
      * Function of the button is defined.
@@ -40,11 +42,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String uuid = UUID.randomUUID().toString();
-
         //connect to the server
         networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
-        networkHandler.connect(uuid);
+        networkHandler.connect();
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
