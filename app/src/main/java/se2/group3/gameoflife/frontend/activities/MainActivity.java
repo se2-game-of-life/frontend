@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.game.Username;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 /**
@@ -53,7 +54,7 @@ public class MainActivity extends Activity {
                 TextView user = findViewById(R.id.enterUsername);
                 username = user.getText().toString();
                 textUser = findViewById(R.id.textUsername);
-                if (checkUsername(username)){
+                if (Username.checkUsername(username)){
                     goToNextActivity();
                 } else{
                     textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
@@ -62,14 +63,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    /**
-     * method to check if username is valid
-     * The username must consist of letters and can contain 0 or more digits at the end.
-     */
-    public boolean checkUsername(String username){
-        String usernameRegex = "^[a-zA-Z]+[0-9]*$";
-        return Pattern.matches(usernameRegex, username);
-    }
+
 
     /**
      * Is used to change the activity
