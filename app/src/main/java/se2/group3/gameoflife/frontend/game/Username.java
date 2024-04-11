@@ -4,6 +4,10 @@ import java.util.regex.Pattern;
 
 public class Username {
 
+    private Username(){
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * method to check if username is valid
      * The username must consist of letters and can contain 0 or more digits at the end.
