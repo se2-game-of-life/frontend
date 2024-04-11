@@ -12,11 +12,10 @@ import androidx.annotation.Nullable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.game.Username;
+import se2.group3.gameoflife.frontend.game.User;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 /**
@@ -51,10 +50,11 @@ public class MainActivity extends Activity {
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView user = findViewById(R.id.enterUsername);
-                username = user.getText().toString();
+                TextView userText = findViewById(R.id.enterUsername);
+                username = userText.getText().toString();
                 textUser = findViewById(R.id.textUsername);
-                if (Username.checkUsername(username)){
+                User user = new User(username);
+                if (user.checkUsername()){
                     goToNextActivity();
                 } else{
                     textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
