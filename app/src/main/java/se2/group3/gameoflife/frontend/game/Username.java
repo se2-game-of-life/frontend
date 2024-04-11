@@ -11,7 +11,7 @@ public class Username {
      * @return if the Username matches the necessary regex
      */
     public static boolean checkUsername(String username){
-        String usernameRegex = "^[a-zA-Z]+[0-9]*$";
+        String usernameRegex = "^[a-zA-Z]+\\d*$";
         return Pattern.matches(usernameRegex, username);
     }
 }
