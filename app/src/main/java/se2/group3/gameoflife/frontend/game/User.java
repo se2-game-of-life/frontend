@@ -22,9 +22,6 @@ public class User {
         return Pattern.matches(usernameRegex, username);
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public void setUsername(String username) {
         this.username = username;
