@@ -50,8 +50,8 @@ public class StartGameActivity extends AppCompatActivity {
         findViewById(R.id.StartButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //todo: change to gameplay activity
+                Intent intent = new Intent(StartGameActivity.this, BoardActivity.class);
+                startActivity(intent);
             }
         });
 
