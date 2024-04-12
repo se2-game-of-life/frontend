@@ -17,4 +17,13 @@
     <string name="player2">Player 2</string>
     <string name="player3">Player 3</string>
     <string name="player4">Player 4</string>
+    <string name="MyJob">My Job</string>
+    <string name="MyInvestments">My Investments</string>
+    <string name="StatisticsOtherPlayers">Statistics Players</string>
+    <string name="RollDice">Roll the Dice</string>
+    <string name="Pickpocket">Pickpocket</string>
+    <string name="ReportCheater">Report Cheater</string>
+    <string name="choosePath">Do you want to enter the workforce right away or do you want to go to college for 100k to possibly get a better paying job later?</string>
+    <string name="CollegePath">Go to college!</string>
+    <string name="CareerPath">Start a career!</string>
 </resources>
