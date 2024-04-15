@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     String playerJSON = null;
     ObjectMapper objectMapper;
     PlayerDTO player;
-    private MainViewModel model;
 
 
     /**
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
         networkHandler.connect();
 
-        model = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel model = new ViewModelProvider(this).get(MainViewModel.class);
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(v -> {
