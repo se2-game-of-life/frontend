@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             if (model.checkUsername(username)){
                 goToNextActivity();
             } else{
-                textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
+                textUser.setText(getString(R.string.usernameHint));
             }
         });
     }
