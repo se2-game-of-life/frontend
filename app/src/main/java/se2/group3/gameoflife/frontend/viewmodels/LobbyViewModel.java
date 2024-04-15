@@ -1,14 +1,8 @@
 package se2.group3.gameoflife.frontend.viewmodels;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
