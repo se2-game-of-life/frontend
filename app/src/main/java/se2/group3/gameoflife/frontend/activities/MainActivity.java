@@ -1,6 +1,5 @@
 package se2.group3.gameoflife.frontend.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,21 +7,24 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.game.User;
+import se2.group3.gameoflife.frontend.game.MainViewModel;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 /**
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static WebsocketClient networkHandler;
     public static String uuid = UUID.randomUUID().toString();
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
     String playerJSON = null;
     ObjectMapper objectMapper;
     PlayerDTO player;
+    private MainViewModel model;
 
 
     /**
@@ -46,15 +49,16 @@ public class MainActivity extends Activity {
         networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
         networkHandler.connect();
 
+        model = new ViewModelProvider(this).get(MainViewModel.class);
+
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView userText = findViewById(R.id.enterUsername);
-                username = userText.getText().toString();
+                TextView user = findViewById(R.id.enterUsername);
+                username = user.getText().toString();
                 textUser = findViewById(R.id.textUsername);
-                User user = new User(username);
-                if (user.checkUsername()){
+                if (model.checkUsername(username)){
                     goToNextActivity();
                 } else{
                     textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
@@ -62,8 +66,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-
-
 
     /**
      * Is used to change the activity
