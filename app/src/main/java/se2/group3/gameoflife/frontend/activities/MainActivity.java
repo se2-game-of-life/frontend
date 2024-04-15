@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
@@ -23,6 +27,8 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
  */
 
 public class MainActivity extends Activity {
+
+    public static final String TAG = "Networking";
 
     private static WebsocketClient networkHandler;
     public static String uuid = UUID.randomUUID().toString();
@@ -43,8 +49,21 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //connect to the server
-        networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
-        networkHandler.connect();
+        networkHandler = WebsocketClient.getInstance("ws://10.0.2.2:8080/gameoflife");
+
+        Disposable dis = networkHandler.connect()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            Log.d(TAG, "Connected to server!");
+                        },
+                        error -> {
+                            throw new RuntimeException();
+                });
+
+
+
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(new View.OnClickListener() {
