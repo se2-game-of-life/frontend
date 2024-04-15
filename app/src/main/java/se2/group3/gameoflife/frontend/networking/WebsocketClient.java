@@ -65,4 +65,12 @@ public class WebsocketClient {
                     Log.e(TAG, "Error sending STOMP message: ", throwable);
                 });
     }
+
+    private String toJsonString(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
+    }
+
+    private <T> Object toObject(String message, Class<T> messageType) throws JsonProcessingException {
+        return objectMapper.readValue(message, messageType);
+    }
 }
