@@ -52,17 +52,14 @@ public class MainActivity extends AppCompatActivity {
         model = new ViewModelProvider(this).get(MainViewModel.class);
 
         Button check = findViewById(R.id.buttonCheck);
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView user = findViewById(R.id.enterUsername);
-                username = user.getText().toString();
-                textUser = findViewById(R.id.textUsername);
-                if (model.checkUsername(username)){
-                    goToNextActivity();
-                } else{
-                    textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
-                }
+        check.setOnClickListener(v -> {
+            TextView user = findViewById(R.id.enterUsername);
+            username = user.getText().toString();
+            textUser = findViewById(R.id.textUsername);
+            if (model.checkUsername(username)){
+                goToNextActivity();
+            } else{
+                textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
             }
         });
     }
