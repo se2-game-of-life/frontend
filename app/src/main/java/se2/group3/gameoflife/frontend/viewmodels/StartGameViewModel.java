@@ -16,7 +16,7 @@ public class StartGameViewModel extends ViewModel {
     private final MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
-    private CompositeDisposable disposables;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public LiveData<LobbyDTO> getLobby() {
         return lobbyDTO;

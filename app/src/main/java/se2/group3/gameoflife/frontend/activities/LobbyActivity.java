@@ -46,9 +46,10 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-//                    Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-//                    intent.putExtra("lobbyDTO", lobbyDTO);
-//                    startActivity(intent);
+                    Log.d(TAG, "UPDATED LOBBY DTO LIVE DATA OBJECT");
+                    Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                    intent.putExtra("lobbyDTO", lobbyDTO);
+                    startActivity(intent);
                 });
                 Log.d(TAG, "Before create lobby!");
                 lobbyViewModel.createLobby(new PlayerDTO(MainActivity.getUsername()));
