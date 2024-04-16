@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -19,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 /**
@@ -34,9 +30,6 @@ public class MainActivity extends Activity {
     public static String uuid = UUID.randomUUID().toString();
     TextView textUser;
     static String username = null;
-    String playerJSON = null;
-    ObjectMapper objectMapper;
-    PlayerDTO player;
 
 
     /**
@@ -55,9 +48,7 @@ public class MainActivity extends Activity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {
-                            Log.d(TAG, "Connected to server!");
-                        },
+                        () -> Log.d(TAG, "Connected to server!"),
                         error -> {
                             throw new RuntimeException();
                 });
@@ -66,17 +57,14 @@ public class MainActivity extends Activity {
 
 
         Button check = findViewById(R.id.buttonCheck);
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView user = findViewById(R.id.enterUsername);
-                username = user.getText().toString();
-                textUser = findViewById(R.id.textUsername);
-                if (checkUsername(username)){
-                    goToNextActivity();
-                } else{
-                    textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
-                }
+        check.setOnClickListener(v -> {
+            TextView user = findViewById(R.id.enterUsername);
+            username = user.getText().toString();
+            textUser = findViewById(R.id.textUsername);
+            if (checkUsername(username)){
+                goToNextActivity();
+            } else{
+                textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
             }
         });
     }

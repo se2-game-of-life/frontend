@@ -5,7 +5,6 @@ import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -35,49 +34,38 @@ public class LobbyActivity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.buttonReturnToUser).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        findViewById(R.id.buttonCreateNewGame).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                    Log.d(TAG, "UPDATED LOBBY DTO LIVE DATA OBJECT");
-                    Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                    intent.putExtra("lobbyDTO", lobbyDTO);
-                    startActivity(intent);
-                });
-                Log.d(TAG, "Before create lobby!");
-                lobbyViewModel.createLobby(new PlayerDTO(MainActivity.getUsername()));
-                Log.d(TAG, "After create lobby!");
-            }
+        findViewById(R.id.buttonReturnToUser).setOnClickListener(v -> {
+            Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
-        findViewById(R.id.buttonJoinGame).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setContentView(R.layout.activity_join_game);
-                findViewById(R.id.GObutton).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                          EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
-                          String lobbyIDString = lobbyIDText.getText().toString();
-                          if (!lobbyIDString.isEmpty()){
-                            long lobbyID = Long.parseLong(lobbyIDString);
-                            lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                                intent.putExtra("lobbyDTO", lobbyDTO);
-                                startActivity(intent);
-                            });
-                            lobbyViewModel.joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
-                        }
-                    }
-                });
-            }
+        findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
+            lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
+                Log.d(TAG, "UPDATED LOBBY DTO LIVE DATA OBJECT");
+                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                intent.putExtra("lobbyDTO", lobbyDTO);
+                startActivity(intent);
+            });
+            Log.d(TAG, "Before create lobby!");
+            lobbyViewModel.createLobby(new PlayerDTO(MainActivity.getUsername()));
+            Log.d(TAG, "After create lobby!");
+        });
+
+        findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
+            setContentView(R.layout.activity_join_game);
+            findViewById(R.id.GObutton).setOnClickListener(v1 -> {
+                  EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
+                  String lobbyIDString = lobbyIDText.getText().toString();
+                  if (!lobbyIDString.isEmpty()){
+                    long lobbyID = Long.parseLong(lobbyIDString);
+                    lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
+                        Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                        intent.putExtra("lobbyDTO", lobbyDTO);
+                        startActivity(intent);
+                    });
+                    lobbyViewModel.joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
+                }
+            });
         });
     }
 

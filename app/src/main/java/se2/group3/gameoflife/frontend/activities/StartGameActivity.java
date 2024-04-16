@@ -35,19 +35,13 @@ public class StartGameActivity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.buttonReturnToLobby).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartGameActivity.this, LobbyActivity.class);
-                startActivity(intent);
-            }
+        findViewById(R.id.buttonReturnToLobby).setOnClickListener(v -> {
+            Intent intent = new Intent(StartGameActivity.this, LobbyActivity.class);
+            startActivity(intent);
         });
 
-        findViewById(R.id.StartButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                throw new UnsupportedOperationException();
-            }
+        findViewById(R.id.StartButton).setOnClickListener(v -> {
+            throw new UnsupportedOperationException();
         });
 
         LobbyDTO lobbyInformation = getIntent().getParcelableExtra("lobbyDTO");
@@ -59,7 +53,7 @@ public class StartGameActivity extends AppCompatActivity {
 
     private void updateLobby(LobbyDTO lobbyDTO) {
         TextView lobbyID = findViewById(R.id.lobbyID);
-        lobbyID.setText("ID: " + lobbyDTO.getLobbyID());
+        lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));
         int numberPlayers = lobbyDTO.getPlayers().length;
         PlayerDTO[] players = lobbyDTO.getPlayers();
         for (int i = 1; i <= numberPlayers; i++){
