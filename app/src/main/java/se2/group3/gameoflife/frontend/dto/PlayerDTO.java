@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties("stability")
 public class PlayerDTO implements Parcelable {
     private final String playerName;
 
@@ -28,7 +30,7 @@ public class PlayerDTO implements Parcelable {
 
         @Override
         public PlayerDTO[] newArray(int size) {
-            return new PlayerDTO[0];
+            return new PlayerDTO[size];
         }
     };
 

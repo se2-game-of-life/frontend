@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties("stability")
 public class LobbyDTO implements Parcelable {
 
     private final long lobbyID;
@@ -35,7 +37,7 @@ public class LobbyDTO implements Parcelable {
 
         @Override
         public LobbyDTO[] newArray(int size) {
-            return new LobbyDTO[0];
+            return new LobbyDTO[size];
         }
     };
 
