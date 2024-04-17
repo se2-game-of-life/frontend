@@ -1,4 +1,8 @@
-package se2.group3.gameoflife.frontend.game;
+package se2.group3.gameoflife.frontend.viewmodels;
+
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 

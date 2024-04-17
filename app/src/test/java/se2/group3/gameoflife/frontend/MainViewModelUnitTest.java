@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import se2.group3.gameoflife.frontend.game.MainViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.MainViewModel;
 
 class MainViewModelUnitTest {
     private MainViewModel mainViewModel;
