@@ -9,33 +9,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import se2.group3.gameoflife.frontend.activities.MainActivity;
+import se2.group3.gameoflife.frontend.game.MainViewModel;
 
-public class MainActivityUnitTest {
-    private MainActivity activity;
-
-
+class MainViewModelUnitTest {
+    private MainViewModel mainViewModel;
     @BeforeEach
-    public void setUp() {
-        activity = new MainActivity();
+    public void setUp(){
+        this.mainViewModel = new MainViewModel();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Johanna01", "Thomas", "Flo007", "Anastasiia3", "Aya"})
-    public void testCorrectUsernames(String name){
-        assertTrue(activity.checkUsername(name));
+    void testCorrectUsernames(String name){
+        assertTrue(mainViewModel.checkUsername(name));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "01", "70", "!", ":)", "Ana!", "0Jo"})
-    public void testInCorrectUsernames(String name) {
-        assertFalse(activity.checkUsername(name));
+    void testInCorrectUsernames(String name) {
+        assertFalse(mainViewModel.checkUsername(name));
     }
+
 
     @AfterEach
     public void breakDown(){
-        activity = null;
+        this.mainViewModel = null;
     }
+
 
 }
 
