@@ -58,9 +58,7 @@ public class WebsocketClient {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            () -> {
-                                Log.d(TAG, "Send message: " + uuid);
-                            }
+                            () -> Log.d(TAG, "Send message: " + uuid)
                     );
             emitter.onComplete();
         });

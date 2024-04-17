@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import se2.group3.gameoflife.frontend.activities.MainActivity;
 import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -39,9 +38,7 @@ public class LobbyViewModel extends ViewModel {
         disposables.add(websocketClient.send("/app/lobby/create", player)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, error -> {
-                    errorMessage.setValue(error.getMessage());
-                })
+                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
         );
     }
 
@@ -59,9 +56,7 @@ public class LobbyViewModel extends ViewModel {
         disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, error -> {
-                    errorMessage.setValue(error.getMessage());
-                })
+                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
         );
     }
 
