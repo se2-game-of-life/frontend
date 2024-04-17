@@ -47,7 +47,7 @@ public class LobbyActivity extends AppCompatActivity {
                 startActivity(intent);
             });
             Log.d(TAG, "Before create lobby!");
-            lobbyViewModel.createLobby(new PlayerDTO(MainActivity.getUsername()));
+            lobbyViewModel.createLobby(new PlayerDTO(getIntent().getStringExtra("username")), getIntent().getStringExtra("uuid"));
             Log.d(TAG, "After create lobby!");
         });
 
@@ -63,7 +63,7 @@ public class LobbyActivity extends AppCompatActivity {
                         intent.putExtra("lobbyDTO", lobbyDTO);
                         startActivity(intent);
                     });
-                    lobbyViewModel.joinLobby(lobbyID, new PlayerDTO(MainActivity.getUsername()));
+                    lobbyViewModel.joinLobby(lobbyID, new PlayerDTO(getIntent().getStringExtra("username")));
                 }
             });
         });

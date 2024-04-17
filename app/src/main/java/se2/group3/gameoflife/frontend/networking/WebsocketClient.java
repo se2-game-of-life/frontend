@@ -2,7 +2,6 @@ package se2.group3.gameoflife.frontend.networking;
 
 
 import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-import static se2.group3.gameoflife.frontend.activities.MainActivity.uuid;
 
 import android.util.Log;
 
@@ -51,7 +50,7 @@ public class WebsocketClient {
         });
     }
 
-    public Completable connect() {
+    public Completable connect(String uuid) {
         return Completable.create(emitter -> {
             stompClient.connect();
 

@@ -25,9 +25,9 @@ public class LobbyViewModel extends ViewModel {
         return lobbyDTO;
     }
 
-    public void createLobby(PlayerDTO player) {
+    public void createLobby(PlayerDTO player, String uuid) {
 
-        disposables.add(websocketClient.subscribe("/topic/lobbies/" + MainActivity.uuid, LobbyDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + uuid, LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -56,7 +56,7 @@ public class LobbyViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(MainActivity.getNetworkHandler().send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player))
+        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> {

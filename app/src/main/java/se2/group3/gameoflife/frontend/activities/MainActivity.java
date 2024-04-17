@@ -28,10 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Networking";
 
-    private static WebsocketClient networkHandler;
-    public static String uuid = UUID.randomUUID().toString();
-    TextView textUser;
-    static String username = null;
+    private static MainViewModel mainViewModel;
+    private TextView textUser;
+    private static String username = null;
 
 
     /**
@@ -42,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //connect to the server
-        networkHandler = WebsocketClient.getInstance("ws://10.0.2.2:8080/gameoflife");
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         Disposable dis = networkHandler.connect()
                 .subscribeOn(Schedulers.io())
@@ -65,8 +62,11 @@ public class MainActivity extends AppCompatActivity {
             TextView user = findViewById(R.id.enterUsername);
             username = user.getText().toString();
             textUser = findViewById(R.id.textUsername);
-            if (model.checkUsername(username)){
-                goToNextActivity();
+            if (mainViewModel.checkUsername(username)){
+                Intent intent = new Intent(this, LobbyActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("uuid", mainViewModel.getUUID());
+                startActivity(intent);
             } else{
                 textUser.setText(getString(R.string.usernameHint));
             }
