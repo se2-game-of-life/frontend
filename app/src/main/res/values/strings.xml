@@ -17,6 +17,7 @@
     <string name="player2">Player 2</string>
     <string name="player3">Player 3</string>
     <string name="player4">Player 4</string>
+    <string name="usernameHint">Please choose a username consisting only of letters and, if you like, digits at the end.</string>
     <string name="MyJob">My Job</string>
     <string name="MyInvestments">My Investments</string>
     <string name="StatisticsOtherPlayers">Statistics Players</string>
