@@ -7,15 +7,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import se2.group3.gameoflife.frontend.R;
 
 
 public class GameBoardFragment extends Fragment {
-    private static final String TAG = "CollegePathFragment";
-
-    private boolean collegePath;
 
     public GameBoardFragment() {
         // Required empty public constructor
