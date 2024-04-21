@@ -17,7 +17,7 @@ public class PlayerDTO {
     // Booleans for the different paths the game offers
     private boolean isCollegePath;
     private boolean isMarriedPath;
-    private boolean isGrowFamiliePath;
+    private boolean isGrowFamilyPath;
     private boolean hasMidlifeCrisis;
     private boolean isRetireEarlyPath;
 
@@ -95,12 +95,12 @@ public class PlayerDTO {
         isMarriedPath = marriedPath;
     }
 
-    public boolean isGrowFamiliePath() {
-        return isGrowFamiliePath;
+    public boolean isGrowFamilyPath() {
+        return isGrowFamilyPath;
     }
 
-    public void setGrowFamiliePath(boolean growFamiliePath) {
-        isGrowFamiliePath = growFamiliePath;
+    public void setGrowFamilyPath(boolean growFamilyPath) {
+        isGrowFamilyPath = growFamilyPath;
     }
 
     public boolean isHasMidlifeCrisis() {
