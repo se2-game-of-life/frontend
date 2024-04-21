@@ -76,6 +76,7 @@ dependencies {
     implementation libs.jackson.databind
     testImplementation libs.junit
     testImplementation libs.junit.jupiter
+    testImplementation libs.mockito.core
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     testRuntimeOnly libs.junit.vintage.engine
