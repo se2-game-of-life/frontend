@@ -4,6 +4,14 @@
     android:id="@+id/GameBoardFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#006400"
     tools:context=".fragments.GameBoardFragment">
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="33"
+        android:rowCount="17"/>
 
 </FrameLayout>
