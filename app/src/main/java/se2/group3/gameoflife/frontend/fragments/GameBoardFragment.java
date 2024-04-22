@@ -1,6 +1,4 @@
 package se2.group3.gameoflife.frontend.fragments;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +8,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import java.util.Objects;
 
 import se2.group3.gameoflife.frontend.util.SerializationUtil;
 
@@ -85,6 +85,7 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
+
     private void updateUI(BoardDTO boardDTO) {
         Log.d(TAG, "updateUI started");
 
@@ -113,11 +114,30 @@ public class GameBoardFragment extends Fragment {
 
                     // Set text and appearance of cells based on cellDTO presence
                     if (cellDTO != null) {
-                        cell.setText("X"); // Filled cell
-                        cell.setBackgroundColor(Color.YELLOW); // Yellow background
-
-                    } else {
-                        cell.setText(""); // Empty cell
+                        if(Objects.equals(cellDTO.getType(), "actionCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_action_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "addpegCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_addpeg_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "investCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_invest_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "houseCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_house_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "paydayCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_payday_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "careerCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_career_background);
+                        }
+                        else if(cellDTO.getType().endsWith("StopCell")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                        }
+                        else if(cellDTO.getType().endsWith("start")) {
+                            cell.setBackgroundResource(R.drawable.cell_start_background);
+                        }
                     }
 
                     // Add cell to the GridLayout

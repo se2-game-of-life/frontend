@@ -80,6 +80,4 @@ dependencies {
     androidTestImplementation libs.espresso.core
     testRuntimeOnly libs.junit.vintage.engine
     implementation libs.jackson.databind
-    implementation libs.gson
-
 }
