@@ -40,12 +40,9 @@ public class StartGameActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        findViewById(R.id.StartButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartGameActivity.this, ChoosePathActivity.class);
-                startActivity(intent);
-            }
+        findViewById(R.id.StartButton).setOnClickListener(v -> {
+            Intent intent = new Intent(StartGameActivity.this, ChoosePathActivity.class);
+            startActivity(intent);
         });
 
         LobbyDTO lobbyInformation = getIntent().getParcelableExtra("lobbyDTO");
