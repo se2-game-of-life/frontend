@@ -26,17 +26,15 @@ public class ChoosePathActivity extends AppCompatActivity {
         });
         findViewById(R.id.btnCollege).setOnClickListener(v -> {
             college = true;
-            choosePath();
+            Intent intent = new Intent(this, BoardActivity.class);
+            startActivity(intent);
         });
         findViewById(R.id.btnCareer).setOnClickListener(v -> {
             college = false;
-            choosePath();
+            Intent intent = new Intent(this, BoardActivity.class);
+            startActivity(intent);
         });
     }
 
-    private void choosePath(){
-        //todo: communicate decision to server
-        Intent intent = new Intent(this, BoardActivity.class);
-        startActivity(intent);
-    }
+
 }
