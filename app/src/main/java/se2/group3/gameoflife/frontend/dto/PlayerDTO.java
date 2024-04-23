@@ -62,6 +62,7 @@ public class PlayerDTO implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(playerName);
+    }
       
           public String getPlayerID() {
         return playerID;
