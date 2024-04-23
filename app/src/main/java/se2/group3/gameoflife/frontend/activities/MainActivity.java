@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Networking";
 
-    private static MainViewModel mainViewModel;
+    private MainViewModel mainViewModel;
     private TextView textUser;
     private static String username = null;
 

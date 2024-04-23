@@ -22,7 +22,7 @@ public class MainViewModel extends ViewModel {
     private static final String URI = "ws://10.0.2.2:8080/gameoflife";
     private final CompositeDisposable disposables = new CompositeDisposable();
     
-    private static String uuid = null;
+    private String uuid = null;
 
     public void connectToServer() {
         WebsocketClient websocketClient = WebsocketClient.getInstance(URI);
