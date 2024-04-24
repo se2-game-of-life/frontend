@@ -41,7 +41,7 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.StartButton).setOnClickListener(v -> {
-            Intent intent = new Intent(StartGameActivity.this, ChoosePathActivity.class);
+            Intent intent = new Intent(StartGameActivity.this, BoardActivity.class);
             startActivity(intent);
         });
 
