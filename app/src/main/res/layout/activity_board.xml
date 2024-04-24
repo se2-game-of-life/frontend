@@ -11,13 +11,13 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="se2.group3.gameoflife.frontend.fragments.ChoosePathFragment"
-            android:layout_width="604dp"
-            android:layout_height="371dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.291"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.6" />
-
+            app:layout_constraintVertical_bias="0.5"
+            tools:layout="@layout/fragment_choose_path" />
 </androidx.constraintlayout.widget.ConstraintLayout>
