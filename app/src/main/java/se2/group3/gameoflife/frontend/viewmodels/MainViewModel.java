@@ -23,6 +23,7 @@ public class MainViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     
     private String uuid = null;
+    private String username = null;
 
     public void connectToServer() {
         WebsocketClient websocketClient = WebsocketClient.getInstance(URI);
@@ -48,7 +49,7 @@ public class MainViewModel extends ViewModel {
      * The username must consist of letters and can contain 0 or more digits at the end.
      * @return if the Username matches the necessary regex
      */
-    public boolean checkUsername(String username){
+    public boolean checkUsername(){
         String usernameRegex = "^[a-zA-Z]+\\d*$";
         return Pattern.matches(usernameRegex, username);
     }
@@ -57,4 +58,11 @@ public class MainViewModel extends ViewModel {
         disposables.dispose();
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

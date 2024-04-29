@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
     private TextView textUser;
-    private static String username = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(v -> {
             TextView user = findViewById(R.id.enterUsername);
-            username = user.getText().toString();
+            mainViewModel.setUsername(user.getText().toString());
             textUser = findViewById(R.id.textUsername);
-            if (mainViewModel.checkUsername(username)){
+            if (mainViewModel.checkUsername()){
                 Intent intent = new Intent(this, LobbyActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("username", mainViewModel.getUsername());
                 intent.putExtra("uuid", mainViewModel.getUUID());
                 startActivity(intent);
             } else{

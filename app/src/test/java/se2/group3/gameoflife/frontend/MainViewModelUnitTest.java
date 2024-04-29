@@ -29,13 +29,15 @@ class MainViewModelUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"Johanna01", "Thomas", "Flo007", "Anastasiia3", "Aya"})
     void testCorrectUsernames(String name){
-        assertTrue(mainViewModel.checkUsername(name));
+        mainViewModel.setUsername(name);
+        assertTrue(mainViewModel.checkUsername());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "01", "70", "!", ":)", "Ana!", "0Jo"})
     void testInCorrectUsernames(String name) {
-        assertFalse(mainViewModel.checkUsername(name));
+        mainViewModel.setUsername(name);
+        assertFalse(mainViewModel.checkUsername());
     }
 
     @Test
