@@ -48,6 +48,12 @@ class MainViewModelUnitTest {
         assertEquals(uuid1, uuid2);
     }
 
+    @Test
+    void testGetUsername(){
+        mainViewModel.setUsername("Johanna");
+        assertEquals("Johanna", mainViewModel.getUsername());
+    }
+
     @AfterEach
     public void breakDown(){
         this.mainViewModel = null;
