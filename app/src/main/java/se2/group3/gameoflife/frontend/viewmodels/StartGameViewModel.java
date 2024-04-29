@@ -44,10 +44,10 @@ public class StartGameViewModel extends ViewModel {
     }
 
     public LobbyDTO getLobbyDTO() {
-        if (lobbyDTO != null && lobbyDTO.getValue() != null) {
-            return lobbyDTO.getValue();
-        } else {
+        if(lobbyDTO == null || lobbyDTO.getValue() == null){
             throw new IllegalArgumentException("LobbyDTO is null");
+        } else{
+            return lobbyDTO.getValue();
         }
     }
 
