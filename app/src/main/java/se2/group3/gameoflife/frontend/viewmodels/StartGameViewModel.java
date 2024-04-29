@@ -13,10 +13,12 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 public class StartGameViewModel extends ViewModel {
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
 
-    private final MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
+    private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private final CompositeDisposable disposables = new CompositeDisposable();
+
+
 
     public LiveData<LobbyDTO> getLobby() {
         return lobbyDTO;
@@ -31,6 +33,22 @@ public class StartGameViewModel extends ViewModel {
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
+    }
+
+    public void setLobbyDTO(LobbyDTO lobbyDTO){
+        if(lobbyDTO == null){
+            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
+        } else{
+            this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
+        }
+    }
+
+    public LobbyDTO getLobbyDTO() {
+        if (lobbyDTO != null && lobbyDTO.getValue() != null) {
+            return lobbyDTO.getValue();
+        } else {
+            throw new IllegalArgumentException("LobbyDTO is null");
+        }
     }
 
     public void dispose() {

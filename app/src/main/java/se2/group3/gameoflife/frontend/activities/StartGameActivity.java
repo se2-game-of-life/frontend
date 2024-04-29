@@ -45,9 +45,8 @@ public class StartGameActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        LobbyDTO lobbyInformation = getIntent().getParcelableExtra("lobbyDTO");
-        if(lobbyInformation == null) throw new RuntimeException("LobbyDTO not found in the StartGameActivity");
-        updateLobby(lobbyInformation);
+        startGameViewModel.setLobbyDTO(getIntent().getParcelableExtra("lobbyDTO"));
+        updateLobby(startGameViewModel.getLobbyDTO());
 
         startGameViewModel.getLobby().observe(StartGameActivity.this, this::updateLobby);
     }
