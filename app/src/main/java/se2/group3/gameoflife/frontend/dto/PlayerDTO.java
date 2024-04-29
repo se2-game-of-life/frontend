@@ -54,7 +54,7 @@ public class PlayerDTO implements Parcelable {
         return this.playerName;
     }
   
-      @Override
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -62,9 +62,20 @@ public class PlayerDTO implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(playerName);
+        dest.writeString(playerID);
+        dest.writeInt(currentCellPosition);
+        dest.writeInt(money);
+        dest.writeInt(investmentNumber);
+        dest.writeInt(investmentLevel);
+        dest.writeInt(numberOfPegs);
+        dest.writeInt(isCollegePath ? 1 : 0);
+        dest.writeInt(isMarriedPath ? 1 : 0);
+        dest.writeInt(isGrowFamilyPath ? 1 : 0);
+        dest.writeInt(hasMidlifeCrisis ? 1 : 0);
+        dest.writeInt(isRetireEarlyPath ? 1 : 0);
     }
       
-          public String getPlayerID() {
+    public String getPlayerID() {
         return playerID;
     }
 
