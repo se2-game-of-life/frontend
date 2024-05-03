@@ -23,7 +23,6 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  * create an instance of this fragment.
  */
 public class ChoosePathFragment extends Fragment {
-    private GameViewModel gameViewModel;
 
     public ChoosePathFragment() {
         // Required empty public constructor
@@ -40,7 +39,7 @@ public class ChoosePathFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        GameViewModel gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
         PlayerDTO playerDTO = getArguments().getParcelable("playerDTO");
 
