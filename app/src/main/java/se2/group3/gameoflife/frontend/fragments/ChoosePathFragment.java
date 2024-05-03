@@ -41,7 +41,13 @@ public class ChoosePathFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         GameViewModel gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
-        PlayerDTO playerDTO = getArguments().getParcelable("playerDTO");
+        PlayerDTO playerDTO;
+
+        if (getArguments() != null) {
+            playerDTO = getArguments().getParcelable("playerDTO");
+        } else {
+            playerDTO = null;
+        }
 
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
