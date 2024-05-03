@@ -32,7 +32,7 @@ public class GameViewModel extends ViewModel {
 
     public void setPlayerDTO(PlayerDTO playerDTO){
         if(playerDTO == null){
-            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
+            throw new IllegalArgumentException("PlayerDTO is null");
         } else{
             this.playerDTO = new MutableLiveData<>(playerDTO);
         }
