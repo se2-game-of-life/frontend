@@ -41,34 +41,18 @@ public class ChoosePathFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         GameViewModel gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
-        PlayerDTO playerDTO;
 
         if (getArguments() != null) {
-            playerDTO = getArguments().getParcelable("playerDTO");
-        } else {
-            playerDTO = null;
+            PlayerDTO playerDTO = getArguments().getParcelable("playerDTO");
+            gameViewModel.setPlayerDTO(playerDTO);
         }
 
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
-        btnCareer.setOnClickListener(v -> {
-            if (playerDTO == null){
-                Log.d("PlayerDTO", "PlayerDTO is null");
-            } else{
-                playerDTO.setCollegePath(false);
-                gameViewModel.choosePath(playerDTO);
-            }
-        });
+        btnCareer.setOnClickListener(v -> gameViewModel.choosePath(false));
 
         Button btnCollege = rootView.findViewById(R.id.btnCollege);
-        btnCollege.setOnClickListener(v -> {
-            if (playerDTO == null){
-                Log.d("PlayerDTO", "PlayerDTO is null");
-            } else{
-                playerDTO.setCollegePath(true);
-                gameViewModel.choosePath(playerDTO);
-            }
-        });
+        btnCollege.setOnClickListener(v -> gameViewModel.choosePath(true));
 
         return rootView;
     }
