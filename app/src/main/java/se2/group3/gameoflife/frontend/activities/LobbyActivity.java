@@ -40,20 +40,23 @@ public class LobbyActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
+            PlayerDTO playerDTO = new PlayerDTO(getIntent().getStringExtra("username"));
             lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
                 Log.d(TAG, "UPDATED LOBBY DTO LIVE DATA OBJECT");
                 Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
                 intent.putExtra("lobbyDTO", lobbyDTO);
+                intent.putExtra("playerDTO", playerDTO);
                 startActivity(intent);
             });
             Log.d(TAG, "Before create lobby!");
-            lobbyViewModel.createLobby(new PlayerDTO(getIntent().getStringExtra("username")), getIntent().getStringExtra("uuid"));
+            lobbyViewModel.createLobby(playerDTO, getIntent().getStringExtra("uuid"));
             Log.d(TAG, "After create lobby!");
         });
 
         findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
             setContentView(R.layout.activity_join_game);
             findViewById(R.id.GObutton).setOnClickListener(v1 -> {
+                PlayerDTO playerDTO = new PlayerDTO(getIntent().getStringExtra("username"));
                   EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
                   String lobbyIDString = lobbyIDText.getText().toString();
                   if (!lobbyIDString.isEmpty()){
@@ -61,9 +64,10 @@ public class LobbyActivity extends AppCompatActivity {
                     lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
                         Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
                         intent.putExtra("lobbyDTO", lobbyDTO);
+                        intent.putExtra("playerDTO", playerDTO);
                         startActivity(intent);
                     });
-                    lobbyViewModel.joinLobby(lobbyID, new PlayerDTO(getIntent().getStringExtra("username")));
+                    lobbyViewModel.joinLobby(lobbyID, playerDTO);
                 }
             });
         });
