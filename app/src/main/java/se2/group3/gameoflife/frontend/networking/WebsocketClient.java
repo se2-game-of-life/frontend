@@ -91,7 +91,7 @@ public class WebsocketClient {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 () -> {
-                                    Log.d(TAG, "Send something!");
+                                    Log.d(TAG, "Message send: " +message);
                                     emitter.onComplete();
                                 },
                                 emitter::onError
