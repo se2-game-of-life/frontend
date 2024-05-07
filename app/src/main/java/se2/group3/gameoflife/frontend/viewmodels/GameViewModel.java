@@ -1,5 +1,7 @@
 package se2.group3.gameoflife.frontend.viewmodels;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,14 +21,20 @@ public class GameViewModel extends ViewModel {
     public void choosePath(boolean collegePath){
         PlayerDTO player = getPlayerDTO();
         player.setCollegePath(collegePath);
-        setPlayerDTO(player);
-        disposables.add(websocketClient.subscribe("/game/path", PlayerDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/game/", PlayerDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         playerDTO::setValue,
                         error -> errorMessage.setValue(error.getMessage())
                 )
+        );
+        Log.d("Networking", playerDTO.toString());
+
+        disposables.add(websocketClient.send("/app/game/path", collegePath)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
         );
     }
 
