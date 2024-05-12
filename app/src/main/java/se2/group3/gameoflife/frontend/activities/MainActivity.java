@@ -1,89 +1,56 @@
 package se2.group3.gameoflife.frontend.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.UUID;
-import java.util.regex.Pattern;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.networking.WebsocketClient;
+import se2.group3.gameoflife.frontend.viewmodels.MainViewModel;
 
 /**
  * This class contains the MainActivity. This is the first screen the player sees after opening the app. This activity is used to welcome the player and the option to choose a user name.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
-    private static WebsocketClient networkHandler;
-    public static String uuid = UUID.randomUUID().toString();
-    TextView textUser;
-    static String username = null;
-    String playerJSON = null;
-    ObjectMapper objectMapper;
-    PlayerDTO player;
+    public static final String TAG = "Networking";
+
+    private MainViewModel mainViewModel;
+    private TextView textUser;
 
 
-    /**
-     * Function of the button is defined.
-     * The player is prompted to choose a user name. If the username is correct, the player is directed to the next screen. If the username is incorrect, the player is asked to choose a new one.
-     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        //connect to the server
-        networkHandler = new WebsocketClient("ws://10.0.2.2:8080/gameoflife");
-        networkHandler.connect();
+        mainViewModel.connectToServer();
 
         Button check = findViewById(R.id.buttonCheck);
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView user = findViewById(R.id.enterUsername);
-                username = user.getText().toString();
-                textUser = findViewById(R.id.textUsername);
-                if (checkUsername(username)){
-                    goToNextActivity();
-                } else{
-                    textUser.setText("Please choose a username consisting only of letters and, if you like, digits at the end.");
-                }
+        check.setOnClickListener(v -> {
+            TextView user = findViewById(R.id.enterUsername);
+            mainViewModel.setUsername(user.getText().toString());
+            textUser = findViewById(R.id.textUsername);
+            if (mainViewModel.checkUsername()){
+                Intent intent = new Intent(this, LobbyActivity.class);
+                intent.putExtra("username", mainViewModel.getUsername());
+                intent.putExtra("uuid", mainViewModel.getUUID());
+                startActivity(intent);
+            } else{
+                textUser.setText(getString(R.string.usernameHint));
             }
         });
     }
 
-    /**
-     * method to check if username is valid
-     * The username must consist of letters and can contain 0 or more digits at the end.
-     */
-    public boolean checkUsername(String username){
-        String usernameRegex = "^[a-zA-Z]+[0-9]*$";
-        return Pattern.matches(usernameRegex, username);
-    }
-
-    /**
-     * Is used to change the activity
-     */
-    public void goToNextActivity(){
-        Intent intent = new Intent(this, LobbyActivity.class);
-        startActivity(intent);
-    }
-
-    public static WebsocketClient getNetworkHandler() {
-        return networkHandler;
-    }
-
-    public static String getUsername() {
-        return username;
+    @Override
+    protected void onDestroy() {
+        mainViewModel.dispose();
+        super.onDestroy();
     }
 }
