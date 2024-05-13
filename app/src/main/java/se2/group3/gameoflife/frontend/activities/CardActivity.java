@@ -11,11 +11,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import io.reactivex.disposables.Disposable;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class CardActivity extends AppCompatActivity {
     private WebsocketClient networkHandler;
+    private Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class CardActivity extends AppCompatActivity {
 
     private void sendButtonClickInfo(String info) {
         if (networkHandler != null) {
-            networkHandler.send("/app/buttonClicked", info)
+            disposable = networkHandler.send("/app/buttonClicked", info)
                     .subscribe(() -> {
                         // Message sent successfully
                         runOnUiThread(() -> Toast.makeText(this, "Button click sent to backend", Toast.LENGTH_SHORT).show());
