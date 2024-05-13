@@ -9,8 +9,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class CardActivity extends AppCompatActivity {
+    private WebsocketClient networkHandler;
+    private boolean buttonOneClicked = false;
+    private boolean buttonTwoClicked = false; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
