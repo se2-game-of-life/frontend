@@ -1,6 +1,7 @@
 package se2.group3.gameoflife.frontend.activities;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,5 +28,7 @@ public class SpinWheel extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button spinButton = findViewById(R.id.spinButton);
     }
 }
