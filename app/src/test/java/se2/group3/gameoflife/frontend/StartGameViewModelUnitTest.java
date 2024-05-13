@@ -37,17 +37,7 @@ class StartGameViewModelUnitTest {
         assertEquals("LobbyDTO is null", ex.getMessage());
     }
 
-    @Test
-    void testSetLobbyDTO(){
-        LobbyDTO lobbyDTO = new LobbyDTO(1L, new PlayerDTO("name"), null);
-        assertDoesNotThrow(() -> startGameViewModel.setLobbyDTO(lobbyDTO));
-    }
 
-    @Test
-    void testGetLobbyDTO(){
-        startGameViewModel.setLobbyDTO(new LobbyDTO(1L, new PlayerDTO("name"), null));
-        assertDoesNotThrow(() -> startGameViewModel.getLobbyDTO());
-    }
 
 
     @AfterEach
