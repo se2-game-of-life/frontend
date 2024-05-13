@@ -44,7 +44,7 @@ public class StartGameActivity extends AppCompatActivity {
 
         findViewById(R.id.StartButton).setOnClickListener(v -> {
             //todo: call start method in the backend
-            //todo: switch intent even if not on button when correct lobby is received
+            //todo: switch intent when correct lobby is received, even if button is not pressed
             Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
             startActivity(intent);
         });
