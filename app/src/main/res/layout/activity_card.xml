@@ -9,17 +9,27 @@
 
     <Button
         android:id="@+id/buttonOne"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="730dp"
+        android:layout_height="49dp"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
         android:text="Button 1"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="201dp" />
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="202dp" />
 
     <Button
         android:id="@+id/buttonTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
         android:text="Button 2"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
         tools:layout_editor_absoluteX="-34dp"
         tools:layout_editor_absoluteY="291dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
