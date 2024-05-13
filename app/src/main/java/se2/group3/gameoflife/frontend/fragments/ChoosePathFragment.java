@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
@@ -24,6 +25,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  */
 public class ChoosePathFragment extends Fragment {
     private GameViewModel gameViewModel;
+    private static LobbyDTO lobbyDTO;
 
     public ChoosePathFragment() {
         // Required empty public constructor
@@ -33,6 +35,7 @@ public class ChoosePathFragment extends Fragment {
         ChoosePathFragment fragment = new ChoosePathFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        lobbyDTO = (LobbyDTO) args.get("lobbyDTO");
         return fragment;
     }
 
@@ -42,17 +45,18 @@ public class ChoosePathFragment extends Fragment {
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
 
-//        if (getArguments() != null) {
-//            PlayerDTO playerDTO = getArguments().getParcelable("playerDTO");
-//            gameViewModel.setPlayerDTO(playerDTO);
-//        }
+        Button btnCareer = rootView.findViewById(R.id.btnCareer);
+        btnCareer.setOnClickListener(v -> {
+                            gameViewModel.setLobbyDTO(lobbyDTO);
+                            gameViewModel.choosePath(false);
+                }
+        );
 
-//
-//        Button btnCareer = rootView.findViewById(R.id.btnCareer);
-//        btnCareer.setOnClickListener(v -> gameViewModel.choosePath(false));
-//
-//        Button btnCollege = rootView.findViewById(R.id.btnCollege);
-//        btnCollege.setOnClickListener(v -> gameViewModel.choosePath(true));
+        Button btnCollege = rootView.findViewById(R.id.btnCollege);
+        btnCollege.setOnClickListener(v -> {
+            gameViewModel.setLobbyDTO(lobbyDTO);
+            gameViewModel.choosePath(true);
+        });
 
         return rootView;
     }
