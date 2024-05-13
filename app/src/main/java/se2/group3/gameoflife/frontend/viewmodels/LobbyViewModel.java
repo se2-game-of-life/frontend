@@ -35,7 +35,7 @@ public class LobbyViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/lobby/create", player)
+        disposables.add(websocketClient.send("/app/lobby/create", player.getPlayerName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
@@ -53,7 +53,7 @@ public class LobbyViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player))
+        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player.getPlayerName()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
