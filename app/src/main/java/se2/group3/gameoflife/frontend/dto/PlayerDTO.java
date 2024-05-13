@@ -58,9 +58,9 @@ public class PlayerDTO implements Parcelable {
         lobbyID = in.readLong();
         currentCellPosition = in.readInt();
         money = in.readInt();
-        careerCard = in.readParcelable(Card.class.getClassLoader());
+//        careerCard = in.readParcelable(Card.class.getClassLoader());
         numberOfPegs = in.readInt();
-        houses = in.createTypedArrayList(HouseCard.CREATOR);
+//        houses = in.createTypedArrayList(HouseCard.CREATOR);
 
     }
 
@@ -90,10 +90,10 @@ public class PlayerDTO implements Parcelable {
         dest.writeInt(currentCellPosition);
         dest.writeInt(money);
         dest.writeInt(numberOfPegs);
-        dest.writeTypedList(houses);
-        dest.writeParcelable(careerCard, flags);
+//        dest.writeTypedList(houses);
+//        dest.writeParcelable(careerCard, flags);
         dest.writeLong(lobbyID);
-        dest.writeBoolean(collegeDegree);
+//        dest.writeBoolean(collegeDegree);
     }
 
     public String getPlayerName() {

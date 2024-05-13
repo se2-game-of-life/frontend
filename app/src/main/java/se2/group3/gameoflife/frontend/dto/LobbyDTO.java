@@ -20,8 +20,8 @@ public class LobbyDTO implements Parcelable {
     private final long lobbyID;
     private final List<PlayerDTO> players;
     private final PlayerDTO currentPlayer;
-    private final boolean hasDecision;
-    private final List<Card> cards;
+    private boolean hasDecision;
+    private List<Card> cards;
     private final int spunNumber;
     private final boolean hasStarted;
 
@@ -53,11 +53,11 @@ public class LobbyDTO implements Parcelable {
         currentPlayer = in.readParcelable(PlayerDTO.class.getClassLoader());
         Log.d("ParcelableDebug", "Reading currentPlayer: " + currentPlayer);
 
-        hasDecision = in.readBoolean();
-        Log.d("ParcelableDebug", "Reading hasDecision: " + hasDecision);
+//        hasDecision = in.readBoolean();
+//        Log.d("ParcelableDebug", "Reading hasDecision: " + hasDecision);
 
-        cards = in.createTypedArrayList(Card.CREATOR);
-        Log.d("ParcelableDebug", "Reading cards: " + cards);
+//        cards = in.createTypedArrayList(Card.CREATOR);
+//        Log.d("ParcelableDebug", "Reading cards: " + cards);
 
         spunNumber = in.readInt();
         Log.d("ParcelableDebug", "Reading spunNumber: " + spunNumber);
@@ -117,11 +117,11 @@ public class LobbyDTO implements Parcelable {
         Log.d("ParcelableDebug", "Writing currentPlayer: " + currentPlayer);
         dest.writeParcelable(currentPlayer, flags);
 
-        Log.d("ParcelableDebug", "Writing hasDecision: " + hasDecision);
-        dest.writeBoolean(hasDecision);
+//        Log.d("ParcelableDebug", "Writing hasDecision: " + hasDecision);
+//        dest.writeBoolean(hasDecision);
 
-        Log.d("ParcelableDebug", "Writing cards: " + cards);
-        dest.writeTypedList(cards);
+//        Log.d("ParcelableDebug", "Writing cards: " + cards);
+//        dest.writeTypedList(cards);
 
         Log.d("ParcelableDebug", "Writing spunNumber: " + spunNumber);
         dest.writeInt(spunNumber);
