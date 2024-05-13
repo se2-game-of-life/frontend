@@ -25,7 +25,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  */
 public class ChoosePathFragment extends Fragment {
     private GameViewModel gameViewModel;
-    private static LobbyDTO lobbyDTO;
+    private LobbyDTO lobbyDTO;
 
     public ChoosePathFragment() {
         // Required empty public constructor
@@ -35,7 +35,6 @@ public class ChoosePathFragment extends Fragment {
         ChoosePathFragment fragment = new ChoosePathFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        lobbyDTO = (LobbyDTO) args.get("lobbyDTO");
         return fragment;
     }
 
@@ -43,6 +42,8 @@ public class ChoosePathFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        Bundle args = getArguments();
+        lobbyDTO = args.getParcelable("lobbyDTO");
 
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
