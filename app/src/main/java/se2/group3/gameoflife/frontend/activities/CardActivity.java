@@ -1,6 +1,7 @@
 package se2.group3.gameoflife.frontend.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -32,5 +33,21 @@ public class CardActivity extends AppCompatActivity {
 
         Button buttonOne = findViewById(R.id.buttonOne);
         Button buttonTwo = findViewById(R.id.buttonTwo);
+
+        buttonOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonOneClicked = true;
+                sendButtonClickInfo("Button One Clicked");
+            }
+        });
+
+        buttonTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonTwoClicked = true;
+                sendButtonClickInfo("Button Two Clicked");
+            }
+        });
     }
 }
