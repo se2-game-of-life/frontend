@@ -17,7 +17,6 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class CardActivity extends AppCompatActivity {
     private WebsocketClient networkHandler;
-    private Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +39,7 @@ public class CardActivity extends AppCompatActivity {
     }
 
     private void sendButtonClickInfo(String info) {
+        Disposable disposable;
         if (networkHandler != null) {
             disposable = networkHandler.send("/app/buttonClicked", info)
                     .subscribe(() -> {
