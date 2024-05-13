@@ -18,9 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.SpinWheel"
+            android:exported="false" />
+        <activity
             android:name=".activities.CardActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activities.GameActivity"
             android:exported="false"
