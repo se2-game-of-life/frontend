@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.activities;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -16,8 +17,6 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class CardActivity extends AppCompatActivity {
     private WebsocketClient networkHandler;
-    private boolean buttonOneClicked = false;
-    private boolean buttonTwoClicked = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class CardActivity extends AppCompatActivity {
         buttonOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonOneClicked = true;
                 sendButtonClickInfo("Button One Clicked");
             }
         });
@@ -45,9 +43,27 @@ public class CardActivity extends AppCompatActivity {
         buttonTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonTwoClicked = true;
                 sendButtonClickInfo("Button Two Clicked");
             }
         });
+    }
+
+    private void sendButtonClickInfo(String info) {
+        if (networkHandler != null) {
+            networkHandler.send("/app/buttonClicked", info)
+                    .subscribe(() -> {
+                        // Message sent successfully
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Button click sent to backend", Toast.LENGTH_SHORT).show();
+                        });
+                    }, throwable -> {
+                        // Error occurred while sending message
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Failed to send button click: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+                    });
+        } else {
+            Toast.makeText(this, "WebSocket client not initialized", Toast.LENGTH_SHORT).show();
+        }
     }
 }
