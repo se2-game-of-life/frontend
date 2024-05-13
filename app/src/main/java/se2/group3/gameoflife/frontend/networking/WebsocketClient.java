@@ -72,7 +72,7 @@ public class WebsocketClient {
                     .subscribe(stompMessage -> {
                         try {
                             T message = type.cast(toObject(stompMessage.getPayload(), type));
-                            Log.d(TAG, "Received Something!");
+                            Log.d(TAG, "Received Something!: " + stompMessage.getPayload());
                             emitter.onNext(message);
                         } catch (ClassCastException | JsonProcessingException e) {
                             emitter.onError(e);
@@ -91,7 +91,7 @@ public class WebsocketClient {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 () -> {
-                                    Log.d(TAG, "Message send: " +message);
+                                    Log.d(TAG, "Message send: " + message);
                                     emitter.onComplete();
                                 },
                                 emitter::onError

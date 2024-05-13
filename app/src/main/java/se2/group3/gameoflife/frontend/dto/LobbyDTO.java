@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+import se2.group3.gameoflife.frontend.dto.cards.Card;
+
 @JsonIgnoreProperties("stability")
 public class LobbyDTO implements Parcelable {
 
@@ -21,6 +23,7 @@ public class LobbyDTO implements Parcelable {
     private final boolean hasDecision;
     private final List<Card> cards;
     private final int spunNumber;
+    private final boolean hasStarted;
 
     @JsonCreator
     public LobbyDTO(@JsonProperty("lobbyID") long lobbyID,
@@ -28,7 +31,8 @@ public class LobbyDTO implements Parcelable {
                     @JsonProperty("currentPlayer") PlayerDTO currentPlayer,
                     @JsonProperty("hasDecision") boolean hasDecision,
                     @JsonProperty("cards") List<Card> cards,
-                    @JsonProperty("spunNumber") int spunNumber
+                    @JsonProperty("spunNumber") int spunNumber,
+                    @JsonProperty("hasStarted") boolean hasStarted
     ) {
         this.lobbyID = lobbyID;
         this.players = players;
@@ -36,19 +40,17 @@ public class LobbyDTO implements Parcelable {
         this.hasDecision = hasDecision;
         this.cards = cards;
         this.spunNumber = spunNumber;
+        this.hasStarted = hasStarted;
     }
 
     protected LobbyDTO(Parcel in) {
         lobbyID = in.readLong();
         players = in.createTypedArrayList(PlayerDTO.CREATOR);
         currentPlayer = in.readParcelable(PlayerDTO.class.getClassLoader());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            hasDecision = in.readBoolean(); //todo: update version to api 29
-        } else {
-            hasDecision = false;
-        }
+        hasDecision = in.readBoolean();
         cards = in.createTypedArrayList(Card.CREATOR);
         spunNumber = in.readInt();
+        hasStarted = in.readBoolean();
     }
 
     public static final Parcelable.Creator<LobbyDTO> CREATOR = new Parcelable.Creator<LobbyDTO>() {
@@ -87,16 +89,19 @@ public class LobbyDTO implements Parcelable {
         return spunNumber;
     }
 
+    public boolean isHasStarted() {
+        return hasStarted;
+    }
+
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeLong(lobbyID);
         dest.writeTypedList(players);
         dest.writeParcelable(currentPlayer, flags);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            dest.writeBoolean(hasDecision);
-        }
+        dest.writeBoolean(hasDecision);
         dest.writeTypedList(cards);
         dest.writeInt(spunNumber);
+        dest.writeBoolean(hasStarted);
     }
 
     @Override

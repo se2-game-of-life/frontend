@@ -20,6 +20,7 @@ import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 public class MainViewModel extends ViewModel {
 
     private static final String URI = "ws://10.0.2.2:8080/gameoflife";
+//    private static final String URI = "ws://se2-demo.aau.at:53207/gameoflife";
     private final CompositeDisposable disposables = new CompositeDisposable();
     
     private String uuid = null;

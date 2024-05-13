@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.List;
+
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -41,9 +43,9 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.StartButton).setOnClickListener(v -> {
+            //todo: call start method in the backend
+            //todo: switch intent even if not on button when correct lobby is received
             Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
-            PlayerDTO playerDTO = getIntent().getParcelableExtra("playerDTO");
-            intent.putExtra("playerDTO", playerDTO);
             startActivity(intent);
         });
 
@@ -56,28 +58,28 @@ public class StartGameActivity extends AppCompatActivity {
     private void updateLobby(LobbyDTO lobbyDTO) {
         TextView lobbyID = findViewById(R.id.lobbyID);
         lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));
-        int numberPlayers = lobbyDTO.getPlayers().length;
-        PlayerDTO[] players = lobbyDTO.getPlayers();
+        int numberPlayers = lobbyDTO.getPlayers().size();
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
         for (int i = 1; i <= numberPlayers; i++){
             switch(i){
                 case 1:
                     Button player1 = findViewById(R.id.player1Button);
-                    player1.setText(players[0].getPlayerName());
+                    player1.setText(players.get(0).getPlayerName());
                     player1.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     Button player2 = findViewById(R.id.player2Button);
-                    player2.setText(players[1].getPlayerName());
+                    player2.setText(players.get(1).getPlayerName());
                     player2.setVisibility(View.VISIBLE);
                     break;
                 case 3:
                     Button player3 = findViewById(R.id.player3Button);
-                    player3.setText(players[2].getPlayerName());
+                    player3.setText(players.get(2).getPlayerName());
                     player3.setVisibility(View.VISIBLE);
                     break;
                 case 4:
                     Button player4 = findViewById(R.id.player4Button);
-                    player4.setText(players[3].getPlayerName());
+                    player4.setText(players.get(3).getPlayerName());
                     player4.setVisibility(View.VISIBLE);
                     break;
                 default:

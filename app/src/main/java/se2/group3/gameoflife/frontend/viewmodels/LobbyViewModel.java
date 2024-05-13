@@ -9,7 +9,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class LobbyViewModel extends ViewModel {
@@ -24,7 +23,7 @@ public class LobbyViewModel extends ViewModel {
         return lobbyDTO;
     }
 
-    public void createLobby(PlayerDTO player, String uuid) {
+    public void createLobby(String playerName, String uuid) {
 
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + uuid, LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
@@ -35,14 +34,14 @@ public class LobbyViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/lobby/create", player.getPlayerName())
+        disposables.add(websocketClient.send("/app/lobby/create", playerName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
         );
     }
 
-    public void joinLobby(long lobbyID, PlayerDTO player) {
+    public void joinLobby(long lobbyID, String playerName) {
 
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
@@ -53,7 +52,7 @@ public class LobbyViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, player.getPlayerName()))
+        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
