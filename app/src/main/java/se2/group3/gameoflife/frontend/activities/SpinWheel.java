@@ -30,5 +30,10 @@ public class SpinWheel extends AppCompatActivity {
         });
 
         Button spinButton = findViewById(R.id.spinButton);
+
+        spinButton.setOnClickListener(v -> {
+            // Send a message to the backend to spin the wheel
+            //sendButtonClickInfo("Spin Button Clicked");
+        });
     }
 }
