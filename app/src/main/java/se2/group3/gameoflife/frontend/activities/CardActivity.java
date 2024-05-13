@@ -54,14 +54,6 @@ public class CardActivity extends AppCompatActivity {
         }
     }
 
-    private boolean playerClickedButtonOne() {
-        return buttonOneClicked;
-    }
-
-    private boolean playerClickedButtonTwo() {
-        return buttonTwoClicked;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
