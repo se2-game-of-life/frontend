@@ -33,19 +33,9 @@ public class CardActivity extends AppCompatActivity {
         Button buttonOne = findViewById(R.id.buttonOne);
         Button buttonTwo = findViewById(R.id.buttonTwo);
 
-        buttonOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendButtonClickInfo("Button One Clicked");
-            }
-        });
+        buttonOne.setOnClickListener(v -> sendButtonClickInfo("Button One Clicked"));
 
-        buttonTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendButtonClickInfo("Button Two Clicked");
-            }
-        });
+        buttonTwo.setOnClickListener(v -> sendButtonClickInfo("Button Two Clicked"));
     }
 
     private void sendButtonClickInfo(String info) {
@@ -53,17 +43,14 @@ public class CardActivity extends AppCompatActivity {
             networkHandler.send("/app/buttonClicked", info)
                     .subscribe(() -> {
                         // Message sent successfully
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Button click sent to backend", Toast.LENGTH_SHORT).show();
-                        });
+                        runOnUiThread(() -> Toast.makeText(this, "Button click sent to backend", Toast.LENGTH_SHORT).show());
                     }, throwable -> {
                         // Error occurred while sending message
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Failed to send button click: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                        runOnUiThread(() -> Toast.makeText(this, "Failed to send button click: " + throwable.getMessage(), Toast.LENGTH_SHORT).show());
                     });
         } else {
             Toast.makeText(this, "WebSocket client not initialized", Toast.LENGTH_SHORT).show();
         }
     }
 }
+
