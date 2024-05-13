@@ -1,6 +1,7 @@
 package se2.group3.gameoflife.frontend.activities;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,8 @@ import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class CardActivity extends AppCompatActivity {
-    private WebsocketClient networkHandler;
     private boolean buttonOneClicked = false;
-    private boolean buttonTwoClicked = false; 
+    private boolean buttonTwoClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +26,8 @@ public class CardActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button buttonOne = findViewById(R.id.buttonOne);
+        Button buttonTwo = findViewById(R.id.buttonTwo);
     }
 }
