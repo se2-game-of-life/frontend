@@ -51,5 +51,12 @@ public class SpinWheel extends AppCompatActivity {
             Toast.makeText(this, "WebSocket client not initialized", Toast.LENGTH_SHORT).show();
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Dispose the disposable when the activity is destroyed
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
 }
