@@ -3,7 +3,7 @@ package se2.group3.gameoflife.frontend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+
 import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
