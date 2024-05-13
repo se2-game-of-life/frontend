@@ -2,6 +2,7 @@ package se2.group3.gameoflife.frontend.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +34,22 @@ public class SpinWheel extends AppCompatActivity {
 
         spinButton.setOnClickListener(v -> {
             // Send a message to the backend to spin the wheel
-            //sendButtonClickInfo("Spin Button Clicked");
+            sendButtonClickInfo("Spin Button Clicked");
         });
     }
+    private void sendButtonClickInfo(String info) {
+        if (networkHandler != null) {
+            disposable = networkHandler.send("/app/spinWheel", info)
+                    .subscribe(() -> {
+                        // Message sent successfully
+                        runOnUiThread(() -> Toast.makeText(this, "Spin wheel info sent to backend", Toast.LENGTH_SHORT).show());
+                    }, throwable -> {
+                        // Error occurred while sending message
+                        runOnUiThread(() -> Toast.makeText(this, "Failed to send spin wheel info: " + throwable.getMessage(), Toast.LENGTH_SHORT).show());
+                    });
+        } else {
+            Toast.makeText(this, "WebSocket client not initialized", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
