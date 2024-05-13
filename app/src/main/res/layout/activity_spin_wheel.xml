@@ -11,7 +11,13 @@
         android:id="@+id/spinButton"
         android:layout_width="730dp"
         android:layout_height="49dp"
+        android:background="@drawable/oval_button"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="spin"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="288dp" />
+        tools:layout_editor_absoluteY="285dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
