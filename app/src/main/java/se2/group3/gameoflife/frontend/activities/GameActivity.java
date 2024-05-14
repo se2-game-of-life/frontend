@@ -24,17 +24,17 @@ public class GameActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        PlayerDTO playerDTO = getIntent().getParcelableExtra("playerDTO");
+//        PlayerDTO playerDTO = getIntent().getParcelableExtra("playerDTO");
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("playerDTO", playerDTO);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("playerDTO", playerDTO);
+//
+//        ChoosePathFragment fragment = new ChoosePathFragment();
+//        fragment.setArguments(bundle);
 
-        ChoosePathFragment fragment = new ChoosePathFragment();
-        fragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, fragment)
-                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragmentContainerView, fragment)
+//                .commit();
     }
 
 }

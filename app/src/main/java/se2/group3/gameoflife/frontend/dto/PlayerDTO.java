@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.dto;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,33 +10,58 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import se2.group3.gameoflife.frontend.dto.cards.Card;
+import se2.group3.gameoflife.frontend.dto.cards.CareerCard;
+import se2.group3.gameoflife.frontend.dto.cards.HouseCard;
+
 @JsonIgnoreProperties("stability")
 public class PlayerDTO implements Parcelable {
+    private String playerUUID;
+    private Long lobbyID;
     private final String playerName;
-    private String playerID;
     private int currentCellPosition;
     private int money;
-    private int investmentNumber; // The chosen investment number
-    private int investmentLevel; // The current level of investment-
+    private CareerCard careerCard;
     private int numberOfPegs;
-    //todo implement class CareerCard
-    //private CareerCard careerCard;
-
-    // Booleans for the different paths the game offers
-    private boolean isCollegePath;
-    private boolean isMarriedPath;
-    private boolean isGrowFamilyPath;
-    private boolean hasMidlifeCrisis;
-    private boolean isRetireEarlyPath;
+    private List<Card> houses;
+    private boolean collegeDegree;
 
 
     @JsonCreator
-    public PlayerDTO(@JsonProperty("playerName") String playerName) {
+    public PlayerDTO(@JsonProperty("playerUUID") String playerUUID,
+                     @JsonProperty("playerName") String playerName,
+                     @JsonProperty("lobbyID") Long lobbyID,
+                     @JsonProperty("currentCellPosition") int currentCellPosition,
+                     @JsonProperty("money") int money,
+                     @JsonProperty("careerCard") CareerCard careerCard,
+                     @JsonProperty("numberOfPegs") int numberOfPegs,
+                     @JsonProperty("houses") List<Card> houses,
+                     @JsonProperty("collageDegree") boolean collegeDegree
+    ) {
+        this.playerUUID = playerUUID;
         this.playerName = playerName;
+        this.lobbyID = lobbyID;
+        this.currentCellPosition = currentCellPosition;
+        this.money = money;
+        this.careerCard = careerCard;
+        this.numberOfPegs = numberOfPegs;
+        this.houses = houses;
+        this.collegeDegree = collegeDegree;
     }
 
     protected PlayerDTO(Parcel in) {
         playerName = in.readString();
+        playerUUID = in.readString();
+        lobbyID = in.readLong();
+        currentCellPosition = in.readInt();
+        money = in.readInt();
+//        careerCard = in.readParcelable(Card.class.getClassLoader());
+        numberOfPegs = in.readInt();
+//        houses = in.createTypedArrayList(HouseCard.CREATOR);
+
     }
 
     public static final Creator<PlayerDTO> CREATOR = new Creator<PlayerDTO>() {
@@ -50,9 +76,7 @@ public class PlayerDTO implements Parcelable {
         }
     };
 
-    public String getPlayerName() {
-        return this.playerName;
-    }
+
   
     @Override
     public int describeContents() {
@@ -62,105 +86,50 @@ public class PlayerDTO implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(playerName);
-        dest.writeString(playerID);
+        dest.writeString(playerUUID);
         dest.writeInt(currentCellPosition);
         dest.writeInt(money);
-        dest.writeInt(investmentNumber);
-        dest.writeInt(investmentLevel);
         dest.writeInt(numberOfPegs);
-        dest.writeInt(isCollegePath ? 1 : 0);
-        dest.writeInt(isMarriedPath ? 1 : 0);
-        dest.writeInt(isGrowFamilyPath ? 1 : 0);
-        dest.writeInt(hasMidlifeCrisis ? 1 : 0);
-        dest.writeInt(isRetireEarlyPath ? 1 : 0);
-    }
-      
-    public String getPlayerID() {
-        return playerID;
+//        dest.writeTypedList(houses);
+//        dest.writeParcelable(careerCard, flags);
+        dest.writeLong(lobbyID);
+//        dest.writeBoolean(collegeDegree);
     }
 
-    public void setPlayerID(String playerID) {
-        this.playerID = playerID;
+    public String getPlayerName() {
+        return this.playerName;
+    }
+
+    public String getPlayerUUID() {
+        return playerUUID;
     }
 
     public int getCurrentCellPosition() {
         return currentCellPosition;
     }
 
-    public void setCurrentCellPosition(int currentCellPosition) {
-        this.currentCellPosition = currentCellPosition;
-    }
-
     public int getMoney() {
         return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
-    public int getInvestmentNumber() {
-        return investmentNumber;
-    }
-
-    public void setInvestmentNumber(int investmentNumber) {
-        this.investmentNumber = investmentNumber;
-    }
-
-    public int getInvestmentLevel() {
-        return investmentLevel;
-    }
-
-    public void setInvestmentLevel(int investmentLevel) {
-        this.investmentLevel = investmentLevel;
     }
 
     public int getNumberOfPegs() {
         return numberOfPegs;
     }
 
-    public void setNumberOfPegs(int numberOfPegs) {
-        this.numberOfPegs = numberOfPegs;
+    public long getLobbyID() {
+        return lobbyID;
     }
 
-    public boolean isCollegePath() {
-        return isCollegePath;
+    public CareerCard getCareerCard() {
+        return careerCard;
     }
 
-    public void setCollegePath(boolean collegePath) {
-        isCollegePath = collegePath;
+    public List<Card> getHouses() {
+        return houses;
     }
 
-    public boolean isMarriedPath() {
-        return isMarriedPath;
-    }
-
-    public void setMarriedPath(boolean marriedPath) {
-        isMarriedPath = marriedPath;
-    }
-
-    public boolean isGrowFamilyPath() {
-        return isGrowFamilyPath;
-    }
-
-    public void setGrowFamilyPath(boolean growFamilyPath) {
-        isGrowFamilyPath = growFamilyPath;
-    }
-
-    public boolean isHasMidlifeCrisis() {
-        return hasMidlifeCrisis;
-    }
-
-    public void setHasMidlifeCrisis(boolean hasMidlifeCrisis) {
-        this.hasMidlifeCrisis = hasMidlifeCrisis;
-    }
-
-    public boolean isRetireEarlyPath() {
-        return isRetireEarlyPath;
-    }
-
-    public void setRetireEarlyPath(boolean retireEarlyPath) {
-        isRetireEarlyPath = retireEarlyPath;
+    public boolean isCollegeDegree() {
+        return collegeDegree;
     }
 }
 

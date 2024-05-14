@@ -5,14 +5,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+
+
+
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+
+
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+
 import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,15 +45,19 @@ class StartGameViewModelUnitTest {
 
     @Test
     void testSetLobbyDTO(){
-        LobbyDTO lobbyDTO = new LobbyDTO(1L, new PlayerDTO("name"), null);
+        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
         assertDoesNotThrow(() -> startGameViewModel.setLobbyDTO(lobbyDTO));
     }
 
     @Test
     void testGetLobbyDTO(){
-        startGameViewModel.setLobbyDTO(new LobbyDTO(1L, new PlayerDTO("name"), null));
+        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
+        startGameViewModel.setLobbyDTO(lobbyDTO);
         assertDoesNotThrow(() -> startGameViewModel.getLobbyDTO());
     }
+
+
+
 
 
     @AfterEach

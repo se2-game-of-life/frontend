@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JoinLobbyRequest {
 
-    private long lobbyID;
-    private PlayerDTO player;
+    private final long lobbyID;
+    private final String playerName;
 
     @JsonCreator
-    public JoinLobbyRequest(@JsonProperty("lobbyID") long lobbyID, @JsonProperty("player") PlayerDTO player) {
+    public JoinLobbyRequest(@JsonProperty("lobbyID") long lobbyID, @JsonProperty("playerName") String playerName) {
         this.lobbyID = lobbyID;
-        this.player = player;
+        this.playerName = playerName;
     }
 
     public long getLobbyID() {
         return lobbyID;
     }
 
-    public PlayerDTO getPlayer() {
-        return player;
+    public String getPlayerName() {
+        return playerName;
     }
 }
