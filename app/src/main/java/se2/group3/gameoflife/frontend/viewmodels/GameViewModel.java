@@ -31,7 +31,7 @@ public class GameViewModel extends ViewModel {
 
         Log.d("Networking", lobbyDTO.toString());
 
-        disposables.add(websocketClient.send("/app/lobby/collegeChoice", collegePath)
+        disposables.add(websocketClient.send("/app/lobby/choice", collegePath)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
