@@ -28,17 +28,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         mainViewModel.connectToServer();
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(v -> {
+
             TextView user = findViewById(R.id.enterUsername);
             mainViewModel.setUsername(user.getText().toString());
             textUser = findViewById(R.id.textUsername);
             if (mainViewModel.checkUsername()){
                 Intent intent = new Intent(this, LobbyActivity.class);
+
                 intent.putExtra("username", mainViewModel.getUsername());
                 intent.putExtra("uuid", mainViewModel.getUUID());
                 startActivity(intent);
