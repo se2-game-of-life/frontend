@@ -43,6 +43,7 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    // fixme method name should indicate the input validation
     @Test
     public void welcomeActivityTest() {
         ViewInteraction editText = onView(

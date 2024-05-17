@@ -101,6 +101,7 @@ public class GameBoardFragment extends Fragment {
                             GridLayout.spec(col, 1f) // Column weight
                     ));
 
+                    // fixme use subclasses for the cells (maybe also for the backend's cell-specific game logic)
                     // Set text and appearance of cells based on cellDTO presence
                     if (cellDTO != null) {
                         if(Objects.equals(cellDTO.getType(), "actionCell")) {

@@ -55,6 +55,7 @@ public class StartGameActivity extends AppCompatActivity {
         startGameViewModel.getLobby().observe(StartGameActivity.this, this::updateLobby);
     }
 
+    // fixme extract duplicate code in methods parameters=(buttonid, idx)
     private void updateLobby(LobbyDTO lobbyDTO) {
         TextView lobbyID = findViewById(R.id.lobbyID);
         lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));

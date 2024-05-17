@@ -40,6 +40,7 @@ class MainViewModelUnitTest {
         assertFalse(mainViewModel.checkUsername());
     }
 
+    // fixme method names, why do you expect the same result
     @Test
     void testGetUUID(){
         String uuid1 = mainViewModel.getUUID();
