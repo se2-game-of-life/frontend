@@ -19,7 +19,7 @@ public class GameViewModel extends ViewModel {
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
 
-    public void choosePath(boolean collegePath){
+    public void makeChoice(boolean chooseLeft){
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,7 +31,7 @@ public class GameViewModel extends ViewModel {
 
         Log.d("Networking", lobbyDTO.toString());
 
-        disposables.add(websocketClient.send("/app/lobby/choice", collegePath)
+        disposables.add(websocketClient.send("/app/lobby/choice", chooseLeft)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))

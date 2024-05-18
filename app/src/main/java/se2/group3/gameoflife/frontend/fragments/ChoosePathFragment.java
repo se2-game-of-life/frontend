@@ -14,7 +14,6 @@ import android.widget.Button;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 
@@ -49,14 +48,15 @@ public class ChoosePathFragment extends Fragment {
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> {
                             gameViewModel.setLobbyDTO(lobbyDTO);
-                            gameViewModel.choosePath(false);
+                            gameViewModel.makeChoice(false);
                 }
         );
 
         Button btnCollege = rootView.findViewById(R.id.btnCollege);
         btnCollege.setOnClickListener(v -> {
             gameViewModel.setLobbyDTO(lobbyDTO);
-            gameViewModel.choosePath(true);
+            //chooseLeft = chooseCollege
+            gameViewModel.makeChoice(true);
         });
 
         return rootView;
