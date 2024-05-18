@@ -168,7 +168,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="se2.group3.gameoflife.frontend.fragments.GameBoardFragment"
+            android:name="se2.group3.gameoflife.frontend.fragments.ChoosePathFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
