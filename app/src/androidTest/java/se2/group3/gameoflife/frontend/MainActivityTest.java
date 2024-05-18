@@ -44,7 +44,7 @@ public class MainActivityTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void welcomeActivityTest() {
+    public void testUsernameCheck_invalid() {
         ViewInteraction editText = onView(
                 allOf(withId(R.id.enterUsername),
                         childAtPosition(
