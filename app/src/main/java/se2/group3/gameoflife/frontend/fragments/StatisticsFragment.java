@@ -19,7 +19,7 @@ import se2.group3.gameoflife.frontend.R;
 
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.fragments.statistics.statisticsPlayerFragment;
+import se2.group3.gameoflife.frontend.fragments.statistics.StatisticsPlayerFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -112,7 +112,7 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void replaceFragment(String playerName, String uuid) {
-        Fragment fragment = statisticsPlayerFragment.newInstance(playerName, uuid);
+        Fragment fragment = StatisticsPlayerFragment.newInstance(playerName, uuid);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
