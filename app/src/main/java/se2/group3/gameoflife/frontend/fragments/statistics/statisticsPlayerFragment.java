@@ -35,15 +35,15 @@ public class statisticsPlayerFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param playerName Parameter 1.
-     * @param lobbyDTO Parameter 2.
+     * @param uuid Parameter 2.
      * @return A new instance of fragment statisticsPlayer_fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static statisticsPlayerFragment newInstance(String playerName, String lobbyDTO) {
+    public static statisticsPlayerFragment newInstance(String playerName, String uuid) {
         statisticsPlayerFragment fragment = new statisticsPlayerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, playerName);
-        args.putString(ARG_PARAM2, lobbyDTO);
+        args.putString(ARG_PARAM2, uuid);
         fragment.setArguments(args);
         return fragment;
     }

@@ -80,44 +80,39 @@ public class StatisticsFragment extends Fragment {
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
         LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
         List<PlayerDTO> players = lobbyDTO.getPlayers();
+        Button player1 = rootView.findViewById(R.id.button_player1);
+        Button player2 = rootView.findViewById(R.id.button_player2);
+        Button player3 = rootView.findViewById(R.id.button_player3);
+        Button player4 = rootView.findViewById(R.id.button_player4);
         for (int i = 1; i <= players.size(); i++) {
             switch (i) {
                 case 1:
-                    Button player1 = rootView.findViewById(R.id.button_player1);
                     player1.setVisibility(View.VISIBLE);
                     player1.setText(players.get(i).getPlayerName());
                     break;
                 case 2:
-                    Button player2 = rootView.findViewById(R.id.button_player2);
                     player2.setVisibility(View.VISIBLE);
                     player2.setText(players.get(i).getPlayerName());
                     break;
                 case 3:
-                    Button player3 = rootView.findViewById(R.id.button_player3);
                     player3.setVisibility(View.VISIBLE);
                     player3.setText(players.get(i).getPlayerName());
                     break;
                 case 4:
-                    Button player4 = rootView.findViewById(R.id.button_player4);
                     player4.setVisibility(View.VISIBLE);
                     player4.setText(players.get(i).getPlayerName());
                     break;
                 default:
                     Log.d("Networking", "default case in statistic fragment");
             }
-
         }
+
+
         return rootView;
     }
 
-    private void replaceFragment(String playerName, LobbyDTO lobbyDTO) {
-        String lobbyString = "";
-        try{
-            lobbyString = gameViewModel.lobbyDTOToString(lobbyDTO);
-        } catch(JsonProcessingException e){
-            Log.d("Networking", "Json Exception.");
-        }
-        Fragment fragment = statisticsPlayerFragment.newInstance(playerName, lobbyString);
+    private void replaceFragment(String playerName, String uuid) {
+        Fragment fragment = statisticsPlayerFragment.newInstance(playerName, uuid);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
