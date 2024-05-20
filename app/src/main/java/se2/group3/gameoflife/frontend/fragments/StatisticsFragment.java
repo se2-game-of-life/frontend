@@ -103,16 +103,16 @@ public class StatisticsFragment extends Fragment {
                     Log.d("Networking", "default case in statistic fragment");
             }
         }
-        player1.setOnClickListener(v -> replaceFragment(players.get(1).getPlayerName(), players.get(1).getPlayerUUID()));
-        player2.setOnClickListener(v -> replaceFragment(players.get(2).getPlayerName(), players.get(2).getPlayerUUID()));
-        player3.setOnClickListener(v -> replaceFragment(players.get(3).getPlayerName(), players.get(3).getPlayerUUID()));
-        player4.setOnClickListener(v -> replaceFragment(players.get(4).getPlayerName(), players.get(4).getPlayerUUID()));
+        player1.setOnClickListener(v -> replaceFragment(players.get(1)));
+        player2.setOnClickListener(v -> replaceFragment(players.get(2)));
+        player3.setOnClickListener(v -> replaceFragment(players.get(3)));
+        player4.setOnClickListener(v -> replaceFragment(players.get(4)));
 
         return rootView;
     }
 
-    private void replaceFragment(String playerName, String uuid) {
-        Fragment fragment = StatisticsPlayerFragment.newInstance(playerName, uuid);
+    private void replaceFragment(PlayerDTO player) {
+        Fragment fragment = StatisticsPlayerFragment.newInstance(player);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
