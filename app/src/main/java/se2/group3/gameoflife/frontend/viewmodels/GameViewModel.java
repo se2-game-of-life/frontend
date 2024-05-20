@@ -63,8 +63,4 @@ public class GameViewModel extends ViewModel {
         return lobbyDTO;
     }
 
-    public String lobbyDTOToString(LobbyDTO lobbyDTO) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(lobbyDTO);
-    }
 }
