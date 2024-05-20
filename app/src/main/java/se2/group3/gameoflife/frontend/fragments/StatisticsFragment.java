@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
@@ -106,6 +108,19 @@ public class StatisticsFragment extends Fragment {
 
         }
         return rootView;
+    }
+
+    private void replaceFragment(String playerName, LobbyDTO lobbyDTO) {
+        String lobbyString = "";
+        try{
+            lobbyString = gameViewModel.lobbyDTOToString(lobbyDTO);
+        } catch(JsonProcessingException e){
+            Log.d("Networking", "Json Exception.");
+        }
+        Fragment fragment = statisticsPlayerFragment.newInstance(playerName, lobbyString);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
 }
