@@ -12,10 +12,10 @@ import se2.group3.gameoflife.frontend.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link statisticsPlayer_fragment#newInstance} factory method to
+ * Use the {@link statisticsPlayerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class statisticsPlayer_fragment extends Fragment {
+public class statisticsPlayerFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class statisticsPlayer_fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public statisticsPlayer_fragment() {
+    public statisticsPlayerFragment() {
         // Required empty public constructor
     }
 
@@ -34,16 +34,16 @@ public class statisticsPlayer_fragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param playerName Parameter 1.
+     * @param lobbyDTO Parameter 2.
      * @return A new instance of fragment statisticsPlayer_fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static statisticsPlayer_fragment newInstance(String param1, String param2) {
-        statisticsPlayer_fragment fragment = new statisticsPlayer_fragment();
+    public static statisticsPlayerFragment newInstance(String playerName, String lobbyDTO) {
+        statisticsPlayerFragment fragment = new statisticsPlayerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, playerName);
+        args.putString(ARG_PARAM2, lobbyDTO);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +61,6 @@ public class statisticsPlayer_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics_player_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_statistics_players, container, false);
     }
 }
