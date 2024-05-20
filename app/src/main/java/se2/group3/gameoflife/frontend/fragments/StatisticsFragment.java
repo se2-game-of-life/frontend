@@ -106,7 +106,10 @@ public class StatisticsFragment extends Fragment {
                     Log.d("Networking", "default case in statistic fragment");
             }
         }
-
+        player1.setOnClickListener(v -> replaceFragment(players.get(1).getPlayerName(), players.get(1).getPlayerUUID()));
+        player2.setOnClickListener(v -> replaceFragment(players.get(2).getPlayerName(), players.get(2).getPlayerUUID()));
+        player3.setOnClickListener(v -> replaceFragment(players.get(3).getPlayerName(), players.get(3).getPlayerUUID()));
+        player4.setOnClickListener(v -> replaceFragment(players.get(4).getPlayerName(), players.get(4).getPlayerUUID()));
 
         return rootView;
     }
