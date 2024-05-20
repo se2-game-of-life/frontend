@@ -16,19 +16,30 @@
             android:id="@+id/button_player1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spieler 1" />
+            android:text="Spieler 1"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/button_player2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spieler 2" />
+            android:text="Spieler 2"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/button_player3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spieler 3" />
+            android:text="Spieler 3"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/button_player4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spieler 4"
+            android:visibility="invisible"/>
+
     </LinearLayout>
 
     <FrameLayout
