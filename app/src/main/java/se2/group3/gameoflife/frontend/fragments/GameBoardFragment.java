@@ -33,6 +33,9 @@ public class GameBoardFragment extends Fragment {
         // Setup button and its click listener
         setupButton(rootView);
 
+        // Call fetchBoardData when the fragment is created
+        fetchBoardData();
+
         return rootView;
     }
 
@@ -43,10 +46,15 @@ public class GameBoardFragment extends Fragment {
         // Add more buttons and their click listeners as needed
     }
 
+    private void fetchBoardData() {
+        // You can add the code for fetching board data here
+    }
+
     @Override
     public void onDestroy() {
         gameBoardViewModel.dispose();
         super.onDestroy();
     }
 }
+
 
