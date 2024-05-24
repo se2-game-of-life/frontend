@@ -47,15 +47,7 @@ public class GameViewModel extends ViewModel {
         }
     }
 
-    public LobbyDTO getLobbyDTO() {
-        if(lobbyDTO == null || lobbyDTO.getValue() == null){
-            throw new IllegalArgumentException("LobbyDTO is null");
-        } else{
-            return lobbyDTO.getValue();
-        }
-    }
-
-//    public void dispose() {
+    //    public void dispose() {
 //        disposables.dispose();
 //    }
 }
