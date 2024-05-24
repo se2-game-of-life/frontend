@@ -49,6 +49,13 @@ public class GameViewModel extends ViewModel {
         }
     }
 
+    public LobbyDTO getLobbyDTO() {
+        if(lobbyDTO == null || lobbyDTO.getValue() == null){
+            throw new IllegalArgumentException("LobbyDTO is null");
+        } else{
+            return lobbyDTO.getValue();
+        }
+    }
     public LiveData<LobbyDTO> getLobby() {
         return lobbyDTO;
     }
