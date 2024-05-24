@@ -30,12 +30,17 @@ public class GameBoardFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
         gameBoardViewModel = new ViewModelProvider(this).get(GameBoardViewModel.class);
 
+        // Setup button and its click listener
+        setupButton(rootView);
+
+        return rootView;
+    }
+
+    private void setupButton(View rootView) {
         Button btnSpin = rootView.findViewById(R.id.buttonSpin);
         btnSpin.setOnClickListener(v -> gameBoardViewModel.spinWheel());
 
         // Add more buttons and their click listeners as needed
-
-        return rootView;
     }
 
     @Override
@@ -44,3 +49,4 @@ public class GameBoardFragment extends Fragment {
         super.onDestroy();
     }
 }
+
