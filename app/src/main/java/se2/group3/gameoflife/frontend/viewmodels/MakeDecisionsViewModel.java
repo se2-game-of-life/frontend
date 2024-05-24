@@ -18,7 +18,7 @@ public class MakeDecisionsViewModel extends ViewModel {
 
     // Method to make a choice
     public void makeChoice(boolean chooseLeft, String uuid) {
-        String choiceData = createChoiceData(chooseLeft, uuid);
+        String choiceData = "{\"chooseLeft\":" + chooseLeft + ",\"uuid\":\"" + uuid + "\"}";
 
         disposables.add(websocketClient.send("/app/makeChoice", choiceData)
                 .subscribeOn(Schedulers.io())
@@ -30,10 +30,6 @@ public class MakeDecisionsViewModel extends ViewModel {
                     choiceResult.setValue(false); // Assuming false indicates failure
                 })
         );
-    }
-
-    private String createChoiceData(boolean chooseLeft, String uuid) {
-        return "{\"chooseLeft\":" + chooseLeft + ",\"uuid\":\"" + uuid + "\"}";
     }
 
     // Getter method for choice result
