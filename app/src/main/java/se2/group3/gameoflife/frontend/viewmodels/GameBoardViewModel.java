@@ -58,10 +58,6 @@ public class GameBoardViewModel extends ViewModel {
         return spinResult;
     }
 
-    // Getter method for error message
-    public MutableLiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
 
     // Clean up disposables
     @Override
