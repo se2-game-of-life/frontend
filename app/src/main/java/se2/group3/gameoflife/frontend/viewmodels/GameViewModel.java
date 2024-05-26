@@ -42,6 +42,10 @@ public class GameViewModel extends ViewModel {
         );
     }
 
+    //todo Anastasiia --> copy spinWheel() in here and delete GameBoardViewModel
+
+
+
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
             this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
