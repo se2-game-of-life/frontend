@@ -8,6 +8,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
@@ -17,6 +20,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ObjectMapper objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -27,7 +31,11 @@ public class GameActivity extends AppCompatActivity {
         LobbyDTO lobbyDTO = getIntent().getParcelableExtra("lobbyDTO");
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable("lobbyDTO", lobbyDTO);
+        try {
+            bundle.putString("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         ChoosePathFragment fragment = new ChoosePathFragment();
         fragment.setArguments(bundle);
