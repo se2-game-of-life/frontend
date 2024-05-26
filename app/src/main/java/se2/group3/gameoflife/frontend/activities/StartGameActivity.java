@@ -59,12 +59,13 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         try {
-            startGameViewModel.setLobbyDTO(objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class));
+            LobbyDTO lobby = objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class);
+            startGameViewModel.setLobbyDTO(lobby);
             updateLobby(startGameViewModel.getLobbyDTO());
+            startGameViewModel.getLobbyUpdates(lobby.getLobbyID());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
         startGameViewModel.getLobby().observe(StartGameActivity.this, this::updateLobby);
     }
 
