@@ -33,6 +33,7 @@ public class StartGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startGameViewModel = new ViewModelProvider(this).get(StartGameViewModel.class);
+        objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_start_game);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
