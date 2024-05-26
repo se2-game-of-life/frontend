@@ -2,11 +2,14 @@ package se2.group3.gameoflife.frontend.viewmodels;
 
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 import io.reactivex.schedulers.Schedulers;
@@ -39,20 +42,6 @@ public class GameViewModel extends ViewModel {
         );
     }
 
-
-    public void setLobbyDTO(LobbyDTO lobbyDTO){
-        if(lobbyDTO == null){
-            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
-        } else{
-            this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
-        }
-    }
-
-    //    public void dispose() {
-//        disposables.dispose();
-//    }
-
-    private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
             this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
