@@ -81,21 +81,21 @@ public class StatisticsFragment extends Fragment {
         Button player2 = rootView.findViewById(R.id.button_player2);
         Button player3 = rootView.findViewById(R.id.button_player3);
         Button player4 = rootView.findViewById(R.id.button_player4);
-        for (int i = 1; i <= players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             switch (i) {
-                case 1:
+                case 0:
                     player1.setVisibility(View.VISIBLE);
                     player1.setText(players.get(i).getPlayerName());
                     break;
-                case 2:
+                case 1:
                     player2.setVisibility(View.VISIBLE);
                     player2.setText(players.get(i).getPlayerName());
                     break;
-                case 3:
+                case 2:
                     player3.setVisibility(View.VISIBLE);
                     player3.setText(players.get(i).getPlayerName());
                     break;
-                case 4:
+                case 3:
                     player4.setVisibility(View.VISIBLE);
                     player4.setText(players.get(i).getPlayerName());
                     break;
@@ -103,10 +103,22 @@ public class StatisticsFragment extends Fragment {
                     Log.d("Networking", "default case in statistic fragment");
             }
         }
-        player1.setOnClickListener(v -> replaceFragment(players.get(1)));
-        player2.setOnClickListener(v -> replaceFragment(players.get(2)));
-        player3.setOnClickListener(v -> replaceFragment(players.get(3)));
-        player4.setOnClickListener(v -> replaceFragment(players.get(4)));
+        player1.setOnClickListener(v -> {
+            gameViewModel.setPlayerDTO(players.get(0));
+            replaceFragment(players.get(0));
+        });
+        player2.setOnClickListener(v -> {
+            gameViewModel.setPlayerDTO(players.get(1));
+            replaceFragment(players.get(1));
+        });
+        player3.setOnClickListener(v -> {
+            gameViewModel.setPlayerDTO(players.get(2));
+            replaceFragment(players.get(2));
+        });
+        player4.setOnClickListener(v ->{
+            gameViewModel.setPlayerDTO(players.get(3));
+            replaceFragment(players.get(3));
+        });
 
         return rootView;
     }
