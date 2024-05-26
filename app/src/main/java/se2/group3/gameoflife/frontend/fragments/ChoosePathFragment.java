@@ -23,8 +23,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  * create an instance of this fragment.
  */
 public class ChoosePathFragment extends Fragment {
-    private GameViewModel gameViewModel;
-    private LobbyDTO lobbyDTO;
+
 
     public ChoosePathFragment() {
         // Required empty public constructor
@@ -39,22 +38,19 @@ public class ChoosePathFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        GameViewModel gameViewModel;
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-        Bundle args = getArguments();
-        lobbyDTO = args.getParcelable("lobbyDTO");
 
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> {
-                            gameViewModel.setLobbyDTO(lobbyDTO);
                             gameViewModel.makeChoice(false);
                 }
         );
 
         Button btnCollege = rootView.findViewById(R.id.btnCollege);
         btnCollege.setOnClickListener(v -> {
-            gameViewModel.setLobbyDTO(lobbyDTO);
             //chooseLeft = chooseCollege
             gameViewModel.makeChoice(true);
         });
