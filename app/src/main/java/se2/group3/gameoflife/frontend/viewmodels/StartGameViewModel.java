@@ -18,8 +18,6 @@ public class StartGameViewModel extends ViewModel {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-
-
     public LiveData<LobbyDTO> getLobby() {
         return lobbyDTO;
     }
@@ -34,6 +32,8 @@ public class StartGameViewModel extends ViewModel {
                 )
         );
     }
+
+    //todo: add method to send leave lobby command (see start game activity for other todo regarding this issue)
 
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO == null){

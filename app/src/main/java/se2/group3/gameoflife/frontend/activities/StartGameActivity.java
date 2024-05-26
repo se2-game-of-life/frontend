@@ -13,6 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
@@ -24,6 +27,7 @@ import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
 public class StartGameActivity extends AppCompatActivity {
 
     private StartGameViewModel startGameViewModel;
+    private ObjectMapper objectMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +44,40 @@ public class StartGameActivity extends AppCompatActivity {
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(v -> {
             Intent intent = new Intent(StartGameActivity.this, LobbyActivity.class);
             startActivity(intent);
+            //todo: handle player leave lobby
         });
 
         findViewById(R.id.StartButton).setOnClickListener(v -> {
-            //todo: call start method in the backend
-            //todo: switch intent when correct lobby is received, even if button is not pressed
             Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
-            LobbyDTO lobbyDTO = intent.getParcelableExtra("lobbyDTO");
-            intent.putExtra("lobbyDTO", lobbyDTO);
+            try {
+                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(startGameViewModel.getLobbyDTO()));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             startActivity(intent);
         });
 
-        startGameViewModel.setLobbyDTO(getIntent().getParcelableExtra("lobbyDTO"));
-        updateLobby(startGameViewModel.getLobbyDTO());
+        try {
+            startGameViewModel.setLobbyDTO(objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class));
+            updateLobby(startGameViewModel.getLobbyDTO());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         startGameViewModel.getLobby().observe(StartGameActivity.this, this::updateLobby);
     }
 
     private void updateLobby(LobbyDTO lobbyDTO) {
+        if(lobbyDTO.isHasStarted()) {
+            Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+            try {
+                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            startActivity(intent);
+        }
+
         TextView lobbyID = findViewById(R.id.lobbyID);
         lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));
         int numberPlayers = lobbyDTO.getPlayers().size();
