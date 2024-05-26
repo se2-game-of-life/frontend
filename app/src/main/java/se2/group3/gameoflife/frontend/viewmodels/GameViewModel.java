@@ -9,9 +9,8 @@ import androidx.lifecycle.ViewModel;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
-
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class GameViewModel extends ViewModel {
@@ -19,24 +18,37 @@ public class GameViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
-//    private MutableLiveData<PlayerDTO> playerDTO = new MutableLiveData<>();
+    private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
 
-//    public void setPlayerDTO(PlayerDTO playerDTO){
-//        if(playerDTO == null){
-//            throw new IllegalArgumentException("PlayerDTO is null");
-//        } else{
-//            this.playerDTO = new MutableLiveData<>(playerDTO);
-//        }
-//    }
-//    public PlayerDTO getPlayerDTO(){
-//        if(playerDTO == null || playerDTO.getValue() == null){
-//            throw new IllegalArgumentException("PlayerDTO is null");
-//        } else{
-//            return playerDTO.getValue();
-//        }
-//    }
+    public void makeChoice(boolean chooseLeft){
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
 
-//    public void dispose() {
+        Log.d("Networking", lobbyDTO.toString());
+
+        disposables.add(websocketClient.send("/app/lobby/choice", chooseLeft)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
+        );
+    }
+
+
+    public void setLobbyDTO(LobbyDTO lobbyDTO){
+        if(lobbyDTO == null){
+            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
+        } else{
+            this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
+        }
+    }
+
+    //    public void dispose() {
 //        disposables.dispose();
 //    }
 

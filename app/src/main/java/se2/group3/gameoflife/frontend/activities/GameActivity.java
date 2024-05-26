@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
 
 public class GameActivity extends AppCompatActivity {
@@ -24,17 +24,17 @@ public class GameActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        PlayerDTO playerDTO = getIntent().getParcelableExtra("playerDTO");
+        LobbyDTO lobbyDTO = getIntent().getParcelableExtra("lobbyDTO");
 
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("playerDTO", playerDTO);
-//
-//        ChoosePathFragment fragment = new ChoosePathFragment();
-//        fragment.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("lobbyDTO", lobbyDTO);
 
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragmentContainerView, fragment)
-//                .commit();
+        ChoosePathFragment fragment = new ChoosePathFragment();
+        fragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, fragment)
+                .commit();
     }
 
 }

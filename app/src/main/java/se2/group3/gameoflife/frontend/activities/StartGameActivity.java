@@ -46,6 +46,8 @@ public class StartGameActivity extends AppCompatActivity {
             //todo: call start method in the backend
             //todo: switch intent when correct lobby is received, even if button is not pressed
             Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+            LobbyDTO lobbyDTO = intent.getParcelableExtra("lobbyDTO");
+            intent.putExtra("lobbyDTO", lobbyDTO);
             startActivity(intent);
         });
 
