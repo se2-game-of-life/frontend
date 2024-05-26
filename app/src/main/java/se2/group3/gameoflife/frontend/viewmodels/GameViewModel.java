@@ -2,11 +2,14 @@ package se2.group3.gameoflife.frontend.viewmodels;
 
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 import io.reactivex.schedulers.Schedulers;
