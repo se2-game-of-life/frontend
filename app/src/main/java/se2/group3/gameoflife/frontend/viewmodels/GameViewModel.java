@@ -62,4 +62,6 @@ public class GameViewModel extends ViewModel {
         return lobbyDTO;
     }
 
+    public LiveData<String> getErrorMessage(){ return errorMessage;}
+
 }
