@@ -18,7 +18,7 @@ import se2.group3.gameoflife.frontend.dto.cards.CareerCard;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCard;
 
 @JsonIgnoreProperties("stability")
-public class PlayerDTO implements Parcelable {
+public class PlayerDTO {
     private String playerUUID;
     private Long lobbyID;
     private final String playerName;
@@ -50,50 +50,6 @@ public class PlayerDTO implements Parcelable {
         this.numberOfPegs = numberOfPegs;
         this.houses = houses;
         this.collegeDegree = collegeDegree;
-    }
-
-    protected PlayerDTO(Parcel in) {
-        playerName = in.readString();
-        playerUUID = in.readString();
-        lobbyID = in.readLong();
-        currentCellPosition = in.readInt();
-        money = in.readInt();
-//        careerCard = in.readParcelable(Card.class.getClassLoader());
-        numberOfPegs = in.readInt();
-//        houses = in.createTypedArrayList(HouseCard.CREATOR);
-
-    }
-
-    public static final Creator<PlayerDTO> CREATOR = new Creator<PlayerDTO>() {
-        @Override
-        public PlayerDTO createFromParcel(Parcel in) {
-            return new PlayerDTO(in);
-        }
-
-        @Override
-        public PlayerDTO[] newArray(int size) {
-            return new PlayerDTO[size];
-        }
-    };
-
-
-  
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(playerName);
-        dest.writeString(playerUUID);
-        dest.writeInt(currentCellPosition);
-        dest.writeInt(money);
-        dest.writeInt(numberOfPegs);
-//        dest.writeTypedList(houses);
-//        dest.writeParcelable(careerCard, flags);
-        dest.writeLong(lobbyID);
-//        dest.writeBoolean(collegeDegree);
     }
 
     public String getPlayerName() {
