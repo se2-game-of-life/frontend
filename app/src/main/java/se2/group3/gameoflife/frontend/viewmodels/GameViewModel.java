@@ -42,20 +42,6 @@ public class GameViewModel extends ViewModel {
         );
     }
 
-
-    public void setLobbyDTO(LobbyDTO lobbyDTO){
-        if(lobbyDTO == null){
-            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
-        } else{
-            this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
-        }
-    }
-
-    //    public void dispose() {
-//        disposables.dispose();
-//    }
-
-    private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
             this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
