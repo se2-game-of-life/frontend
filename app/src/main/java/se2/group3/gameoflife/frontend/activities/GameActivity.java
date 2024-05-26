@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +15,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
+import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
 
 public class GameActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        GameViewModel gameViewModel;
         super.onCreate(savedInstanceState);
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
         ObjectMapper objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
@@ -28,18 +34,16 @@ public class GameActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        LobbyDTO lobbyDTO = getIntent().getParcelableExtra("lobbyDTO");
 
-        Bundle bundle = new Bundle();
+
         try {
-            bundle.putString("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+            LobbyDTO lobby = objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class);
+            gameViewModel.setLobbyDTO(lobby);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
         ChoosePathFragment fragment = new ChoosePathFragment();
-        fragment.setArguments(bundle);
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerView, fragment)
                 .commit();
