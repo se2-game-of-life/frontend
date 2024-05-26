@@ -4,11 +4,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
@@ -26,12 +28,15 @@ import se2.group3.gameoflife.frontend.dto.CellDTO;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
 
 public class GameBoardFragment extends Fragment {
 
     private static final String TAG = "Networking";
+    private Button spinButton;
 
+    private GameBoardViewModel viewModel;
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
@@ -46,7 +51,17 @@ public class GameBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
+        // Initialize spinButton
+        spinButton = rootView.findViewById(R.id.buttonSpin);
 
+        // Initialize viewModel
+        viewModel = new ViewModelProvider(this).get(GameBoardViewModel.class);
+
+        // Set OnClickListener on spinButton
+        spinButton.setOnClickListener(v -> {
+            // Call spinWheel method in viewModel
+            viewModel.spinWheel();
+        });
         // Call fetchBoardData when the fragment is created
         fetchBoardData();
 
