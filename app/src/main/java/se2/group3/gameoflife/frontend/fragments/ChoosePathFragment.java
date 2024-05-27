@@ -4,6 +4,7 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -64,6 +65,7 @@ public class ChoosePathFragment extends Fragment {
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> {
                             gameViewModel.makeChoice(false);
+                            navigateToGameBoardFragment();
                 }
         );
 
@@ -71,9 +73,19 @@ public class ChoosePathFragment extends Fragment {
         btnCollege.setOnClickListener(v -> {
             //chooseLeft = chooseCollege
             gameViewModel.makeChoice(true);
+            navigateToGameBoardFragment();
         });
 
         return rootView;
+    }
+
+    private void navigateToGameBoardFragment() {
+        if (getActivity() != null) {
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new GameBoardFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
 //    @Override
