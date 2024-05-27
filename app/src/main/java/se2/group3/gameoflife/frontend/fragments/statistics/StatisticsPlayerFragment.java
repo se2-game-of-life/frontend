@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.fragments.statistics;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,9 +22,10 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 public class StatisticsPlayerFragment extends Fragment {
 
 
+    private GameViewModel gameViewModel;
     private static PlayerDTO PLAYER = null;
 
-
+    private View rootView;
     private String mParam1;
     private String mParam2;
 
@@ -51,24 +54,24 @@ public class StatisticsPlayerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_statistics_players, container, false);
+        rootView = inflater.inflate(R.layout.fragment_statistics_players, container, false);
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
+        gameViewModel.getPlayerDTO().observe(getViewLifecycleOwner(), this::updateStatistics);
+
+        return rootView;
+    }
+
+    private void updateStatistics(PlayerDTO playerDTO){
         TextView money = rootView.findViewById(R.id.moneyStat);
         TextView college = rootView.findViewById(R.id.universityDegreeStat);
         TextView job = rootView.findViewById(R.id.jobStat);
         TextView houses = rootView.findViewById(R.id.housesStat);
-
-        if (getArguments() != null) {
-            String playerUUID = getArguments().getString(PLAYER.getPlayerUUID());
+        if(playerDTO != null){
+            money.setText("Money: " + playerDTO.getMoney());
+            college.setText("College Degree: "+playerDTO.isCollegeDegree());
+            job.setText("Job: " + playerDTO.getCareerCard().toString());
+            houses.setText("#houses" + playerDTO.getHouses().size());
         }
-
-        if(PLAYER != null){
-            money.setText("Money: " + PLAYER.getMoney());
-            college.setText("College Degree: "+PLAYER.isCollegeDegree());
-            job.setText("Job: " + PLAYER.getCareerCard().toString());
-            houses.setText("#houses" + PLAYER.getHouses().size());
-        }
-
-        return rootView;
     }
 }

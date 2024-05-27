@@ -14,6 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
@@ -21,11 +24,13 @@ import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
 public class LobbyActivity extends AppCompatActivity {
 
     private LobbyViewModel lobbyViewModel;
+    private ObjectMapper objectMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lobbyViewModel = new ViewModelProvider(this).get(LobbyViewModel.class);
+        objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_lobby);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -43,7 +48,11 @@ public class LobbyActivity extends AppCompatActivity {
             String playerName = getIntent().getStringExtra("username");
             lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
                 Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                intent.putExtra("lobbyDTO", lobbyDTO);
+                try {
+                    intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
                 startActivity(intent);
             });
             Log.d(TAG, "Before create lobby!");
@@ -63,7 +72,11 @@ public class LobbyActivity extends AppCompatActivity {
                     long lobbyID = Long.parseLong(lobbyIDString);
                     lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
                         Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                        intent.putExtra("lobbyDTO", lobbyDTO);
+                        try {
+                            intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
                         startActivity(intent);
                     });
                     assert playerName != null;
