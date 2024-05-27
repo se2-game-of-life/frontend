@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
@@ -41,6 +43,22 @@ public class ChoosePathFragment extends Fragment {
         GameViewModel gameViewModel;
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+
+
+        if (getArguments() != null) {
+            String lobbyDTOJson = getArguments().getString("lobbyDTO");
+            if (lobbyDTOJson != null) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
+                    if(lobbyDTO != null){
+                        gameViewModel.setLobbyDTO(lobbyDTO);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
