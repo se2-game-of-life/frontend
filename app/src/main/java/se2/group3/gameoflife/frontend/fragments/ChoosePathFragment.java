@@ -82,7 +82,7 @@ public class ChoosePathFragment extends Fragment {
     private void navigateToGameBoardFragment() {
         if (getActivity() != null) {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new GameBoardFragment());
+            transaction.replace(R.id.fragmentContainerView, new GameBoardFragment());
             transaction.addToBackStack(null);
             transaction.commit();
         }
