@@ -23,7 +23,6 @@ public class GameViewModel extends ViewModel {
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
 
-    private final MutableLiveData<Integer> spinResult = new MutableLiveData<>();
     public void makeChoice(boolean chooseLeft){
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
@@ -48,10 +47,7 @@ public class GameViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        lobbyDTO -> {
-                            this.lobbyDTO.setValue(lobbyDTO);
-                            spinResult.setValue(lobbyDTO.getSpunNumber());
-                        },
+                        lobbyDTO::setValue,
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
