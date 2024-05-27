@@ -8,7 +8,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
-import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
+
 
 public class GameActivity extends AppCompatActivity {
 
