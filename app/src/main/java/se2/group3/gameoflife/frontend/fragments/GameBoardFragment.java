@@ -15,20 +15,16 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 
-
-import io.reactivex.disposables.Disposable;
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.activities.MainActivity;
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 
 public class GameBoardFragment extends Fragment {
@@ -36,7 +32,7 @@ public class GameBoardFragment extends Fragment {
     private static final String TAG = "Networking";
     private Button spinButton;
 
-    private GameBoardViewModel viewModel;
+    private GameViewModel viewModel;
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
@@ -55,13 +51,10 @@ public class GameBoardFragment extends Fragment {
         spinButton = rootView.findViewById(R.id.buttonSpin);
 
         // Initialize viewModel
-        viewModel = new ViewModelProvider(this).get(GameBoardViewModel.class);
+        viewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
         // Set OnClickListener on spinButton
-        spinButton.setOnClickListener(v -> {
-            // Call spinWheel method in viewModel
-            viewModel.spinWheel();
-        });
+        spinButton.setOnClickListener(v -> viewModel.spinWheel());
         // Call fetchBoardData when the fragment is created
         fetchBoardData();
 

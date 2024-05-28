@@ -44,6 +44,28 @@ public class GameViewModel extends ViewModel {
         );
     }
 
+    public void spinWheel() {
+        disposables.add(websocketClient.subscribe("/topic/game/", LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        disposables.add(websocketClient.send("/app/game/spin", "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {},
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+    }
+
+
+
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
             this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
@@ -77,5 +99,7 @@ public class GameViewModel extends ViewModel {
     public LiveData<LobbyDTO> getLobby() {
         return lobbyDTO;
     }
+
+    public LiveData<String> getErrorMessage(){ return errorMessage;}
 
 }
