@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
-public class StartGameViewModel extends ViewModel {
+public class LobbyViewModel extends ViewModel {
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();

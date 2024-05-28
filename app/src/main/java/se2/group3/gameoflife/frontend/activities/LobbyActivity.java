@@ -21,21 +21,21 @@ import java.util.List;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
 
 
-public class StartGameActivity extends AppCompatActivity {
+public class LobbyActivity extends AppCompatActivity {
 
-    private StartGameViewModel startGameViewModel;
+    private LobbyViewModel lobbyViewModel;
     private ObjectMapper objectMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startGameViewModel = new ViewModelProvider(this).get(StartGameViewModel.class);
+        lobbyViewModel = new ViewModelProvider(this).get(LobbyViewModel.class);
         objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_start_game);
+        setContentView(R.layout.activity_lobby);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -43,15 +43,15 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(v -> {
-            Intent intent = new Intent(StartGameActivity.this, MenuActivity.class);
+            Intent intent = new Intent(LobbyActivity.this, MenuActivity.class);
             startActivity(intent);
             //todo: handle player leave lobby
         });
 
         findViewById(R.id.StartButton).setOnClickListener(v -> {
-            Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+            Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
             try {
-                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(startGameViewModel.getLobbyDTO()));
+                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyViewModel.getLobbyDTO()));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -60,18 +60,18 @@ public class StartGameActivity extends AppCompatActivity {
 
         try {
             LobbyDTO lobby = objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class);
-            startGameViewModel.setLobbyDTO(lobby);
-            updateLobby(startGameViewModel.getLobbyDTO());
-            startGameViewModel.getLobbyUpdates(lobby.getLobbyID());
+            lobbyViewModel.setLobbyDTO(lobby);
+            updateLobby(lobbyViewModel.getLobbyDTO());
+            lobbyViewModel.getLobbyUpdates(lobby.getLobbyID());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        startGameViewModel.getLobby().observe(StartGameActivity.this, this::updateLobby);
+        lobbyViewModel.getLobby().observe(LobbyActivity.this, this::updateLobby);
     }
 
     private void updateLobby(LobbyDTO lobbyDTO) {
         if(lobbyDTO.isHasStarted()) {
-            Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+            Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
             try {
                 intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
             } catch (JsonProcessingException e) {

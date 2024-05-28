@@ -46,7 +46,7 @@ public class MenuActivity extends AppCompatActivity {
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
             menuViewModel.getLobby().observe(MenuActivity.this, lobbyDTO -> {
-                Intent intent = new Intent(MenuActivity.this, StartGameActivity.class);
+                Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
                 try {
                     intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
                 } catch (JsonProcessingException e) {
@@ -70,7 +70,7 @@ public class MenuActivity extends AppCompatActivity {
                 if (!lobbyIDString.isEmpty()){
                     long lobbyID = Long.parseLong(lobbyIDString);
                     menuViewModel.getLobby().observe(MenuActivity.this, lobbyDTO -> {
-                        Intent intent = new Intent(MenuActivity.this, StartGameActivity.class);
+                        Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
                         try {
                             intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
                         } catch (JsonProcessingException e) {

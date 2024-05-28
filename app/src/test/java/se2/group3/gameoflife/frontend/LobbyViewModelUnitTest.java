@@ -19,41 +19,41 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 
-import se2.group3.gameoflife.frontend.viewmodels.StartGameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
-class StartGameViewModelUnitTest {
-    private StartGameViewModel startGameViewModel;
+class LobbyViewModelUnitTest {
+    private LobbyViewModel lobbyViewModel;
 
     @BeforeEach
     public void setUp(){
-        this.startGameViewModel = new StartGameViewModel();
+        this.lobbyViewModel = new LobbyViewModel();
     }
 
     @Test
     void testSetLobbyDTO_exception(){
         LobbyDTO lobbyDTO = null;
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> startGameViewModel.setLobbyDTO(lobbyDTO));
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> lobbyViewModel.setLobbyDTO(lobbyDTO));
         assertEquals("LobbyDTO not found in the StartGameActivity", ex.getMessage());
     }
 
     @Test
     void testGetLobbyDTO_exception(){
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> startGameViewModel.getLobbyDTO());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> lobbyViewModel.getLobbyDTO());
         assertEquals("LobbyDTO is null", ex.getMessage());
     }
 
     @Test
     void testSetLobbyDTO(){
         LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
-        assertDoesNotThrow(() -> startGameViewModel.setLobbyDTO(lobbyDTO));
+        assertDoesNotThrow(() -> lobbyViewModel.setLobbyDTO(lobbyDTO));
     }
 
     @Test
     void testGetLobbyDTO(){
         LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
-        startGameViewModel.setLobbyDTO(lobbyDTO);
-        assertDoesNotThrow(() -> startGameViewModel.getLobbyDTO());
+        lobbyViewModel.setLobbyDTO(lobbyDTO);
+        assertDoesNotThrow(() -> lobbyViewModel.getLobbyDTO());
     }
 
 
@@ -62,6 +62,6 @@ class StartGameViewModelUnitTest {
 
     @AfterEach
     public void breakDown(){
-        this.startGameViewModel = null;
+        this.lobbyViewModel = null;
     }
 }
