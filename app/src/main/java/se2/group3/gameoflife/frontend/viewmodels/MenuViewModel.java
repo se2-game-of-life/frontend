@@ -11,7 +11,7 @@ import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
-public class LobbyViewModel extends ViewModel {
+public class MenuViewModel extends ViewModel {
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
 
     private final MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();

@@ -22,7 +22,7 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.LobbyActivity"
+            android:name=".activities.MenuActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity

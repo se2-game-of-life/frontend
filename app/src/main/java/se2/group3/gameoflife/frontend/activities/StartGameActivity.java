@@ -43,7 +43,7 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.buttonReturnToLobby).setOnClickListener(v -> {
-            Intent intent = new Intent(StartGameActivity.this, LobbyActivity.class);
+            Intent intent = new Intent(StartGameActivity.this, MenuActivity.class);
             startActivity(intent);
             //todo: handle player leave lobby
         });

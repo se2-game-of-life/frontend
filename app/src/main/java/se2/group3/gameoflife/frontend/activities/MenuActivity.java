@@ -18,21 +18,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.MenuViewModel;
 
-public class LobbyActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
-    private LobbyViewModel lobbyViewModel;
+    private MenuViewModel menuViewModel;
     private ObjectMapper objectMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lobbyViewModel = new ViewModelProvider(this).get(LobbyViewModel.class);
+        menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         objectMapper = new ObjectMapper();
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_lobby);
+        setContentView(R.layout.activity_menu);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -40,14 +39,14 @@ public class LobbyActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.buttonReturnToUser).setOnClickListener(v -> {
-            Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
+            Intent intent = new Intent(MenuActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
-            lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+            menuViewModel.getLobby().observe(MenuActivity.this, lobbyDTO -> {
+                Intent intent = new Intent(MenuActivity.this, StartGameActivity.class);
                 try {
                     intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
                 } catch (JsonProcessingException e) {
@@ -57,7 +56,7 @@ public class LobbyActivity extends AppCompatActivity {
             });
             Log.d(TAG, "Before create lobby!");
             assert playerName != null;
-            lobbyViewModel.createLobby(playerName, getIntent().getStringExtra("uuid"));
+            menuViewModel.createLobby(playerName, getIntent().getStringExtra("uuid"));
             Log.d(TAG, "After create lobby!");
         });
 
@@ -70,8 +69,8 @@ public class LobbyActivity extends AppCompatActivity {
                 String lobbyIDString = lobbyIDText.getText().toString();
                 if (!lobbyIDString.isEmpty()){
                     long lobbyID = Long.parseLong(lobbyIDString);
-                    lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                        Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
+                    menuViewModel.getLobby().observe(MenuActivity.this, lobbyDTO -> {
+                        Intent intent = new Intent(MenuActivity.this, StartGameActivity.class);
                         try {
                             intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
                         } catch (JsonProcessingException e) {
@@ -80,7 +79,7 @@ public class LobbyActivity extends AppCompatActivity {
                         startActivity(intent);
                     });
                     assert playerName != null;
-                    lobbyViewModel.joinLobby(lobbyID, playerName);
+                    menuViewModel.joinLobby(lobbyID, playerName);
                 }
             });
         });
@@ -88,7 +87,7 @@ public class LobbyActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        lobbyViewModel.dispose();
+        menuViewModel.dispose();
         super.onDestroy();
     }
 }
