@@ -89,30 +89,49 @@ public class StatisticsFragment extends Fragment {
 
         try {
             gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-            LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
-            List<PlayerDTO> players = lobbyDTO.getPlayers();
+            if (getArguments() != null) {
+                String lobbyDTOJson = getArguments().getString("lobbyDTO");
+                if (lobbyDTOJson != null) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
+                        if(lobbyDTO != null){
+                            gameViewModel.setLobbyDTO(lobbyDTO);
+                        }
+                    } catch (NullPointerException | JsonProcessingException e) {
+                        Log.d("Networking","Exception: " + e.getMessage());
+                    }
+                }
+            }
+            try{
+                LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+                List<PlayerDTO> players = lobbyDTO.getPlayers();
 
-            if (players == null || players.isEmpty()) {
-                Log.e(TAG, "Playerliste ist null oder leer");
-                return rootView;
+                if (players == null || players.isEmpty()) {
+                    Log.e(TAG, "Playerliste ist null oder leer");
+                    return rootView;
+                }
+
+                Button[] playerButtons = new Button[4];
+                playerButtons[0] = rootView.findViewById(R.id.button_player1);
+                playerButtons[1] = rootView.findViewById(R.id.button_player2);
+                playerButtons[2] = rootView.findViewById(R.id.button_player3);
+                playerButtons[3] = rootView.findViewById(R.id.button_player4);
+
+                for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+                    PlayerDTO player = players.get(i);
+                    Button playerButton = playerButtons[i];
+                    playerButton.setVisibility(View.VISIBLE);
+                    playerButton.setText(player.getPlayerName());
+                    playerButton.setOnClickListener(v -> {
+                        gameViewModel.setPlayerDTO(player);
+                        replaceFragment(player);
+                    });
+                }
+            }catch(Exception e){
+                Log.e(TAG, "Übertragung von LobbyDTO fehlgeschlagen.");
             }
 
-            Button[] playerButtons = new Button[4];
-            playerButtons[0] = rootView.findViewById(R.id.button_player1);
-            playerButtons[1] = rootView.findViewById(R.id.button_player2);
-            playerButtons[2] = rootView.findViewById(R.id.button_player3);
-            playerButtons[3] = rootView.findViewById(R.id.button_player4);
-
-            for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
-                PlayerDTO player = players.get(i);
-                Button playerButton = playerButtons[i];
-                playerButton.setVisibility(View.VISIBLE);
-                playerButton.setText(player.getPlayerName());
-                playerButton.setOnClickListener(v -> {
-                    gameViewModel.setPlayerDTO(player);
-                    replaceFragment(player);
-                });
-            }
         } catch (Exception e) {
             Log.e(TAG, "Fehler im onCreateView: " + e.getMessage(), e);
         }
