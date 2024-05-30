@@ -153,7 +153,7 @@ public class GameBoardFragment extends Fragment {
     private void changeToStatisticsFragment() {
         if (getActivity() != null) {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new StatisticsFragment());
+            transaction.replace(R.id.fragmentContainerView, new StatisticsFragment());
             transaction.addToBackStack(null);
             transaction.commit();
         }
