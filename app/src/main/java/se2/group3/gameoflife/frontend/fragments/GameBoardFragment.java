@@ -9,6 +9,7 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -49,6 +50,7 @@ public class GameBoardFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
         // Initialize spinButton
         spinButton = rootView.findViewById(R.id.buttonSpin);
+        rootView.findViewById(R.id.statisticsBtn).setOnClickListener(v -> changeToStatisticsFragment());
 
         // Initialize viewModel
         viewModel = new ViewModelProvider(this).get(GameViewModel.class);
@@ -147,5 +149,16 @@ public class GameBoardFragment extends Fragment {
         }
 
     }
+
+    private void changeToStatisticsFragment() {
+        if (getActivity() != null) {
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new StatisticsFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+
 
 }
