@@ -106,6 +106,8 @@ public class StatisticsPlayerFragment extends Fragment {
             college.setText("College Degree: "+playerDTO.isCollegeDegree());
             job.setText("Job: " + playerDTO.getCareerCard().toString());
             houses.setText("#houses" + playerDTO.getHouses().size());
+        } else{
+            Log.e("Networking", "PlayerDTO is null.");
         }
     }
 }

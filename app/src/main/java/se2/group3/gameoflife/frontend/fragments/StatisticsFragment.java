@@ -136,7 +136,6 @@ public class StatisticsFragment extends Fragment {
     private void replaceFragment() {
         try {
             Fragment fragment = StatisticsPlayerFragment.newInstance();
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             try {
                 Bundle bundle = new Bundle();
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -146,6 +145,7 @@ public class StatisticsFragment extends Fragment {
             } catch (JsonProcessingException e) {
                 Log.e(TAG, "Problem with transfer LobbyDTO.");
             }
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainer_PlayerStat, fragment);
             transaction.commit();
         } catch (Exception e) {
