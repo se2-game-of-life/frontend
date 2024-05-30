@@ -26,6 +26,19 @@
         android:fontWeight="800"
         android:text="Spin"
         android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/statisticsBtn"
+        android:layout_width="221dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="350dp"
+        android:background="@drawable/button_background"
+        android:fontFamily="@font/inter_extra_bold"
+        android:fontWeight="800"
+        android:text="@string/StatisticsOtherPlayers"
+        android:textColor="#FFFFFF" />
+
 
 </FrameLayout>
