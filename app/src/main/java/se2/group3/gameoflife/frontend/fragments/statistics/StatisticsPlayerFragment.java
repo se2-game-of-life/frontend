@@ -101,6 +101,10 @@ public class StatisticsPlayerFragment extends Fragment {
         TextView job = rootView.findViewById(R.id.jobStat);
         TextView houses = rootView.findViewById(R.id.housesStat);
         if(playerDTO != null){
+            money.setVisibility(View.VISIBLE);
+            college.setVisibility(View.VISIBLE);
+            job.setVisibility(View.VISIBLE);
+            houses.setVisibility(View.VISIBLE);
             money.setText("Money: " + playerDTO.getMoney());
             college.setText("College Degree: "+playerDTO.isCollegeDegree());
             job.setText("Job: " + playerDTO.getCareerCard().toString());
