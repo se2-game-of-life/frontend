@@ -117,7 +117,6 @@ public class StatisticsFragment extends Fragment {
                     playerButton.setVisibility(View.VISIBLE);
                     playerButton.setText(player.getPlayerName());
                     playerButton.setOnClickListener(v -> {
-                        gameViewModel.setPlayerDTO(player);
                         replaceFragment(player.getPlayerUUID());
                     });
                 }
