@@ -1,11 +1,10 @@
 package se2.group3.gameoflife.frontend.activities;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +16,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.LobbyViewModel;
+
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -39,56 +42,72 @@ public class LobbyActivity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.buttonReturnToUser).setOnClickListener(v -> {
-            Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
+        findViewById(R.id.buttonReturnToLobby).setOnClickListener(v -> {
+            Intent intent = new Intent(LobbyActivity.this, MenuActivity.class);
+            startActivity(intent);
+            //todo: handle player leave lobby
+        });
+
+        findViewById(R.id.StartButton).setOnClickListener(v -> {
+            Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
+            try {
+                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyViewModel.getLobbyDTO()));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             startActivity(intent);
         });
 
-        findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
-            String playerName = getIntent().getStringExtra("username");
-            lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                try {
-                    intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-                startActivity(intent);
-            });
-            Log.d(TAG, "Before create lobby!");
-            assert playerName != null;
-            lobbyViewModel.createLobby(playerName, getIntent().getStringExtra("uuid"));
-            Log.d(TAG, "After create lobby!");
-        });
-
-        findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
-            setContentView(R.layout.activity_join_game);
-            findViewById(R.id.GObutton).setOnClickListener(v1 -> {
-                String playerName = getIntent().getStringExtra("username");
-                if(playerName == null) Log.e(TAG, "Error with the username intent!");
-                EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
-                String lobbyIDString = lobbyIDText.getText().toString();
-                if (!lobbyIDString.isEmpty()){
-                    long lobbyID = Long.parseLong(lobbyIDString);
-                    lobbyViewModel.getLobby().observe(LobbyActivity.this, lobbyDTO -> {
-                        Intent intent = new Intent(LobbyActivity.this, StartGameActivity.class);
-                        try {
-                            intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                        startActivity(intent);
-                    });
-                    assert playerName != null;
-                    lobbyViewModel.joinLobby(lobbyID, playerName);
-                }
-            });
-        });
+        try {
+            LobbyDTO lobby = objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class);
+            lobbyViewModel.setLobbyDTO(lobby);
+            updateLobby(lobbyViewModel.getLobbyDTO());
+            lobbyViewModel.getLobbyUpdates(lobby.getLobbyID());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        lobbyViewModel.getLobby().observe(LobbyActivity.this, this::updateLobby);
     }
 
-    @Override
-    protected void onDestroy() {
-        lobbyViewModel.dispose();
-        super.onDestroy();
+    private void updateLobby(LobbyDTO lobbyDTO) {
+        if(lobbyDTO.isHasStarted()) {
+            Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
+            try {
+                intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            startActivity(intent);
+        }
+
+        TextView lobbyID = findViewById(R.id.lobbyID);
+        lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));
+        int numberPlayers = lobbyDTO.getPlayers().size();
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
+        for (int i = 1; i <= numberPlayers; i++){
+            switch(i){
+                case 1:
+                    Button player1 = findViewById(R.id.player1Button);
+                    player1.setText(players.get(0).getPlayerName());
+                    player1.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    Button player2 = findViewById(R.id.player2Button);
+                    player2.setText(players.get(1).getPlayerName());
+                    player2.setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    Button player3 = findViewById(R.id.player3Button);
+                    player3.setText(players.get(2).getPlayerName());
+                    player3.setVisibility(View.VISIBLE);
+                    break;
+                case 4:
+                    Button player4 = findViewById(R.id.player4Button);
+                    player4.setText(players.get(3).getPlayerName());
+                    player4.setVisibility(View.VISIBLE);
+                    break;
+                default:
+            }
+        }
     }
 }

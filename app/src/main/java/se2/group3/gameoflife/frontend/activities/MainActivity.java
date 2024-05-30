@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             mainViewModel.setUsername(user.getText().toString());
             textUser = findViewById(R.id.textUsername);
             if (mainViewModel.checkUsername()){
-                Intent intent = new Intent(this, LobbyActivity.class);
+                Intent intent = new Intent(this, MenuActivity.class);
 
                 intent.putExtra("username", mainViewModel.getUsername());
                 intent.putExtra("uuid", mainViewModel.getUUID());

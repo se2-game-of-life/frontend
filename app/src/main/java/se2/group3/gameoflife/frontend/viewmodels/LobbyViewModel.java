@@ -7,14 +7,13 @@ import androidx.lifecycle.ViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class LobbyViewModel extends ViewModel {
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
 
-    private final MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
+    private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -23,26 +22,7 @@ public class LobbyViewModel extends ViewModel {
         return lobbyDTO;
     }
 
-    public void createLobby(String playerName, String uuid) {
-
-        disposables.add(websocketClient.subscribe("/topic/lobbies/" + uuid, LobbyDTO.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        lobbyDTO::setValue,
-                        error -> errorMessage.setValue(error.getMessage())
-                )
-        );
-
-        disposables.add(websocketClient.send("/app/lobby/create", playerName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
-        );
-    }
-
-    public void joinLobby(long lobbyID, String playerName) {
-
+    public void getLobbyUpdates(long lobbyID) {
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,12 +31,24 @@ public class LobbyViewModel extends ViewModel {
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
+    }
 
-        disposables.add(websocketClient.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
-        );
+    //todo: add method to send leave lobby command (see start game activity for other todo regarding this issue)
+
+    public void setLobbyDTO(LobbyDTO lobbyDTO){
+        if(lobbyDTO == null){
+            throw new IllegalArgumentException("LobbyDTO not found in the StartGameActivity");
+        } else{
+            this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
+        }
+    }
+
+    public LobbyDTO getLobbyDTO() {
+        if(lobbyDTO == null || lobbyDTO.getValue() == null){
+            throw new IllegalArgumentException("LobbyDTO is null");
+        } else{
+            return lobbyDTO.getValue();
+        }
     }
 
     public void dispose() {
