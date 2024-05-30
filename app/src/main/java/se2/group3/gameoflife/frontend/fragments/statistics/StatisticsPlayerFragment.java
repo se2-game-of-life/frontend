@@ -5,12 +5,17 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
@@ -56,6 +61,25 @@ public class StatisticsPlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_statistics_players, container, false);
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        try {
+            gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+            if (getArguments() != null) {
+                String lobbyDTOJson = getArguments().getString("lobbyDTO");
+                if (lobbyDTOJson != null) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
+                        if (lobbyDTO != null) {
+                            gameViewModel.setLobbyDTO(lobbyDTO);
+                        }
+                    } catch (NullPointerException | JsonProcessingException e) {
+                        Log.d("Networking", "Exception: " + e.getMessage());
+                    }
+                }
+            }
+        } catch(Exception e){
+            Log.e("Networking", "LobbyDTO transfer failed.");
+        }
 
         gameViewModel.getPlayerDTO().observe(getViewLifecycleOwner(), this::updateStatistics);
 
