@@ -32,6 +32,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  */
 public class StatisticsFragment extends Fragment {
     private GameViewModel gameViewModel;
+    public final String TAG = "Networking";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,54 +77,63 @@ public class StatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView gestartet");
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-
-        if (getArguments() != null) {
-            String lobbyDTOJson = getArguments().getString("lobbyDTO");
-            if (lobbyDTOJson != null) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
-                    if(lobbyDTO != null){
-                        gameViewModel.setLobbyDTO(lobbyDTO);
-                    }
-                    List<PlayerDTO> players = gameViewModel.getLobbyDTO().getPlayers();
-                    Button[] playerButtons = new Button[4];
-                    playerButtons[0] = rootView.findViewById(R.id.button_player1);
-                    playerButtons[1] = rootView.findViewById(R.id.button_player2);
-                    playerButtons[2] = rootView.findViewById(R.id.button_player3);
-                    playerButtons[3] = rootView.findViewById(R.id.button_player4);
-
-                    for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
-                        PlayerDTO player = players.get(i);
-                        Button playerButton = playerButtons[i];
-                        playerButton.setVisibility(View.VISIBLE);
-                        playerButton.setText(player.getPlayerName());
-                        playerButton.setOnClickListener(v -> {
-                            gameViewModel.setPlayerDTO(player);
-                            replaceFragment(player);
-                        });
-                    }
-                } catch (NullPointerException | JsonProcessingException e) {
-                    Log.d("Networking","Exception: " + e.getMessage());
-                }
-            }
+        if (savedInstanceState == null) {
+            Log.d(TAG, "savedInstanceState ist null, Fragment wird hinzugefügt");
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer_PlayerStat, new StatisticsPlayerFragment())
+                    .commit();
         }
+
+        try {
+            gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+            LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+            List<PlayerDTO> players = lobbyDTO.getPlayers();
+
+            if (players == null || players.isEmpty()) {
+                Log.e(TAG, "Playerliste ist null oder leer");
+                return rootView;
+            }
+
+            Button[] playerButtons = new Button[4];
+            playerButtons[0] = rootView.findViewById(R.id.button_player1);
+            playerButtons[1] = rootView.findViewById(R.id.button_player2);
+            playerButtons[2] = rootView.findViewById(R.id.button_player3);
+            playerButtons[3] = rootView.findViewById(R.id.button_player4);
+
+            for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+                PlayerDTO player = players.get(i);
+                Button playerButton = playerButtons[i];
+                playerButton.setVisibility(View.VISIBLE);
+                playerButton.setText(player.getPlayerName());
+                playerButton.setOnClickListener(v -> {
+                    gameViewModel.setPlayerDTO(player);
+                    replaceFragment(player);
+                });
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Fehler im onCreateView: " + e.getMessage(), e);
+        }
+
         return rootView;
     }
 
     private void replaceFragment(PlayerDTO player) {
         if (player == null) {
-            Log.e("Fragment", "PlayerDTO is null");
+            Log.e(TAG, "PlayerDTO is null");
             return;
         }
 
-        Fragment fragment = StatisticsPlayerFragment.newInstance(player);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer_PlayerStat, fragment);
-        transaction.commit();
+        try {
+            Fragment fragment = StatisticsPlayerFragment.newInstance(player);
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer_PlayerStat, fragment);
+            transaction.commit();
+        } catch (Exception e) {
+            Log.e(TAG, "Fehler beim Ersetzen des Fragments: " + e.getMessage(), e);
+        }
     }
 
 
