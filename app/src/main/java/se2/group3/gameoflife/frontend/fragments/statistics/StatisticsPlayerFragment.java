@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -28,7 +30,7 @@ public class StatisticsPlayerFragment extends Fragment {
 
 
     private GameViewModel gameViewModel;
-    private static PlayerDTO PLAYER = null;
+    private static String PLAYERUUID;
 
     private View rootView;
     private String mParam1;
@@ -40,10 +42,10 @@ public class StatisticsPlayerFragment extends Fragment {
 
 
 
-    public static StatisticsPlayerFragment newInstance(PlayerDTO player) {
+    public static StatisticsPlayerFragment newInstance(String playerUUID) {
         StatisticsPlayerFragment fragment = new StatisticsPlayerFragment();
         Bundle args = new Bundle();
-        PLAYER = player;
+        PLAYERUUID = playerUUID;
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +54,7 @@ public class StatisticsPlayerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = PLAYER.getPlayerName();
+            mParam1 = PLAYERUUID;
         }
     }
 
@@ -81,12 +83,19 @@ public class StatisticsPlayerFragment extends Fragment {
             Log.e("Networking", "LobbyDTO transfer failed.");
         }
 
-        gameViewModel.getPlayerDTO().observe(getViewLifecycleOwner(), this::updateStatistics);
+        gameViewModel.getLobby().observe(getViewLifecycleOwner(), this::updateStatistics);
 
         return rootView;
     }
 
-    private void updateStatistics(PlayerDTO playerDTO){
+    private void updateStatistics(LobbyDTO lobbyDTO){
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
+        PlayerDTO playerDTO = null;
+        for(PlayerDTO p : players){
+            if (p.getPlayerUUID().equals(PLAYERUUID)){
+                playerDTO = p;
+            }
+        }
         TextView money = rootView.findViewById(R.id.moneyStat);
         TextView college = rootView.findViewById(R.id.universityDegreeStat);
         TextView job = rootView.findViewById(R.id.jobStat);

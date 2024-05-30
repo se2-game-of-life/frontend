@@ -80,13 +80,6 @@ public class StatisticsFragment extends Fragment {
         Log.d(TAG, "onCreateView started");
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        if (savedInstanceState == null) {
-            Log.d(TAG, "savedInstanceState is null");
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer_PlayerStat, new StatisticsPlayerFragment())
-                    .commit();
-        }
-
         try {
             gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
             if (getArguments() != null) {
@@ -125,7 +118,7 @@ public class StatisticsFragment extends Fragment {
                     playerButton.setText(player.getPlayerName());
                     playerButton.setOnClickListener(v -> {
                         gameViewModel.setPlayerDTO(player);
-                        replaceFragment(player);
+                        replaceFragment(player.getPlayerUUID());
                     });
                 }
             }catch(Exception e){
@@ -139,14 +132,9 @@ public class StatisticsFragment extends Fragment {
         return rootView;
     }
 
-    private void replaceFragment(PlayerDTO player) {
-        if (player == null) {
-            Log.e(TAG, "PlayerDTO is null");
-            return;
-        }
-
+    private void replaceFragment(String playerUUID) {
         try {
-            Fragment fragment = StatisticsPlayerFragment.newInstance(player);
+            Fragment fragment = StatisticsPlayerFragment.newInstance(playerUUID);
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             try {
                 Bundle bundle = new Bundle();
