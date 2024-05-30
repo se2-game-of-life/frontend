@@ -77,11 +77,11 @@ public class StatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView gestartet");
+        Log.d(TAG, "onCreateView started");
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
         if (savedInstanceState == null) {
-            Log.d(TAG, "savedInstanceState ist null, Fragment wird hinzugefügt");
+            Log.d(TAG, "savedInstanceState is null");
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer_PlayerStat, new StatisticsPlayerFragment())
                     .commit();
@@ -108,7 +108,7 @@ public class StatisticsFragment extends Fragment {
                 List<PlayerDTO> players = lobbyDTO.getPlayers();
 
                 if (players == null || players.isEmpty()) {
-                    Log.e(TAG, "Playerliste ist null oder leer");
+                    Log.e(TAG, "Playerlist is null or empty");
                     return rootView;
                 }
 
@@ -129,11 +129,11 @@ public class StatisticsFragment extends Fragment {
                     });
                 }
             }catch(Exception e){
-                Log.e(TAG, "Übertragung von LobbyDTO fehlgeschlagen.");
+                Log.e(TAG, "LobbyDTO transfer error.");
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "Fehler im onCreateView: " + e.getMessage(), e);
+            Log.e(TAG, "Error in onCreateView: " + e.getMessage(), e);
         }
 
         return rootView;
@@ -148,10 +148,18 @@ public class StatisticsFragment extends Fragment {
         try {
             Fragment fragment = StatisticsPlayerFragment.newInstance(player);
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            try {
+                Bundle bundle = new Bundle();
+                ObjectMapper objectMapper = new ObjectMapper();
+                bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
+                fragment.setArguments(bundle);
+            } catch (JsonProcessingException e) {
+                Log.e(TAG, "Problem with transfer LobbyDTO.");
+            }
             transaction.replace(R.id.fragmentContainer_PlayerStat, fragment);
             transaction.commit();
         } catch (Exception e) {
-            Log.e(TAG, "Fehler beim Ersetzen des Fragments: " + e.getMessage(), e);
+            Log.e(TAG, "Error: " + e.getMessage(), e);
         }
     }
 
