@@ -122,7 +122,7 @@ public class StatisticsFragment extends Fragment {
 
         Fragment fragment = StatisticsPlayerFragment.newInstance(player);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
+        transaction.replace(R.id.fragmentContainer_PlayerStat, fragment);
         transaction.commit();
     }
 
