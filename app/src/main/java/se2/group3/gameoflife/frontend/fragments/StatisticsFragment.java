@@ -33,6 +33,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class StatisticsFragment extends Fragment {
     private GameViewModel gameViewModel;
     public final String TAG = "Networking";
+    private String playerUUID;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -117,7 +118,8 @@ public class StatisticsFragment extends Fragment {
                     playerButton.setVisibility(View.VISIBLE);
                     playerButton.setText(player.getPlayerName());
                     playerButton.setOnClickListener(v -> {
-                        replaceFragment(player.getPlayerUUID());
+                        playerUUID = player.getPlayerUUID();
+                        replaceFragment();
                     });
                 }
             }catch(Exception e){
@@ -131,14 +133,15 @@ public class StatisticsFragment extends Fragment {
         return rootView;
     }
 
-    private void replaceFragment(String playerUUID) {
+    private void replaceFragment() {
         try {
-            Fragment fragment = StatisticsPlayerFragment.newInstance(playerUUID);
+            Fragment fragment = StatisticsPlayerFragment.newInstance();
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             try {
                 Bundle bundle = new Bundle();
                 ObjectMapper objectMapper = new ObjectMapper();
                 bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
+                bundle.putString("playerUUID", playerUUID);
                 fragment.setArguments(bundle);
             } catch (JsonProcessingException e) {
                 Log.e(TAG, "Problem with transfer LobbyDTO.");

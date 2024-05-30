@@ -30,7 +30,7 @@ public class StatisticsPlayerFragment extends Fragment {
 
 
     private GameViewModel gameViewModel;
-    private static String PLAYERUUID;
+    private String playerUUID;
 
     private View rootView;
     private String mParam1;
@@ -42,10 +42,9 @@ public class StatisticsPlayerFragment extends Fragment {
 
 
 
-    public static StatisticsPlayerFragment newInstance(String playerUUID) {
+    public static StatisticsPlayerFragment newInstance() {
         StatisticsPlayerFragment fragment = new StatisticsPlayerFragment();
         Bundle args = new Bundle();
-        PLAYERUUID = playerUUID;
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,9 +52,6 @@ public class StatisticsPlayerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = PLAYERUUID;
-        }
     }
 
     @Override
@@ -67,6 +63,7 @@ public class StatisticsPlayerFragment extends Fragment {
             gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
             if (getArguments() != null) {
                 String lobbyDTOJson = getArguments().getString("lobbyDTO");
+                playerUUID = getArguments().getString("playerUUID");
                 if (lobbyDTOJson != null) {
                     try {
                         ObjectMapper objectMapper = new ObjectMapper();
@@ -92,7 +89,7 @@ public class StatisticsPlayerFragment extends Fragment {
         List<PlayerDTO> players = lobbyDTO.getPlayers();
         PlayerDTO playerDTO = null;
         for(PlayerDTO p : players){
-            if (p.getPlayerUUID().equals(PLAYERUUID)){
+            if (p.getPlayerUUID().equals(playerUUID)){
                 playerDTO = p;
             }
         }
