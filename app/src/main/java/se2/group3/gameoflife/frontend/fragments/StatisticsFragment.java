@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
@@ -74,66 +77,61 @@ public class StatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
+
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new StatisticsPlayerFragment())
                     .commit();
         }
 
+
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-        LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
-        List<PlayerDTO> players = lobbyDTO.getPlayers();
-        Button player1 = rootView.findViewById(R.id.button_player1);
-        Button player2 = rootView.findViewById(R.id.button_player2);
-        Button player3 = rootView.findViewById(R.id.button_player3);
-        Button player4 = rootView.findViewById(R.id.button_player4);
-        for (int i = 0; i < players.size(); i++) {
-            switch (i) {
-                case 0:
-                    player1.setVisibility(View.VISIBLE);
-                    player1.setText(players.get(i).getPlayerName());
-                    break;
-                case 1:
-                    player2.setVisibility(View.VISIBLE);
-                    player2.setText(players.get(i).getPlayerName());
-                    break;
-                case 2:
-                    player3.setVisibility(View.VISIBLE);
-                    player3.setText(players.get(i).getPlayerName());
-                    break;
-                case 3:
-                    player4.setVisibility(View.VISIBLE);
-                    player4.setText(players.get(i).getPlayerName());
-                    break;
-                default:
-                    Log.d("Networking", "default case in statistic fragment");
+
+        if (getArguments() != null) {
+            String lobbyDTOJson = getArguments().getString("lobbyDTO");
+            if (lobbyDTOJson != null) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
+                    if(lobbyDTO != null){
+                        gameViewModel.setLobbyDTO(lobbyDTO);
+                    }
+                    List<PlayerDTO> players = gameViewModel.getLobbyDTO().getPlayers();
+                    Button[] playerButtons = new Button[4];
+                    playerButtons[0] = rootView.findViewById(R.id.button_player1);
+                    playerButtons[1] = rootView.findViewById(R.id.button_player2);
+                    playerButtons[2] = rootView.findViewById(R.id.button_player3);
+                    playerButtons[3] = rootView.findViewById(R.id.button_player4);
+
+                    for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+                        PlayerDTO player = players.get(i);
+                        Button playerButton = playerButtons[i];
+                        playerButton.setVisibility(View.VISIBLE);
+                        playerButton.setText(player.getPlayerName());
+                        playerButton.setOnClickListener(v -> {
+                            gameViewModel.setPlayerDTO(player);
+                            replaceFragment(player);
+                        });
+                    }
+                } catch (NullPointerException | JsonProcessingException e) {
+                    Log.d("Networking","Exception: " + e.getMessage());
+                }
             }
         }
-        player1.setOnClickListener(v -> {
-            gameViewModel.setPlayerDTO(players.get(0));
-            replaceFragment(players.get(0));
-        });
-        player2.setOnClickListener(v -> {
-            gameViewModel.setPlayerDTO(players.get(1));
-            replaceFragment(players.get(1));
-        });
-        player3.setOnClickListener(v -> {
-            gameViewModel.setPlayerDTO(players.get(2));
-            replaceFragment(players.get(2));
-        });
-        player4.setOnClickListener(v ->{
-            gameViewModel.setPlayerDTO(players.get(3));
-            replaceFragment(players.get(3));
-        });
-
         return rootView;
     }
 
     private void replaceFragment(PlayerDTO player) {
+        if (player == null) {
+            Log.e("Fragment", "PlayerDTO is null");
+            return;
+        }
+
         Fragment fragment = StatisticsPlayerFragment.newInstance(player);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
+
 
 }
