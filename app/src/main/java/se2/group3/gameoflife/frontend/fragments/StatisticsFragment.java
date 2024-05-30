@@ -78,13 +78,6 @@ public class StatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        if (savedInstanceState == null) {
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new StatisticsPlayerFragment())
-                    .commit();
-        }
-
-
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
         if (getArguments() != null) {
