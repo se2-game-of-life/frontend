@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -93,6 +94,15 @@ public class StatisticsFragment extends Fragment {
         job = rootView.findViewById(R.id.jobStat);
         houses = rootView.findViewById(R.id.housesStat);
 
+        rootView.findViewById(R.id.backBTN).setOnClickListener(v -> {
+            if (getActivity() != null) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                GameBoardFragment fragment = new GameBoardFragment();
+                transaction.replace(R.id.fragmentContainerView, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         try {
             gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
