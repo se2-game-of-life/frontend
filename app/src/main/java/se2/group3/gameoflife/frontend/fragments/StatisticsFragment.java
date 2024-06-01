@@ -140,7 +140,7 @@ public class StatisticsFragment extends Fragment {
                         money.setText("Money: " + playerDTO.getMoney());
                         college.setText("College Degree: "+ playerDTO.isCollegeDegree());
                         if(playerDTO.getCareerCard() == null){
-                            job.setText("Job: none");
+                            job.setText(R.string.job_none);
                         } else{
                             job.setText("Job: " + playerDTO.getCareerCard().toString());
                         }
