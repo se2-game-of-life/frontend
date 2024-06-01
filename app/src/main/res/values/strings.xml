@@ -30,4 +30,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="job_none">Job: none</string>
+    <string name="money">"Money: "</string>
+    <string name="college_degree">"College Degree: "</string>
+    <string name="job">"Job: "</string>
+    <string name="houses">"#houses: "</string>
 </resources>

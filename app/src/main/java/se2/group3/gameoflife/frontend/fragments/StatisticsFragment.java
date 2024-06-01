@@ -141,18 +141,7 @@ public class StatisticsFragment extends Fragment {
                     public void onChanged(LobbyDTO lobbyDTO) {
                         List<PlayerDTO> playersChanged = lobbyDTO.getPlayers();
                         PlayerDTO playerDTO = playersChanged.get(0);
-                        money.setVisibility(View.VISIBLE);
-                        college.setVisibility(View.VISIBLE);
-                        job.setVisibility(View.VISIBLE);
-                        houses.setVisibility(View.VISIBLE);
-                        money.setText("Money: " + playerDTO.getMoney());
-                        college.setText("College Degree: "+ playerDTO.isCollegeDegree());
-                        if(playerDTO.getCareerCard() == null){
-                            job.setText(R.string.job_none);
-                        } else{
-                            job.setText("Job: " + playerDTO.getCareerCard().toString());
-                        }
-                        houses.setText("#houses: " + playerDTO.getHouses().size());
+                        updateStatistics(playerDTO);
 
                         playerButtons[0].setOnClickListener(v -> updateStatistics(playersChanged.get(0)));
 
@@ -177,14 +166,14 @@ public class StatisticsFragment extends Fragment {
         college.setVisibility(View.VISIBLE);
         job.setVisibility(View.VISIBLE);
         houses.setVisibility(View.VISIBLE);
-        money.setText("Money: " + player.getMoney());
-        college.setText("College Degree: "+ player.isCollegeDegree());
+        money.setText(getString(R.string.money) + player.getMoney());
+        college.setText(getString(R.string.college_degree)+ player.isCollegeDegree());
         if(player.getCareerCard() == null){
-            job.setText("Job: none");
+            job.setText(R.string.job_none);
         } else{
-            job.setText("Job: " + player.getCareerCard().toString());
+            job.setText(getString(R.string.job) + player.getCareerCard().toString());
         }
-        houses.setText("#houses: " + player.getHouses().size());
+        houses.setText(getString(R.string.houses) + player.getHouses().size());
     }
 
     private void updateLobby(LobbyDTO lobbyDTO){
