@@ -136,21 +136,18 @@ public class StatisticsFragment extends Fragment {
                     playerButton.setText(player.getPlayerName());
                 }
 
-                gameViewModel.getLobby().observe(getViewLifecycleOwner(), new Observer<LobbyDTO>() {
-                    @Override
-                    public void onChanged(LobbyDTO lobbyDTO) {
-                        List<PlayerDTO> playersChanged = lobbyDTO.getPlayers();
-                        PlayerDTO playerDTO = playersChanged.get(0);
-                        updateStatistics(playerDTO);
+                gameViewModel.getLobby().observe(getViewLifecycleOwner(), lobbyDTO1 -> {
+                    List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
+                    PlayerDTO playerDTO = playersChanged.get(0);
+                    updateStatistics(playerDTO);
 
-                        playerButtons[0].setOnClickListener(v -> updateStatistics(playersChanged.get(0)));
+                    playerButtons[0].setOnClickListener(v -> updateStatistics(playersChanged.get(0)));
 
-                        playerButtons[1].setOnClickListener(v -> updateStatistics(playersChanged.get(1)));
+                    playerButtons[1].setOnClickListener(v -> updateStatistics(playersChanged.get(1)));
 
-                        playerButtons[2].setOnClickListener(v -> updateStatistics(playersChanged.get(2)));
+                    playerButtons[2].setOnClickListener(v -> updateStatistics(playersChanged.get(2)));
 
-                        playerButtons[3].setOnClickListener(v -> updateStatistics(playersChanged.get(3)));
-                    }
+                    playerButtons[3].setOnClickListener(v -> updateStatistics(playersChanged.get(3)));
                 });
 
         } catch (Exception e) {
