@@ -69,7 +69,7 @@ public class StatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView started");
+        Log.d(TAG, "Statistics fragment opened");
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
 
@@ -82,6 +82,14 @@ public class StatisticsFragment extends Fragment {
             if (getActivity() != null) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 GameBoardFragment fragment = new GameBoardFragment();
+                try {
+                    Bundle bundle = new Bundle();
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
+                    fragment.setArguments(bundle);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
                 transaction.replace(R.id.fragmentContainerView, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
