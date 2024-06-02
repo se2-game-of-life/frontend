@@ -83,9 +83,9 @@ public class GameBoardFragment extends Fragment {
     }
 
     private void fetchBoardData() {
-        // Log.d(TAG, "fetchBoardData started");
+        Log.d(TAG, "fetchBoardData started");
 
-        disposables.add(websocketClient.subscribe("/topic/board/" , BoardDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/board/" , BoardDTO.class) //todo: needs uuid from player
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -94,15 +94,18 @@ public class GameBoardFragment extends Fragment {
                 )
         );
 
-
-
         try {
-            websocketClient.send("/app/board/fetch", null);
+            String temp = "I am a fetch request!";
+            disposables.add(websocketClient.send("/app/fetch", temp)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
+            );
+            Log.d(TAG, "Fetch board request sent!");
         } catch (Exception e) {
             Log.e(TAG, "Error sending fetch board request!", e);
         }
     }
-
 
     private void updateUI(BoardDTO boardDTO) {
         Log.d(TAG, "updateUI started");
