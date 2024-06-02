@@ -28,7 +28,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  * create an instance of this fragment.
  */
 public class ChoosePathFragment extends Fragment {
-
+    private GameViewModel gameViewModel;
 
     public ChoosePathFragment() {
         // Required empty public constructor
@@ -43,7 +43,6 @@ public class ChoosePathFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        GameViewModel gameViewModel;
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
@@ -84,7 +83,16 @@ public class ChoosePathFragment extends Fragment {
     private void navigateToGameBoardFragment() {
         if (getActivity() != null) {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragmentContainerView, new GameBoardFragment());
+            GameBoardFragment fragment = new GameBoardFragment();
+            try {
+                Bundle bundle = new Bundle();
+                ObjectMapper objectMapper = new ObjectMapper();
+                bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
+                fragment.setArguments(bundle);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            transaction.replace(R.id.fragmentContainerView, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
         }
