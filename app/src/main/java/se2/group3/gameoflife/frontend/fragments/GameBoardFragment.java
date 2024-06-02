@@ -85,7 +85,7 @@ public class GameBoardFragment extends Fragment {
     private void fetchBoardData() {
         Log.d(TAG, "fetchBoardData started");
 
-        disposables.add(websocketClient.subscribe("/topic/board/" , BoardDTO.class) //todo: needs uuid from player
+        disposables.add(websocketClient.subscribe("/topic/board/" + viewModel.getLobbyDTO().getCurrentPlayer().getPlayerUUID(), BoardDTO.class) //todo: needs uuid from player
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
