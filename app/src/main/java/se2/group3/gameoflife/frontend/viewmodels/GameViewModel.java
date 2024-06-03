@@ -23,6 +23,29 @@ public class GameViewModel extends ViewModel {
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
 
+    public void startGame() {
+        LobbyDTO lobby = lobbyDTO.getValue();
+        if(lobby == null) throw new RuntimeException("LobbyDTO NULL in GameViewModel!");
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        //return if the lobby has already started
+        if(lobby.isHasStarted()) return;
+
+        //start lobby if lobby not started already
+        disposables.add(websocketClient.send("/app/lobby/start", "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
+        );
+    }
+
     public void makeChoice(boolean chooseLeft){
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
