@@ -197,6 +197,8 @@ public class GameBoardFragment extends Fragment {
 
         updatePlayerUI(2, 2, 1);
         updatePlayerUI(2, 2, 2);
+        updatePlayerUI(2, 2, 3);
+        updatePlayerUI(2, 2, 4);
 
     }
 
@@ -232,24 +234,25 @@ public class GameBoardFragment extends Fragment {
             // Get the PlayerCellView representing the cell
             PlayerCellView cellView = (PlayerCellView) gridLayout.getChildAt(index);
 
-            // Determine which player's symbol to update based on playerNumber
+            // Determine which player's dot to update based on playerNumber
             switch (playerNumber) {
                 case 1:
-                    cellView.setPlayer1Text("O.");
+                    cellView.setPlayer1Dot(R.drawable.player1_dot);
                     break;
                 case 2:
-                    cellView.setPlayer2Text(".");
+                    cellView.setPlayer2Dot(R.drawable.player2_dot);
                     break;
                 case 3:
-                    cellView.setPlayer3Text(".");
+                    cellView.setPlayer3Dot(R.drawable.player3_dot);
                     break;
                 case 4:
-                    cellView.setPlayer4Text(".");
+                    cellView.setPlayer4Dot(R.drawable.player4_dot);
                     break;
                 default:
                     Log.e(TAG, "Invalid player number: " + playerNumber);
                     break;
             }
+
         }
     }
 

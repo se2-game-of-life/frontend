@@ -1,18 +1,18 @@
 package se2.group3.gameoflife.frontend.fragments;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import se2.group3.gameoflife.frontend.R;
 
-
 public class PlayerCellView extends LinearLayout {
-    private TextView player1View;
-    private TextView player2View;
-    private TextView player3View;
-    private TextView player4View;
+    private ImageView player1Dot;
+    private ImageView player2Dot;
+    private ImageView player3Dot;
+    private ImageView player4Dot;
 
     public PlayerCellView(Context context) {
         super(context);
@@ -29,27 +29,27 @@ public class PlayerCellView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.player_cell_view, this);
 
-        // Find and initialize the TextViews for each player symbol
-        player1View = findViewById(R.id.player1_text);
-        player2View = findViewById(R.id.player2_text);
-        player3View = findViewById(R.id.player3_text);
-        player4View = findViewById(R.id.player4_text);
+        // Find and initialize the ImageViews for each player dot
+        player1Dot = findViewById(R.id.player1_dot);
+        player2Dot = findViewById(R.id.player2_dot);
+        player3Dot = findViewById(R.id.player3_dot);
+        player4Dot = findViewById(R.id.player4_dot);
     }
 
-    // Methods to set player symbols for each section
-    public void setPlayer1Text(String text) {
-        player1View.setText(text);
+    // Methods to set player dots for each section
+    public void setPlayer1Dot(int drawableResId) {
+        player1Dot.setBackgroundResource(drawableResId);
     }
 
-    public void setPlayer2Text(String text) {
-        player2View.setText(text);
+    public void setPlayer2Dot(int drawableResId) {
+        player2Dot.setBackgroundResource(drawableResId);
     }
 
-    public void setPlayer3Text(String text) {
-        player3View.setText(text);
+    public void setPlayer3Dot(int drawableResId) {
+        player3Dot.setBackgroundResource(drawableResId);
     }
 
-    public void setPlayer4Text(String text) {
-        player4View.setText(text);
+    public void setPlayer4Dot(int drawableResId) {
+        player4Dot.setBackgroundResource(drawableResId);
     }
 }

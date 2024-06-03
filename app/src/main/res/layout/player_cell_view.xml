@@ -4,40 +4,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Player 1 section (top left) -->
-        <TextView
-            android:id="@+id/player1_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:textSize="16sp"/>
+        <!-- Player 1 dot (top left) -->
+        <ImageView
+            android:id="@+id/player1_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+           />
 
-        <!-- Player 2 section (top right) -->
-        <TextView
-            android:id="@+id/player2_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!-- Player 2 dot (top right) -->
+        <ImageView
+            android:id="@+id/player2_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:textSize="16sp"/>
+            />
 
-        <!-- Player 3 section (bottom left) -->
-        <TextView
-            android:id="@+id/player3_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+        <!-- Player 3 dot (bottom left) -->
+        <ImageView
+            android:id="@+id/player3_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
             android:layout_alignParentBottom="true"
-            android:textSize="16sp"/>
+            />
 
-        <!-- Player 4 section (bottom right) -->
-        <TextView
-            android:id="@+id/player4_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!-- Player 4 dot (bottom right) -->
+        <ImageView
+            android:id="@+id/player4_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:textSize="16sp"/>
+            />
     </RelativeLayout>
 </merge>
