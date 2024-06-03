@@ -46,12 +46,10 @@ public class GameActivity extends AppCompatActivity {
             throw new RuntimeException(e); //todo: better error handling
         }
 
-        // Load Choose Path Fragment on first Create
-        if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new ChoosePathFragment())
-                    .commit();
-        }
-    }
 
+        gameViewModel.startGame(); //start the game
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, new ChoosePathFragment())
+                .commit();
+    }
 }
