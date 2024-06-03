@@ -1,62 +1,56 @@
 package se2.group3.gameoflife.frontend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
+
 public class CellDTO {
-    private int row;
-    private int col;
+    private  String id;
     private String type;
     private int number;
-    private List<Integer> nextCells; // Add the "nextCells" field
+    private List<Integer> nextCells;
+    private int row;
+    private int col;
+
+    public CellDTO(@JsonProperty("id") String id,
+                   @JsonProperty("number") int number,
+                   @JsonProperty("type") String type,
+                   @JsonProperty("nextCells") List<Integer> nextCells,
+                   @JsonProperty("row") int row,
+                   @JsonProperty("col") int col) {
+        this.id = id;
+        this.type = type;
+        this.number = number;
+        this.nextCells = nextCells;
+        this.row = row;
+        this.col = col;
+    }
 
     public CellDTO() {
     }
 
-    public CellDTO(int row, int col, String type, int number, List<Integer> nextCells) { // Update the constructor
-        this.row = row;
-        this.col = col;
-        this.type = type;
-        this.number = number;
-        this.nextCells = nextCells;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
+    public String getId() {
+        return id;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getNumber() { // Add getter for "number"
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(int number) { // Add setter for "number"
-        this.number = number;
-    }
-
-    public List<Integer> getNextCells() { // Add getter for "nextCells"
+    public List<Integer> getNextCells() {
         return nextCells;
     }
 
-    public void setNextCells(List<Integer> nextCells) { // Add setter for "nextCells"
-        this.nextCells = nextCells;
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

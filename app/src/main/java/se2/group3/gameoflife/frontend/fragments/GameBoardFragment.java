@@ -83,9 +83,9 @@ public class GameBoardFragment extends Fragment {
     }
 
     private void fetchBoardData() {
-        // Log.d(TAG, "fetchBoardData started");
+        Log.d(TAG, "fetchBoardData started");
 
-        disposables.add(websocketClient.subscribe("/topic/board/" , BoardDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/board/" + viewModel.getLobbyDTO().getCurrentPlayer().getPlayerUUID(), BoardDTO.class) //todo: needs uuid from player
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -94,15 +94,18 @@ public class GameBoardFragment extends Fragment {
                 )
         );
 
-
-
         try {
-            websocketClient.send("/app/board/fetch", null);
+            String temp = "I am a fetch request!";
+            disposables.add(websocketClient.send("/app/fetch", temp)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
+            );
+            Log.d(TAG, "Fetch board request sent!");
         } catch (Exception e) {
             Log.e(TAG, "Error sending fetch board request!", e);
         }
     }
-
 
     private void updateUI(BoardDTO boardDTO) {
         Log.d(TAG, "updateUI started");
@@ -132,29 +135,39 @@ public class GameBoardFragment extends Fragment {
 
                     // Set text and appearance of cells based on cellDTO presence
                     if (cellDTO != null) {
-                        if(Objects.equals(cellDTO.getType(), "actionCell")) {
+                        if(Objects.equals(cellDTO.getType(), "ACTION")) {
                             cell.setBackgroundResource(R.drawable.cell_action_background);
                         }
-                        else if(Objects.equals(cellDTO.getType(), "addpegCell")) {
+                        else if(Objects.equals(cellDTO.getType(), "FAMILY")) {
                             cell.setBackgroundResource(R.drawable.cell_addpeg_background);
                         }
-                        else if(Objects.equals(cellDTO.getType(), "investCell")) {
-                            cell.setBackgroundResource(R.drawable.cell_invest_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "houseCell")) {
+                        else if(Objects.equals(cellDTO.getType(), "HOUSE")) {
                             cell.setBackgroundResource(R.drawable.cell_house_background);
                         }
-                        else if(Objects.equals(cellDTO.getType(), "paydayCell")) {
+                        else if(Objects.equals(cellDTO.getType(), "CASH")) {
                             cell.setBackgroundResource(R.drawable.cell_payday_background);
                         }
-                        else if(Objects.equals(cellDTO.getType(), "careerCell")) {
+                        else if(Objects.equals(cellDTO.getType(), "CAREER")) {
                             cell.setBackgroundResource(R.drawable.cell_career_background);
                         }
-                        else if(cellDTO.getType().endsWith("StopCell")) {
+
+                        else if(Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
                             cell.setBackgroundResource(R.drawable.cell_stop_background);
                         }
-                        else if(cellDTO.getType().endsWith("start")) {
-                            cell.setBackgroundResource(R.drawable.cell_start_background);
+                        else if(Objects.equals(cellDTO.getType(), "GRADUATE")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "MARRY")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "MID_LIFE")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "RETIRE_EARLY")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "RETIREMENT")) {
+                            cell.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                     }
 
