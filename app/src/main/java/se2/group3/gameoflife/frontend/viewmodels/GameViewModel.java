@@ -39,7 +39,7 @@ public class GameViewModel extends ViewModel {
         if(lobby.isHasStarted()) return;
 
         //start lobby if lobby not started already
-        disposables.add(websocketClient.send("app/lobby/start", "")
+        disposables.add(websocketClient.send("/app/lobby/start", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
