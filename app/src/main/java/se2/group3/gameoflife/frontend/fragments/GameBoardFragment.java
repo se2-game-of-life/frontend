@@ -131,7 +131,8 @@ public class GameBoardFragment extends Fragment {
 
                     // Create a new TextView for each cell
                     TextView cell1 = new TextView(getContext());
-                    TextView cell2 = new TextView(getContext());
+                    PlayerCellView cell2 = new PlayerCellView(getContext());
+
 
 
                     GridLayout.LayoutParams params = new GridLayout.LayoutParams(
@@ -194,7 +195,8 @@ public class GameBoardFragment extends Fragment {
             Log.e(TAG, "BoardDTO or cells are null");
         }
 
-        updatePlayerUI(2, 2, "O");
+        updatePlayerUI(2, 2, 1);
+        updatePlayerUI(2, 2, 2);
 
     }
 
@@ -216,7 +218,7 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-    private void updatePlayerUI(int row, int col, String symbol) {
+    private void updatePlayerUI(int row, int col, int playerNumber) {
         Log.d(TAG, "updatePlayerUI started");
 
         // Find the GridLayout in the layout
@@ -227,11 +229,27 @@ public class GameBoardFragment extends Fragment {
 
         // Check if the index is within the bounds of the GridLayout
         if (index >= 0 && index < gridLayout.getChildCount()) {
-            // Get the TextView representing the cell
-            TextView cell = (TextView) gridLayout.getChildAt(index);
+            // Get the PlayerCellView representing the cell
+            PlayerCellView cellView = (PlayerCellView) gridLayout.getChildAt(index);
 
-            // Set the player symbol
-            cell.setText(symbol);
+            // Determine which player's symbol to update based on playerNumber
+            switch (playerNumber) {
+                case 1:
+                    cellView.setPlayer1Text("O.");
+                    break;
+                case 2:
+                    cellView.setPlayer2Text(".");
+                    break;
+                case 3:
+                    cellView.setPlayer3Text(".");
+                    break;
+                case 4:
+                    cellView.setPlayer4Text(".");
+                    break;
+                default:
+                    Log.e(TAG, "Invalid player number: " + playerNumber);
+                    break;
+            }
         }
     }
 
