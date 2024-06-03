@@ -52,4 +52,21 @@ public class PlayerCellView extends LinearLayout {
     public void setPlayer4Dot(int drawableResId) {
         player4Dot.setBackgroundResource(drawableResId);
     }
+
+
+    public void clearPlayer1Dot(int drawableResId) {
+        player1Dot.setBackgroundResource(android.R.color.transparent); // Set transparent background to clear the dot
+    }
+
+    public void clearPlayer2Dot(int drawableResId) {
+        player2Dot.setBackgroundResource(android.R.color.transparent); // Set transparent background to clear the dot
+    }
+
+    public void clearPlayer3Dot(int drawableResId) {
+        player3Dot.setBackgroundResource(android.R.color.transparent); // Set transparent background to clear the dot
+    }
+
+    public void clearPlayer4Dot(int drawableResId) {
+        player4Dot.setBackgroundResource(android.R.color.transparent); // Set transparent background to clear the dot
+    }
 }

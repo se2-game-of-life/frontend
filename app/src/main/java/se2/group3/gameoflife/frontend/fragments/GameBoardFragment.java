@@ -195,10 +195,15 @@ public class GameBoardFragment extends Fragment {
             Log.e(TAG, "BoardDTO or cells are null");
         }
 
-        updatePlayerUI(2, 2, 1);
-        updatePlayerUI(2, 2, 2);
-        updatePlayerUI(2, 2, 3);
-        updatePlayerUI(2, 2, 4);
+        updatePlayerDot(2, 2, 1);
+        updatePlayerDot(2, 2, 2);
+        updatePlayerDot(2, 2, 3);
+        updatePlayerDot(2, 2, 4);
+        /*
+        //To move a player yu need to clear their previous cot and add a new one
+        clearPlayerDot(2, 2, 4);
+        updatePlayerDot(2, 3, 4);
+        */
 
     }
 
@@ -220,7 +225,7 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-    private void updatePlayerUI(int row, int col, int playerNumber) {
+    private void updatePlayerDot(int row, int col, int playerNumber) {
         Log.d(TAG, "updatePlayerUI started");
 
         // Find the GridLayout in the layout
@@ -247,6 +252,41 @@ public class GameBoardFragment extends Fragment {
                     break;
                 case 4:
                     cellView.setPlayer4Dot(R.drawable.player4_dot);
+                    break;
+                default:
+                    Log.e(TAG, "Invalid player number: " + playerNumber);
+                    break;
+            }
+
+        }
+    }
+
+    private void clearPlayerDot(int row, int col, int playerNumber) {
+
+        // Find the GridLayout in the layout
+        GridLayout gridLayout = requireView().findViewById(R.id.gridLayout2);
+
+        // Calculate the index of the cell in the GridLayout
+        int index = row * gridLayout.getColumnCount() + col;
+
+        // Check if the index is within the bounds of the GridLayout
+        if (index >= 0 && index < gridLayout.getChildCount()) {
+            // Get the PlayerCellView representing the cell
+            PlayerCellView cellView = (PlayerCellView) gridLayout.getChildAt(index);
+
+            // Determine which player's dot to update based on playerNumber
+            switch (playerNumber) {
+                case 1:
+                    cellView.clearPlayer1Dot(R.drawable.player1_dot);
+                    break;
+                case 2:
+                    cellView.clearPlayer2Dot(R.drawable.player2_dot);
+                    break;
+                case 3:
+                    cellView.clearPlayer3Dot(R.drawable.player3_dot);
+                    break;
+                case 4:
+                    cellView.clearPlayer4Dot(R.drawable.player4_dot);
                     break;
                 default:
                     Log.e(TAG, "Invalid player number: " + playerNumber);
