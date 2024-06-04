@@ -59,6 +59,7 @@ public class GameBoardFragment extends Fragment {
         // Initialize viewModel
         viewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
+
         if (getArguments() != null) {
             String lobbyDTOJson = getArguments().getString("lobbyDTO");
             if (lobbyDTOJson != null) {
@@ -89,7 +90,7 @@ public class GameBoardFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::updateUI,
+                        this::updateBoardUI,
                         error -> Log.e(TAG, "Error fetching board data!", error)
                 )
         );
@@ -107,14 +108,16 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-    private void updateUI(BoardDTO boardDTO) {
+    private void updateBoardUI(BoardDTO boardDTO) {
         Log.d(TAG, "updateUI started");
 
         // Find the GridLayout in the layout
-        GridLayout gridLayout = requireView().findViewById(R.id.gridLayout);
+        GridLayout gridLayout1 = requireView().findViewById(R.id.gridLayout1);
+        GridLayout gridLayout2 = requireView().findViewById(R.id.gridLayout2);
 
         // Clear existing views from GridLayout
-        gridLayout.removeAllViews();
+        gridLayout1.removeAllViews();
+        gridLayout2.removeAllViews();
 
         // Check if BoardDTO is not null
         if (boardDTO != null && boardDTO.getCells() != null) {
@@ -127,58 +130,80 @@ public class GameBoardFragment extends Fragment {
                     CellDTO cellDTO = boardDTO.getCells().get(row).get(col);
 
                     // Create a new TextView for each cell
-                    TextView cell = new TextView(getContext());
-                    cell.setLayoutParams(new GridLayout.LayoutParams(
+                    TextView cell1 = new TextView(getContext());
+                    PlayerCellView cell2 = new PlayerCellView(getContext());
+
+
+
+                    GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                             GridLayout.spec(row, 1f), // Row weight
-                            GridLayout.spec(col, 1f) // Column weight
-                    ));
+                            GridLayout.spec(col, 1f)  // Column weight
+                    );
+                    params.width = 200;  // Set the width in pixels
+                    params.height = 200; // Set the height in pixels
+
+                    // Apply the layout parameters to the TextView
+                    cell1.setLayoutParams(params);
+                    cell2.setLayoutParams(params);
+
+                    gridLayout2.addView(cell2);
 
                     // Set text and appearance of cells based on cellDTO presence
                     if (cellDTO != null) {
                         if(Objects.equals(cellDTO.getType(), "ACTION")) {
-                            cell.setBackgroundResource(R.drawable.cell_action_background);
+                            cell1.setBackgroundResource(R.drawable.cell_action_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "FAMILY")) {
-                            cell.setBackgroundResource(R.drawable.cell_addpeg_background);
+                            cell1.setBackgroundResource(R.drawable.cell_addpeg_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "HOUSE")) {
-                            cell.setBackgroundResource(R.drawable.cell_house_background);
+                            cell1.setBackgroundResource(R.drawable.cell_house_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "CASH")) {
-                            cell.setBackgroundResource(R.drawable.cell_payday_background);
+                            cell1.setBackgroundResource(R.drawable.cell_payday_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "CAREER")) {
-                            cell.setBackgroundResource(R.drawable.cell_career_background);
+                            cell1.setBackgroundResource(R.drawable.cell_career_background);
                         }
 
                         else if(Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "GRADUATE")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "MARRY")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "MID_LIFE")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "RETIRE_EARLY")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "RETIREMENT")) {
-                            cell.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                     }
 
                     // Add cell to the GridLayout
-                    gridLayout.addView(cell);
+                    gridLayout1.addView(cell1);
                 }
             }
         } else {
             // Log a message or handle the situation when BoardDTO or its cells are null
             Log.e(TAG, "BoardDTO or cells are null");
         }
+
+        updatePlayerDot(2, 2, 1);
+        updatePlayerDot(2, 2, 2);
+        updatePlayerDot(2, 2, 3);
+        updatePlayerDot(2, 2, 4);
+        /*
+        //To move a player yu need to clear their previous cot and add a new one
+        clearPlayerDot(2, 2, 4);
+        updatePlayerDot(2, 3, 4);
+        */
 
     }
 
@@ -197,6 +222,77 @@ public class GameBoardFragment extends Fragment {
             transaction.replace(R.id.fragmentContainerView, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        }
+    }
+
+    private void updatePlayerDot(int row, int col, int playerNumber) {
+        Log.d(TAG, "updatePlayerUI started");
+
+        // Find the GridLayout in the layout
+        GridLayout gridLayout = requireView().findViewById(R.id.gridLayout2);
+
+        // Calculate the index of the cell in the GridLayout
+        int index = row * gridLayout.getColumnCount() + col;
+
+        // Check if the index is within the bounds of the GridLayout
+        if (index >= 0 && index < gridLayout.getChildCount()) {
+            // Get the PlayerCellView representing the cell
+            PlayerCellView cellView = (PlayerCellView) gridLayout.getChildAt(index);
+
+            // Determine which player's dot to update based on playerNumber
+            switch (playerNumber) {
+                case 1:
+                    cellView.setPlayer1Dot(R.drawable.player1_dot);
+                    break;
+                case 2:
+                    cellView.setPlayer2Dot(R.drawable.player2_dot);
+                    break;
+                case 3:
+                    cellView.setPlayer3Dot(R.drawable.player3_dot);
+                    break;
+                case 4:
+                    cellView.setPlayer4Dot(R.drawable.player4_dot);
+                    break;
+                default:
+                    Log.e(TAG, "Invalid player number: " + playerNumber);
+                    break;
+            }
+
+        }
+    }
+
+    private void clearPlayerDot(int row, int col, int playerNumber) {
+
+        // Find the GridLayout in the layout
+        GridLayout gridLayout = requireView().findViewById(R.id.gridLayout2);
+
+        // Calculate the index of the cell in the GridLayout
+        int index = row * gridLayout.getColumnCount() + col;
+
+        // Check if the index is within the bounds of the GridLayout
+        if (index >= 0 && index < gridLayout.getChildCount()) {
+            // Get the PlayerCellView representing the cell
+            PlayerCellView cellView = (PlayerCellView) gridLayout.getChildAt(index);
+
+            // Determine which player's dot to update based on playerNumber
+            switch (playerNumber) {
+                case 1:
+                    cellView.clearPlayer1Dot(R.drawable.player1_dot);
+                    break;
+                case 2:
+                    cellView.clearPlayer2Dot(R.drawable.player2_dot);
+                    break;
+                case 3:
+                    cellView.clearPlayer3Dot(R.drawable.player3_dot);
+                    break;
+                case 4:
+                    cellView.clearPlayer4Dot(R.drawable.player4_dot);
+                    break;
+                default:
+                    Log.e(TAG, "Invalid player number: " + playerNumber);
+                    break;
+            }
+
         }
     }
 
