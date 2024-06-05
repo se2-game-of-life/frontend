@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:paddingHorizontal="25dp"
+    android:paddingVertical="10dp">
+
+    <Button
+        android:id="@+id/player1Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Player 1"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player2Button" />
+
+    <Button
+        android:id="@+id/player2Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Player 2"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/player1Button"
+        app:layout_constraintEnd_toStartOf="@+id/player3Button" />
+
+    <Button
+        android:id="@+id/player3Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Player 3"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/player2Button"
+        app:layout_constraintEnd_toStartOf="@+id/player4Button" />
+
+    <Button
+        android:id="@+id/player4Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Player 4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/player3Button"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
