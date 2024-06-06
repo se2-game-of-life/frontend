@@ -15,30 +15,7 @@
         android:layout_height="match_parent"
         android:columnCount="33"
         android:rowCount="17"/>
-    <Button
-        android:id="@+id/buttonSpin"
-        android:layout_width="221dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="500dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/oval_button"
-        android:fontFamily="@font/inter_extra_bold"
-        android:fontWeight="800"
-        android:text="Spin"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/statisticsBtn"
-        android:layout_width="221dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="500dp"
-        android:layout_marginTop="105dp"
-        android:background="@drawable/button_background"
-        android:fontFamily="@font/inter_extra_bold"
-        android:fontWeight="800"
-        android:text="@string/StatisticsOtherPlayers"
-        android:textColor="#FFFFFF" />
 
 
 </FrameLayout>
