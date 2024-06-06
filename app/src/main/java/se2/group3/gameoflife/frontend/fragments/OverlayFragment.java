@@ -56,12 +56,14 @@ public class OverlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        getLobbyDTO();
+        updateStatistics();
         return rootView;
     }
 
@@ -95,19 +97,19 @@ public class OverlayFragment extends Fragment {
                 List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
 
                 playerButtons[0].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged.get(0));
+                    updateButton(playerButtons, playersChanged, playersChanged.get(0));
                 });
 
                 playerButtons[1].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged.get(1));
+                    updateButton(playerButtons, playersChanged, playersChanged.get(1));
                 });
 
                 playerButtons[2].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged.get(2));
+                    updateButton(playerButtons, playersChanged, playersChanged.get(2));
                 });
 
                 playerButtons[3].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged.get(3));
+                    updateButton(playerButtons, playersChanged, playersChanged.get(3));
                 });
             });
 
@@ -134,12 +136,8 @@ public class OverlayFragment extends Fragment {
         gameViewModel.setLobbyDTO(lobbyDTO);
     }
 
-    private void updateButton(Button[] playerButtons, PlayerDTO playerDTO){
-        for (Button playerButton : playerButtons) {
-            if (!playerButton.getText().equals(playerDTO.getPlayerName())) {
-                playerButton.setText(playerDTO.getPlayerName());
-            }
-        }
+    private void updateButton(Button[] playerButtons, List<PlayerDTO> players, PlayerDTO playerDTO){
+        setPlayerNamesButton(players, playerButtons);
 
         for (Button playerButton : playerButtons){
             if(playerButton.getText().equals(playerDTO.getPlayerName())){
