@@ -24,10 +24,11 @@ public class GameViewModel extends ViewModel {
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
 
     public void makeChoice(boolean chooseLeft){
-        if(lobbyDTO.getValue() == null) {
-            Log.e("Networking", "Error making choice: lobbyDTO was null!");
+        if(lobbyDTO == null || lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO is null!");
             return;
         }
+
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
