@@ -25,6 +25,7 @@ public class OverlayFragment extends Fragment {
     private GameViewModel gameViewModel;
     private View rootView;
     public final String TAG = "Networking";
+    private boolean playerName;
 
 
     private void getLobbyDTO() {
@@ -97,19 +98,35 @@ public class OverlayFragment extends Fragment {
                 List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
 
                 playerButtons[0].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged, playersChanged.get(0));
+                    if(playerName){
+                        updateButton(playerButtons, playersChanged, playersChanged.get(0));
+                    } else{
+                        setPlayerNamesButton(players, playerButtons);
+                    }
                 });
 
                 playerButtons[1].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged, playersChanged.get(1));
+                    if(playerName){
+                        updateButton(playerButtons, playersChanged, playersChanged.get(1));
+                    } else{
+                        setPlayerNamesButton(players, playerButtons);
+                    }
                 });
 
                 playerButtons[2].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged, playersChanged.get(2));
+                    if(playerName){
+                        updateButton(playerButtons, playersChanged, playersChanged.get(2));
+                    } else{
+                        setPlayerNamesButton(players, playerButtons);
+                    }
                 });
 
                 playerButtons[3].setOnClickListener(v -> {
-                    updateButton(playerButtons, playersChanged, playersChanged.get(3));
+                    if(playerName){
+                        updateButton(playerButtons, playersChanged, playersChanged.get(3));
+                    } else{
+                        setPlayerNamesButton(players, playerButtons);
+                    }
                 });
             });
 
@@ -131,6 +148,7 @@ public class OverlayFragment extends Fragment {
             Button playerButton = playerButtons[i];
             playerButton.setText(player.getPlayerName());
         }
+        playerName = true;
     }
     private void updateLobby(LobbyDTO lobbyDTO){
         gameViewModel.setLobbyDTO(lobbyDTO);
@@ -150,6 +168,7 @@ public class OverlayFragment extends Fragment {
                 }
             }
         }
+        playerName = false;
     }
 
 }
