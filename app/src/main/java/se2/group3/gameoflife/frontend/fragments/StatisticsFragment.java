@@ -45,15 +45,6 @@ public class StatisticsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static StatisticsFragment newInstance(String param1, String param2) {
         StatisticsFragment fragment = new StatisticsFragment();
         Bundle args = new Bundle();
@@ -61,10 +52,6 @@ public class StatisticsFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
