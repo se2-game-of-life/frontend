@@ -85,18 +85,25 @@ public class ChoosePathFragment extends Fragment {
     private void navigateToGameBoardFragment() {
         if (getActivity() != null) {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            GameBoardFragment fragment = new GameBoardFragment();
+            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+            GameBoardFragment gameBoardFragment = new GameBoardFragment();
+            OverlayFragment overlayFragment = new OverlayFragment();
             try {
                 Bundle bundle = new Bundle();
                 ObjectMapper objectMapper = new ObjectMapper();
                 bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
-                fragment.setArguments(bundle);
+                gameBoardFragment.setArguments(bundle);
+                overlayFragment.setArguments(bundle);
             } catch (JsonProcessingException e) {
                 Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
             }
-            transaction.replace(R.id.fragmentContainerView, fragment);
+            transaction.replace(R.id.fragmentContainerView, gameBoardFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
+            transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
+            transactionOverLay.addToBackStack(null);
+            transactionOverLay.commit();
         }
     }
 

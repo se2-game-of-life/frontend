@@ -4,6 +4,7 @@ import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
+
 
 
 public class GameActivity extends AppCompatActivity {
@@ -51,6 +53,13 @@ public class GameActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerView, fragment)
                 .commit();
+    }
+
+    public void setFragmentVisibility(){
+        View fragment = findViewById(R.id.fragmentContainerView2);
+        if(fragment != null){
+            fragment.setVisibility(View.VISIBLE);
+        }
     }
 
 }

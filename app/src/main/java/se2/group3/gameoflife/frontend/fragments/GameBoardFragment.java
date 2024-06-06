@@ -1,5 +1,4 @@
 package se2.group3.gameoflife.frontend.fragments;
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
@@ -57,6 +57,7 @@ public class GameBoardFragment extends Fragment {
         // Initialize spinButton
         spinButton = rootView.findViewById(R.id.buttonSpin);
         rootView.findViewById(R.id.statisticsBtn).setOnClickListener(v -> changeToStatisticsFragment());
+        makeOverlayVisible();
 
         // Initialize viewModel
         viewModel = new ViewModelProvider(this).get(GameViewModel.class);
@@ -186,6 +187,13 @@ public class GameBoardFragment extends Fragment {
             transaction.replace(R.id.fragmentContainerView, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        }
+    }
+
+    private void makeOverlayVisible(){
+        GameActivity gameActivity = (GameActivity) getActivity();
+        if(gameActivity != null){
+            gameActivity.setFragmentVisibility();
         }
     }
 
