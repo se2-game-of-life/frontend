@@ -37,7 +37,6 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class GameBoardFragment extends Fragment {
 
     private static final String TAG = "Networking";
-    private Button spinButton;
 
     private GameViewModel viewModel;
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
@@ -52,11 +51,9 @@ public class GameBoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
-        // Initialize spinButton
-        spinButton = rootView.findViewById(R.id.buttonSpin);
-        rootView.findViewById(R.id.statisticsBtn).setOnClickListener(v -> changeToStatisticsFragment());
+
         makeOverlayVisible();
 
         // Initialize viewModel
@@ -77,9 +74,6 @@ public class GameBoardFragment extends Fragment {
             }
         }
 
-        // Set OnClickListener on spinButton
-        spinButton.setOnClickListener(v -> viewModel.spinWheel());
-        // Call fetchBoardData when the fragment is created
         fetchBoardData();
 
         return rootView;
@@ -172,23 +166,6 @@ public class GameBoardFragment extends Fragment {
 
     }
 
-    private void changeToStatisticsFragment() {
-        if (getActivity() != null) {
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            StatisticsFragment fragment = new StatisticsFragment();
-            try {
-                Bundle bundle = new Bundle();
-                ObjectMapper objectMapper = new ObjectMapper();
-                bundle.putString("lobbyDTO", objectMapper.writeValueAsString(viewModel.getLobbyDTO()));
-                fragment.setArguments(bundle);
-            } catch (JsonProcessingException e) {
-                Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
-            }
-            transaction.replace(R.id.fragmentContainerView, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-    }
 
     private void makeOverlayVisible(){
         GameActivity gameActivity = (GameActivity) getActivity();
