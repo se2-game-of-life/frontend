@@ -34,4 +34,10 @@
     <string name="college_degree">"College Degree: "</string>
     <string name="job">"Job: "</string>
     <string name="houses">"#houses: "</string>
+    <string name="player_1">Player 1</string>
+    <string name="player_2">Player 2</string>
+    <string name="player_3">Player 3</string>
+    <string name="player_4">Player 4</string>
+    <string name="cheat">Cheat</string>
+    <string name="spin">Spin</string>
 </resources>
