@@ -3,23 +3,55 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class OverlayFragment extends Fragment {
+    private GameViewModel gameViewModel;
+    private View rootView;
+    public final String TAG = "Networking";
 
-    //todo: get lobbyDTO from LiveData
+
+    private void getLobbyDTO() {
+        if (getArguments() != null) {
+            String lobbyDTOJson = getArguments().getString("lobbyDTO");
+            if (lobbyDTOJson != null) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
+                    if (lobbyDTO != null) {
+                        gameViewModel.setLobbyDTO(lobbyDTO);
+                        gameViewModel.getLobby().observe(getViewLifecycleOwner(), this::updateLobby);
+                    }
+                } catch (NullPointerException | JsonProcessingException e) {
+                    Log.d("Networking", "Exception: " + e.getMessage());
+                }
+            }
+        }
+    }
     //todo: change visibility of buttons depending on how many people are in the lobby
     //todo: make buttons toggle between player name and player stats
     //todo: implement long press for report
     //todo: add button for spinning
     //todo: add button for cheating / fake cheating (fake cheating also needs to be added in the backend)
 
-    public OverlayFragment() {}
+    public OverlayFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +60,82 @@ public class OverlayFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_overlay, container, false);
+        rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        return rootView;
     }
+
+    private void updateStatistics() {
+        try {
+
+            LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+            List<PlayerDTO> players = lobbyDTO.getPlayers();
+
+            if (players == null || players.isEmpty()) {
+                Log.e(TAG, "Playerlist is null or empty");
+                return;
+            }
+
+            Button[] playerButtons = new Button[4];
+            playerButtons[0] = rootView.findViewById(R.id.player1Button);
+            playerButtons[1] = rootView.findViewById(R.id.player2Button);
+            playerButtons[2] = rootView.findViewById(R.id.player3Button);
+            playerButtons[3] = rootView.findViewById(R.id.player4Button);
+
+
+            for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+                PlayerDTO player = players.get(i);
+                Button playerButton = playerButtons[i];
+                playerButton.setVisibility(View.VISIBLE);
+                playerButton.setText(player.getPlayerName());
+            }
+
+            gameViewModel.getLobby().observe(getViewLifecycleOwner(), lobbyDTO1 -> {
+                List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
+
+                playerButtons[0].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(0));
+                });
+
+                playerButtons[1].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(1));
+                });
+
+                playerButtons[2].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(2));
+                });
+
+                playerButtons[3].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(3));
+                });
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreateView: " + e.getMessage());
+        }
+    }
+    private void updateLobby(LobbyDTO lobbyDTO){
+        gameViewModel.setLobbyDTO(lobbyDTO);
+    }
+
+    private void updateButton(Button[] playerButtons, PlayerDTO playerDTO){
+        for (Button playerButton : playerButtons) {
+            if (!playerButton.getText().equals(playerDTO.getPlayerName())) {
+                playerButton.setText(playerDTO.getPlayerName());
+            }
+        }
+
+        for (Button playerButton : playerButtons){
+            if(playerButton.getText().equals(playerDTO.getPlayerName())){
+                if(playerDTO.getCareerCard() == null){
+                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: none "+
+                            "\n#houses: " + playerDTO.getHouses().size());
+                } else{
+                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: " +playerDTO.getCareerCard().toString()+
+                            "]\n#houses: " + playerDTO.getHouses().size());
+                }
+            }
+        }
+    }
+
 }
