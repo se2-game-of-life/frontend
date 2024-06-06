@@ -50,7 +50,8 @@ public class OverlayFragment extends Fragment {
     //todo: add button for spinning
     //todo: add button for cheating / fake cheating (fake cheating also needs to be added in the backend)
 
-    public OverlayFragment() {}
+    public OverlayFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,60 +61,74 @@ public class OverlayFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
-
-        Button player1Button = rootView.findViewById(R.id.player1Button);
-        Button player2Button = rootView.findViewById(R.id.player2Button);
-        Button player3Button = rootView.findViewById(R.id.player3Button);
-        Button player4Button = rootView.findViewById(R.id.player4Button);
-        Button spinButton = rootView.findViewById(R.id.spinButton);
-        Button cheatButton = rootView.findViewById(R.id.cheatButton);
-
-        player1Button.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
-        player1Button.setOnLongClickListener(v -> {
-            gameViewModel.report(0);
-            return true;
-        });
-        player2Button.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
-        player2Button.setOnLongClickListener(v -> {
-            gameViewModel.report(1);
-            return true;
-        });
-        player3Button.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
-        player3Button.setOnLongClickListener(v -> {
-            gameViewModel.report(2);
-            return true;
-        });
-        player4Button.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
-        player4Button.setOnLongClickListener(v -> {
-            gameViewModel.report(3);
-            return true;
-        });
-        cheatButton.setOnClickListener(view -> {
-            gameViewModel.cheat();
-            vibratePhone();
-        });
-        cheatButton.setOnLongClickListener(v -> {
-            vibratePhone();
-            return true;
-        });
-        spinButton.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
-
+        rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         return rootView;
     }
 
+    private void updateStatistics() {
+        try {
+            LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+            List<PlayerDTO> players = lobbyDTO.getPlayers();
+
+            if (players == null || players.isEmpty()) {
+                Log.e(TAG, "Playerlist is null or empty");
+                return;
+            }
+
+            Log.d(TAG, "start buttons");
+            Button[] playerButtons = new Button[4];
+            playerButtons[0] = rootView.findViewById(R.id.player1Button);
+            playerButtons[1] = rootView.findViewById(R.id.player2Button);
+            playerButtons[2] = rootView.findViewById(R.id.player3Button);
+            playerButtons[3] = rootView.findViewById(R.id.player4Button);
+
+            setPlayerNamesButton(players, playerButtons);
+
+            for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+                PlayerDTO player = players.get(i);
+                Button playerButton = playerButtons[i];
+                playerButton.setVisibility(View.VISIBLE);
+                playerButton.setText(player.getPlayerName());
+            }
+
+            gameViewModel.getLobby().observe(getViewLifecycleOwner(), lobbyDTO1 -> {
+                List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
+
+                playerButtons[0].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(0));
+                });
+
+                playerButtons[1].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(1));
+                });
+
+                playerButtons[2].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(2));
+                });
+
+                playerButtons[3].setOnClickListener(v -> {
+                    updateButton(playerButtons, playersChanged.get(3));
+                });
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreateView: " + e.getMessage());
+        }
+    }
+
+
     private void vibratePhone() {
         //todo: implement vibrations
+    }
+
+
+
+    private void setPlayerNamesButton(List<PlayerDTO> players, Button[] playerButtons){
+        for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+            PlayerDTO player = players.get(i);
+            Button playerButton = playerButtons[i];
+            playerButton.setText(player.getPlayerName());
+        }
     }
     private void updateLobby(LobbyDTO lobbyDTO){
         gameViewModel.setLobbyDTO(lobbyDTO);
