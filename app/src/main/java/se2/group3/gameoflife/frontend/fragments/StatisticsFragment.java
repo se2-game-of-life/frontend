@@ -1,5 +1,7 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -75,7 +77,7 @@ public class StatisticsFragment extends Fragment {
                     bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
                     fragment.setArguments(bundle);
                 } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
+                    Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
                 }
                 transaction.replace(R.id.fragmentContainerView, fragment);
                 transaction.addToBackStack(null);

@@ -1,6 +1,9 @@
 package se2.group3.gameoflife.frontend.activities;
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
             bundle.putString("lobbyDTO", lobbyDTOJson);
             fragment.setArguments(bundle);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
         }
 
         getSupportFragmentManager().beginTransaction()
