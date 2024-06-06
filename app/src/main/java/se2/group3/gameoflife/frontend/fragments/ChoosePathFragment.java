@@ -46,7 +46,7 @@ public class ChoosePathFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
 
         if (getArguments() != null) {

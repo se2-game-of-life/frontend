@@ -57,7 +57,7 @@ public class GameBoardFragment extends Fragment {
         makeOverlayVisible();
 
         // Initialize viewModel
-        viewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
         if (getArguments() != null) {
             String lobbyDTOJson = getArguments().getString("lobbyDTO");

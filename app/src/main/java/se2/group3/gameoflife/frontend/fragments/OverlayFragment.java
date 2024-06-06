@@ -62,7 +62,7 @@ public class OverlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         getLobbyDTO();
         updateStatistics();
         return rootView;
