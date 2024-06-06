@@ -69,10 +69,11 @@ public class OverlayFragment extends Fragment {
             return true;
         });
         cheatButton.setOnClickListener(view -> {
-            //todo: handle short click player1button
+            gameViewModel.cheat();
+            vibratePhone();
         });
         cheatButton.setOnLongClickListener(v -> {
-            //todo: handle long click player1button
+            vibratePhone();
             return true;
         });
         spinButton.setOnClickListener(view -> {
@@ -80,5 +81,9 @@ public class OverlayFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void vibratePhone() {
+        //todo: implement vibrations
     }
 }

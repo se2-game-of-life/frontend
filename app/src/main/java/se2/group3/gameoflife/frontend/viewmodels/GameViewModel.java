@@ -47,7 +47,11 @@ public class GameViewModel extends ViewModel {
     }
 
     public void spinWheel() {
-        disposables.add(websocketClient.subscribe("/topic/game/", LobbyDTO.class)
+        if(lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO was null!");
+            return;
+        }
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -74,7 +78,7 @@ public class GameViewModel extends ViewModel {
         }
         String playerUUID = lobby.getPlayers().get(player).getPlayerUUID();
 
-        disposables.add(websocketClient.subscribe("/topic/game/", LobbyDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -84,6 +88,30 @@ public class GameViewModel extends ViewModel {
         );
 
         disposables.add(websocketClient.send("/app/report", playerUUID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {},
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+    }
+
+    public void cheat() {
+        if(lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO was null!");
+            return;
+        }
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        disposables.add(websocketClient.send("/app/cheat", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
