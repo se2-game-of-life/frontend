@@ -19,51 +19,56 @@
             android:id="@+id/player1Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_background_player1"
             android:text="@string/player_1"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/player2Button"
-            android:visibility="invisible"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/player2Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_background_player2"
             android:text="@string/player_2"
-            tools:layout_editor_absoluteX="172dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/player1Button"
             app:layout_constraintEnd_toStartOf="@id/player3Button"
-            android:visibility="invisible"/>
+            app:layout_constraintStart_toEndOf="@id/player1Button" />
 
         <Button
             android:id="@+id/player3Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_background_player3"
             android:text="@string/player_3"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/player2Button"
             app:layout_constraintEnd_toStartOf="@id/player4Button"
-            android:visibility="invisible"/>
+            app:layout_constraintStart_toEndOf="@id/player2Button" />
 
         <Button
             android:id="@+id/player4Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_background_player4"
             android:text="@string/player_4"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/player3Button"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible"/>
+            app:layout_constraintStart_toEndOf="@id/player3Button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/cheatButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cheat"
-        android:layout_marginEnd="25dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/edittext_background"
+        android:text="@string/cheat"
+        android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,8 +76,10 @@
         android:id="@+id/spinButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/spin"
         android:layout_marginEnd="25dp"
+        android:background="@drawable/button_background_start"
+        android:text="@string/spin"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cheatButton" />
 
