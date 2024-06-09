@@ -41,6 +41,8 @@ public class GameActivity extends AppCompatActivity {
         ObjectMapper objectMapper = new ObjectMapper();
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
+        gameViewModel.getLobby().observe(GameActivity.this, this::updateLobby);
+
         try {
             gameViewModel.setLobbyDTO(objectMapper.readValue(getIntent().getStringExtra("lobbyDTO"), LobbyDTO.class));
         } catch (JsonProcessingException e) {
@@ -58,5 +60,9 @@ public class GameActivity extends AppCompatActivity {
         if(fragment != null){
             fragment.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateLobby(LobbyDTO lobbyDTO){
+        gameViewModel.setLobbyDTO(lobbyDTO);
     }
 }
