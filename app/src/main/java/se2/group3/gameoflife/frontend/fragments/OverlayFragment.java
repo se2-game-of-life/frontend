@@ -27,7 +27,6 @@ public class OverlayFragment extends Fragment {
     public final String TAG = "Networking";
     private boolean playerName;
 
-
     private void getLobbyDTO() {
         if (getArguments() != null) {
             String lobbyDTOJson = getArguments().getString("lobbyDTO");
@@ -45,11 +44,6 @@ public class OverlayFragment extends Fragment {
             }
         }
     }
-    //todo: change visibility of buttons depending on how many people are in the lobby
-    //todo: make buttons toggle between player name and player stats
-    //todo: implement long press for report
-    //todo: add button for spinning
-    //todo: add button for cheating / fake cheating (fake cheating also needs to be added in the backend)
 
     public OverlayFragment() {
     }
@@ -65,6 +59,23 @@ public class OverlayFragment extends Fragment {
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         getLobbyDTO();
         updateStatistics();
+
+        Button spinButton = rootView.findViewById(R.id.spinButton);
+        Button cheatButton = rootView.findViewById(R.id.cheatButton);
+
+        cheatButton.setOnClickListener(view -> {
+            gameViewModel.cheat();
+            vibratePhone();
+        });
+        cheatButton.setOnLongClickListener(v -> {
+            //todo: implement fake cheat
+            vibratePhone();
+            return true;
+        });
+        spinButton.setOnClickListener(view -> {
+            //todo: handle short click player1button
+        });
+
         return rootView;
     }
 
@@ -105,12 +116,22 @@ public class OverlayFragment extends Fragment {
                     }
                 });
 
+                playerButtons[0].setOnLongClickListener(v -> {
+                    gameViewModel.report(0);
+                    return true;
+                });
+
                 playerButtons[1].setOnClickListener(v -> {
                     if(playerName){
                         updateButton(playerButtons, playersChanged, playersChanged.get(1));
                     } else{
                         setPlayerNamesButton(players, playerButtons);
                     }
+                });
+
+                playerButtons[1].setOnLongClickListener(v -> {
+                    gameViewModel.report(1);
+                    return true;
                 });
 
                 playerButtons[2].setOnClickListener(v -> {
@@ -121,12 +142,22 @@ public class OverlayFragment extends Fragment {
                     }
                 });
 
+                playerButtons[2].setOnLongClickListener(v -> {
+                    gameViewModel.report(2);
+                    return true;
+                });
+
                 playerButtons[3].setOnClickListener(v -> {
                     if(playerName){
                         updateButton(playerButtons, playersChanged, playersChanged.get(3));
                     } else{
                         setPlayerNamesButton(players, playerButtons);
                     }
+                });
+
+                playerButtons[3].setOnLongClickListener(v -> {
+                    gameViewModel.report(3);
+                    return true;
                 });
             });
 
@@ -135,12 +166,9 @@ public class OverlayFragment extends Fragment {
         }
     }
 
-
     private void vibratePhone() {
         //todo: implement vibrations
     }
-
-
 
     private void setPlayerNamesButton(List<PlayerDTO> players, Button[] playerButtons){
         for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
@@ -170,5 +198,4 @@ public class OverlayFragment extends Fragment {
         }
         playerName = false;
     }
-
 }
