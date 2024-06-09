@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class ChoosePathFragment extends Fragment {
