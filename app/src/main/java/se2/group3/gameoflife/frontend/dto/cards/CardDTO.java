@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties("stability")
-public class Card {
-
+public class CardDTO {
+    //this class will stay empty, as it is only used to group the other DTOs
     @JsonCreator
-    public Card() {}
+    public CardDTO() {}
 }
