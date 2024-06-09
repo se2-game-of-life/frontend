@@ -1,18 +1,12 @@
 package se2.group3.gameoflife.frontend.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-import se2.group3.gameoflife.frontend.dto.cards.Card;
+import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
 
 @JsonIgnoreProperties("stability")
 public class LobbyDTO {
@@ -21,7 +15,7 @@ public class LobbyDTO {
     private final List<PlayerDTO> players;
     private final PlayerDTO currentPlayer;
     private boolean hasDecision;
-    private List<Card> cards;
+    private List<CardDTO> cardDTOS;
     private final int spunNumber;
     private final boolean hasStarted;
 
@@ -30,7 +24,7 @@ public class LobbyDTO {
                     @JsonProperty("players") List<PlayerDTO> players,
                     @JsonProperty("currentPlayer") PlayerDTO currentPlayer,
                     @JsonProperty("hasDecision") boolean hasDecision,
-                    @JsonProperty("cards") List<Card> cards,
+                    @JsonProperty("cards") List<CardDTO> cards,
                     @JsonProperty("spunNumber") int spunNumber,
                     @JsonProperty("hasStarted") boolean hasStarted
     ) {
@@ -38,7 +32,7 @@ public class LobbyDTO {
         this.players = players;
         this.currentPlayer = currentPlayer;
         this.hasDecision = hasDecision;
-        this.cards = cards;
+        this.cardDTOS = cards;
         this.spunNumber = spunNumber;
         this.hasStarted = hasStarted;
     }
@@ -59,8 +53,8 @@ public class LobbyDTO {
         return hasDecision;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public List<CardDTO> getCards() {
+        return cardDTOS;
     }
 
     public int getSpunNumber() {

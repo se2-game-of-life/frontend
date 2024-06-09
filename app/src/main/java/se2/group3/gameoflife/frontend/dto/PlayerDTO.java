@@ -1,21 +1,13 @@
 package se2.group3.gameoflife.frontend.dto;
 
-import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import se2.group3.gameoflife.frontend.dto.cards.Card;
-import se2.group3.gameoflife.frontend.dto.cards.CareerCard;
-import se2.group3.gameoflife.frontend.dto.cards.HouseCard;
+import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
+import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 
 @JsonIgnoreProperties("stability")
 public class PlayerDTO {
@@ -24,9 +16,9 @@ public class PlayerDTO {
     private final String playerName;
     private int currentCellPosition;
     private int money;
-    private CareerCard careerCard;
+    private CareerCardDTO careerCard;
     private int numberOfPegs;
-    private List<Card> houses;
+    private List<HouseCardDTO> houses;
     private boolean collegeDegree;
 
 
@@ -36,9 +28,9 @@ public class PlayerDTO {
                      @JsonProperty("lobbyID") Long lobbyID,
                      @JsonProperty("currentCellPosition") int currentCellPosition,
                      @JsonProperty("money") int money,
-                     @JsonProperty("careerCard") CareerCard careerCard,
+                     @JsonProperty("careerCard") CareerCardDTO careerCard,
                      @JsonProperty("numberOfPegs") int numberOfPegs,
-                     @JsonProperty("houses") List<Card> houses,
+                     @JsonProperty("houses") List<HouseCardDTO> houses,
                      @JsonProperty("collageDegree") boolean collegeDegree
     ) {
         this.playerUUID = playerUUID;
@@ -76,11 +68,11 @@ public class PlayerDTO {
         return lobbyID;
     }
 
-    public CareerCard getCareerCard() {
+    public CareerCardDTO getCareerCard() {
         return careerCard;
     }
 
-    public List<Card> getHouses() {
+    public List<HouseCardDTO> getHouses() {
         return houses;
     }
 
