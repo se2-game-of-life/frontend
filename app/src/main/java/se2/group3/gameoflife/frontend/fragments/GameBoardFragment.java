@@ -60,20 +60,6 @@ public class GameBoardFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
 
-        if (getArguments() != null) {
-            String lobbyDTOJson = getArguments().getString("lobbyDTO");
-            if (lobbyDTOJson != null) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
-                    if(lobbyDTO != null){
-                        viewModel.setLobbyDTO(lobbyDTO);
-                    }
-                } catch (NullPointerException | JsonProcessingException e) {
-                    Log.d("Networking","Exception: " + e.getMessage());
-                }
-            }
-        }
 
         fetchBoardData();
 

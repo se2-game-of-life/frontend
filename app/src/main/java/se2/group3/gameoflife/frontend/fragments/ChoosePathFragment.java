@@ -29,20 +29,6 @@ public class ChoosePathFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
-        if (getArguments() != null) {
-            String lobbyDTOJson = getArguments().getString("lobbyDTO");
-            if (lobbyDTOJson != null) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
-                    if(lobbyDTO != null){
-                        gameViewModel.setLobbyDTO(lobbyDTO);
-                    }
-                } catch (NullPointerException | JsonProcessingException e) {
-                    Log.d("Networking","Exception: " + e.getMessage());
-                }
-            }
-        }
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> {

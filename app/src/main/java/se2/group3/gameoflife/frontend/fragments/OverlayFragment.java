@@ -27,23 +27,6 @@ public class OverlayFragment extends Fragment {
     public final String TAG = "Networking";
     private boolean playerName;
 
-    private void getLobbyDTO() {
-        if (getArguments() != null) {
-            String lobbyDTOJson = getArguments().getString("lobbyDTO");
-            if (lobbyDTOJson != null) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
-                    if (lobbyDTO != null) {
-                        gameViewModel.setLobbyDTO(lobbyDTO);
-                        gameViewModel.getLobby().observe(getViewLifecycleOwner(), this::updateLobby);
-                    }
-                } catch (NullPointerException | JsonProcessingException e) {
-                    Log.d("Networking", "Exception: " + e.getMessage());
-                }
-            }
-        }
-    }
 
     public OverlayFragment() {
     }
@@ -57,7 +40,6 @@ public class OverlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-        getLobbyDTO();
         updateStatistics();
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
