@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Player 1 dot (top left) -->
+        <ImageView
+            android:id="@+id/player1_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+           />
+
+        <!-- Player 2 dot (top right) -->
+        <ImageView
+            android:id="@+id/player2_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentEnd="true"
+            />
+
+        <!-- Player 3 dot (bottom left) -->
+        <ImageView
+            android:id="@+id/player3_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentBottom="true"
+            />
+
+        <!-- Player 4 dot (bottom right) -->
+        <ImageView
+            android:id="@+id/player4_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+</merge>
