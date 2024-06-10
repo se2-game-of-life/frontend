@@ -53,7 +53,7 @@ public class OverlayFragment extends Fragment {
             return true;
         });
         spinButton.setOnClickListener(view -> {
-            //todo: handle short click player1button
+            gameViewModel.spinWheel();
         });
 
         return rootView;

@@ -81,7 +81,7 @@ public class GameViewModel extends ViewModel {
             Log.e("Networking", "Error making choice: lobbyDTO was null!");
             return;
         }
-        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -90,7 +90,7 @@ public class GameViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/game/spin", "")
+        disposables.add(websocketClient.send("/app/lobby/spin", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
