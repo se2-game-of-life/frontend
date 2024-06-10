@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,14 +10,17 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
+import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 
@@ -39,6 +43,8 @@ public class GameBoardFragment extends Fragment {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
+    private View rootView;
+
     public GameBoardFragment() {
         // Required empty public constructor
     }
@@ -47,7 +53,7 @@ public class GameBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
+        rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         makeOverlayVisible();
 
@@ -55,8 +61,8 @@ public class GameBoardFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
 
-
         fetchBoardData();
+        handleCell();
 
         return rootView;
     }
@@ -263,6 +269,61 @@ public class GameBoardFragment extends Fragment {
             }
 
         }
+    }
+
+
+    private void handleCell(){
+        HashMap<Integer, CellDTO> cellDTOHashMap = viewModel.getCellDTOHashMap();
+        PlayerDTO currentPlayer = viewModel.getLobbyDTO().getCurrentPlayer();
+        Integer currentCellPosition = currentPlayer.getCurrentCellPosition();
+        String cellType;
+        try{
+             cellType = cellDTOHashMap.get(currentCellPosition).getType();
+        } catch(NullPointerException e){
+            Log.d(TAG, "CellDTO error:" + e.getMessage());
+            return;
+        }
+        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        Log.d(TAG, cellType);
+        switch(cellType) {
+            case "CASH":
+
+                break;
+            case "ACTION":
+
+                break;
+            case "FAMILY":
+
+                break;
+            case "HOUSE":
+
+                break;
+            case "CAREER":
+                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
+                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+                break;
+            case "MID_LIFE":
+
+                break;
+            case "MARRY":
+
+                break;
+            case "GROW_FAMILY":
+                break;
+
+            case "RETIRE_EARLY":
+                break;
+
+            case "RETIREMENT":
+
+                break;
+            default:
+                Log.d(TAG, "Something went wrong in handleCell");
+        }
+
+        transactionOverLay.addToBackStack(null);
+        transactionOverLay.commit();
     }
 
 
