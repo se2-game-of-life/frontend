@@ -169,6 +169,9 @@ public class GameBoardFragment extends Fragment {
                         else if(Objects.equals(cellDTO.getType(), "RETIREMENT")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
+                        else if(Objects.equals(cellDTO.getType(), "NOTHING")) {
+                            cell1.setBackgroundResource(R.drawable.cell_nothing_background);
+                        }
                     }
 
                     // Add cell to the GridLayout
