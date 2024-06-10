@@ -34,7 +34,7 @@
                 android:id="@+id/career1Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10"
+                android:layout_weight="15"
                 android:text="TextView" />
 
             <TextView
@@ -56,7 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:background="@drawable/button_background"
+                android:text="Choose"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,7 +72,7 @@
                 android:id="@+id/career2Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10"
+                android:layout_weight="15"
                 android:text="TextView" />
 
             <TextView
@@ -91,7 +94,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:background="@drawable/button_background"
+                android:text="@string/choose"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
