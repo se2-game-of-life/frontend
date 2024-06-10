@@ -150,7 +150,6 @@ public class GameBoardFragment extends Fragment {
                         else if(Objects.equals(cellDTO.getType(), "CAREER")) {
                             cell1.setBackgroundResource(R.drawable.cell_career_background);
                         }
-
                         else if(Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
@@ -283,7 +282,7 @@ public class GameBoardFragment extends Fragment {
         try{
              cellType = cellDTOHashMap.get(currentCellPosition).getType();
         } catch(NullPointerException e){
-            Log.d(TAG, "CellDTO error:" + e.getMessage());
+            Log.e(TAG, "CellDTO error:" + e.getMessage());
             return;
         }
         FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
