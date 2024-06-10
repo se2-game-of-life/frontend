@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -12,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
@@ -54,6 +57,7 @@ public class OverlayFragment extends Fragment {
         });
         spinButton.setOnClickListener(view -> {
             gameViewModel.spinWheel();
+            //handleCell();
         });
 
         return rootView;
@@ -177,5 +181,60 @@ public class OverlayFragment extends Fragment {
             }
         }
         playerName = false;
+    }
+
+
+    private void handleCell(){
+        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
+        Integer currentCellPosition = currentPlayer.getCurrentCellPosition();
+        String cellType;
+        try{
+            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+        } catch(NullPointerException e){
+            Log.e(TAG, "CellDTO error:" + e.getMessage());
+            return;
+        }
+        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        Log.d(TAG, cellType);
+        switch(cellType) {
+            case "CASH":
+
+                break;
+            case "ACTION":
+
+                break;
+            case "FAMILY":
+
+                break;
+            case "HOUSE":
+
+                break;
+            case "CAREER":
+                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
+                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+                break;
+            case "MID_LIFE":
+
+                break;
+            case "MARRY":
+
+                break;
+            case "GROW_FAMILY":
+                break;
+
+            case "RETIRE_EARLY":
+                break;
+
+            case "RETIREMENT":
+
+                break;
+            default:
+                Log.d(TAG, "Something went wrong in handleCell");
+        }
+
+        transactionOverLay.addToBackStack(null);
+        transactionOverLay.commit();
     }
 }

@@ -62,7 +62,6 @@ public class GameBoardFragment extends Fragment {
 
 
         fetchBoardData();
-        handleCell();
 
         return rootView;
     }
@@ -273,60 +272,6 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-
-    private void handleCell(){
-        HashMap<Integer, CellDTO> cellDTOHashMap = viewModel.getCellDTOHashMap();
-        PlayerDTO currentPlayer = viewModel.getLobbyDTO().getCurrentPlayer();
-        Integer currentCellPosition = currentPlayer.getCurrentCellPosition();
-        String cellType;
-        try{
-             cellType = cellDTOHashMap.get(currentCellPosition).getType();
-        } catch(NullPointerException e){
-            Log.e(TAG, "CellDTO error:" + e.getMessage());
-            return;
-        }
-        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-
-        Log.d(TAG, cellType);
-        switch(cellType) {
-            case "CASH":
-
-                break;
-            case "ACTION":
-
-                break;
-            case "FAMILY":
-
-                break;
-            case "HOUSE":
-
-                break;
-            case "CAREER":
-                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
-                break;
-            case "MID_LIFE":
-
-                break;
-            case "MARRY":
-
-                break;
-            case "GROW_FAMILY":
-                break;
-
-            case "RETIRE_EARLY":
-                break;
-
-            case "RETIREMENT":
-
-                break;
-            default:
-                Log.d(TAG, "Something went wrong in handleCell");
-        }
-
-        transactionOverLay.addToBackStack(null);
-        transactionOverLay.commit();
-    }
 
 
 
