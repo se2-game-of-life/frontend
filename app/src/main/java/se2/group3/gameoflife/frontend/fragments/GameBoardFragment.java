@@ -100,6 +100,7 @@ public class GameBoardFragment extends Fragment {
         // Check if BoardDTO is not null
         if (boardDTO != null && boardDTO.getCells() != null) {
             Log.d(TAG, "Populate GridLayout with cells from BoardDTO");
+            viewModel.setCellDTOHashMap(boardDTO);
 
             // Populate GridLayout with cells from BoardDTO
             for (int row = 0; row < boardDTO.getCells().size(); row++) {

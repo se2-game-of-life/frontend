@@ -9,10 +9,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
+import java.util.HashMap;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 import io.reactivex.schedulers.Schedulers;
+import se2.group3.gameoflife.frontend.dto.BoardDTO;
+import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
@@ -22,6 +27,7 @@ public class GameViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
+    private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
 
     public void startGame() {
         LobbyDTO lobby = lobbyDTO.getValue();
@@ -168,5 +174,19 @@ public class GameViewModel extends ViewModel {
     }
 
     public LiveData<String> getErrorMessage(){ return errorMessage;}
+
+    public HashMap<Integer, CellDTO> getCellDTOHashMap() {
+        return cellDTOHashMap;
+    }
+
+    public void setCellDTOHashMap(BoardDTO boardDTO) {
+        for (List<CellDTO> row : boardDTO.getCells()) {
+            for (CellDTO cell : row) {
+                if (cell != null) {
+                    cellDTOHashMap.put(cell.getNumber(), cell);
+                }
+            }
+        }
+    }
 
 }
