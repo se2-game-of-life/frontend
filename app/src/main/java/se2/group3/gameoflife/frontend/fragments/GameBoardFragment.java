@@ -1,25 +1,22 @@
 package se2.group3.gameoflife.frontend.fragments;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 
@@ -35,7 +32,6 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class GameBoardFragment extends Fragment {
 
     private static final String TAG = "Networking";
-    private Button spinButton;
 
     private GameViewModel viewModel;
     private final WebsocketClient websocketClient = WebsocketClient.getInstance();
@@ -50,34 +46,16 @@ public class GameBoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
-        // Initialize spinButton
-        spinButton = rootView.findViewById(R.id.buttonSpin);
-        rootView.findViewById(R.id.statisticsBtn).setOnClickListener(v -> changeToStatisticsFragment());
+
+        makeOverlayVisible();
 
         // Initialize viewModel
-        viewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
 
-        if (getArguments() != null) {
-            String lobbyDTOJson = getArguments().getString("lobbyDTO");
-            if (lobbyDTOJson != null) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    LobbyDTO lobbyDTO = objectMapper.readValue(lobbyDTOJson, LobbyDTO.class);
-                    if(lobbyDTO != null){
-                        viewModel.setLobbyDTO(lobbyDTO);
-                    }
-                } catch (NullPointerException | JsonProcessingException e) {
-                    Log.d("Networking","Exception: " + e.getMessage());
-                }
-            }
-        }
 
-        // Set OnClickListener on spinButton
-        spinButton.setOnClickListener(v -> viewModel.spinWheel());
-        // Call fetchBoardData when the fragment is created
         fetchBoardData();
 
         return rootView;
@@ -207,21 +185,11 @@ public class GameBoardFragment extends Fragment {
 
     }
 
-    private void changeToStatisticsFragment() {
-        if (getActivity() != null) {
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            StatisticsFragment fragment = new StatisticsFragment();
-            try {
-                Bundle bundle = new Bundle();
-                ObjectMapper objectMapper = new ObjectMapper();
-                bundle.putString("lobbyDTO", objectMapper.writeValueAsString(viewModel.getLobbyDTO()));
-                fragment.setArguments(bundle);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            transaction.replace(R.id.fragmentContainerView, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+
+    private void makeOverlayVisible(){
+        GameActivity gameActivity = (GameActivity) getActivity();
+        if(gameActivity != null){
+            gameActivity.setFragmentVisibility();
         }
     }
 

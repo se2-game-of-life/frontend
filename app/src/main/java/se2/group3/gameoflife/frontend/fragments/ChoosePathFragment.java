@@ -1,11 +1,14 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ public class ChoosePathFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> {
@@ -44,18 +48,25 @@ public class ChoosePathFragment extends Fragment {
     private void navigateToGameBoardFragment() {
         if (getActivity() != null) {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            GameBoardFragment fragment = new GameBoardFragment();
+            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+            GameBoardFragment gameBoardFragment = new GameBoardFragment();
+            OverlayFragment overlayFragment = new OverlayFragment();
             try {
                 Bundle bundle = new Bundle();
                 ObjectMapper objectMapper = new ObjectMapper();
                 bundle.putString("lobbyDTO", objectMapper.writeValueAsString(gameViewModel.getLobbyDTO()));
-                fragment.setArguments(bundle);
+                gameBoardFragment.setArguments(bundle);
+                overlayFragment.setArguments(bundle);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
             }
-            transaction.replace(R.id.fragmentContainerView, fragment);
+            transaction.replace(R.id.fragmentContainerView, gameBoardFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
+            transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
+            transactionOverLay.addToBackStack(null);
+            transactionOverLay.commit();
         }
     }
 }

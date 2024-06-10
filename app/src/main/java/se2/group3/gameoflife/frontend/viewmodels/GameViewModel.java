@@ -47,6 +47,11 @@ public class GameViewModel extends ViewModel {
     }
 
     public void makeChoice(boolean chooseLeft){
+        if(lobbyDTO == null || lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO is null!");
+            return;
+        }
+
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -66,7 +71,11 @@ public class GameViewModel extends ViewModel {
     }
 
     public void spinWheel() {
-        disposables.add(websocketClient.subscribe("/topic/game/", LobbyDTO.class)
+        if(lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO was null!");
+            return;
+        }
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -85,7 +94,56 @@ public class GameViewModel extends ViewModel {
         );
     }
 
+    public void report(int player) {
+        LobbyDTO lobby = lobbyDTO.getValue();
+        if(lobby == null) {
+            Log.e("Networking", "Report has failed: lobbyDTO is not initialized yet!");
+            return;
+        }
+        String playerUUID = lobby.getPlayers().get(player).getPlayerUUID();
 
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        disposables.add(websocketClient.send("/app/report", playerUUID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {},
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+    }
+
+    public void cheat() {
+        if(lobbyDTO.getValue() == null) {
+            Log.e("Networking", "Error making choice: lobbyDTO was null!");
+            return;
+        }
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        disposables.add(websocketClient.send("/app/cheat", "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {},
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+    }
 
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
