@@ -180,16 +180,12 @@ public class GameViewModel extends ViewModel {
     }
 
     public void setCellDTOHashMap(BoardDTO boardDTO) {
-        for (List<CellDTO> row : boardDTO.getCells()) {
-            if (row != null) {
-                for (CellDTO cell : row) {
-                    if (cell != null && cell.getId() != null && cell.getNumber() != 0) {
-                        cellDTOHashMap.put(cell.getNumber(), cell);
-                    }
-                }
+        for (int row = 0; row < boardDTO.getCells().size(); row++) {
+            for (int col = 0; col < boardDTO.getCells().get(row).size(); col++) {
+                CellDTO cell = boardDTO.getCells().get(row).get(col);
+                if(cell == null) continue;
+                cellDTOHashMap.put(cell.getNumber(), cell);
             }
         }
     }
-
-
 }
