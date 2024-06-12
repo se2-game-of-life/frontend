@@ -43,18 +43,8 @@ public class OverlayFragment extends Fragment {
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
 
-        cheatButton.setOnClickListener(view -> {
-            gameViewModel.cheat();
-            vibratePhone();
-        });
-        cheatButton.setOnLongClickListener(v -> {
-            //todo: implement fake cheat
-            vibratePhone();
-            return true;
-        });
-        spinButton.setOnClickListener(view -> {
-            //todo: handle short click player1button
-        });
+        cheatButton.setOnClickListener(view -> gameViewModel.cheat());
+        spinButton.setOnClickListener(view -> gameViewModel.spinWheel());
 
         return rootView;
     }
@@ -146,10 +136,6 @@ public class OverlayFragment extends Fragment {
         }
     }
 
-    private void vibratePhone() {
-        //todo: implement vibrations
-    }
-
     private void setPlayerNamesButton(List<PlayerDTO> players, Button[] playerButtons){
         for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
             PlayerDTO player = players.get(i);
@@ -157,9 +143,6 @@ public class OverlayFragment extends Fragment {
             playerButton.setText(player.getPlayerName());
         }
         playerName = true;
-    }
-    private void updateLobby(LobbyDTO lobbyDTO){
-        gameViewModel.setLobbyDTO(lobbyDTO);
     }
 
     private void updateButton(Button[] playerButtons, List<PlayerDTO> players, PlayerDTO playerDTO){
