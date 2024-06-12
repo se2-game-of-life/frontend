@@ -216,7 +216,7 @@ public class OverlayFragment extends Fragment {
         Log.d(TAG, cellType);
         switch(cellType) {
             case "CASH":
-                Toast.makeText(requireContext(), "You got your salary!", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
                 Toast.makeText(requireContext(), "Action cell", Toast.LENGTH_LONG).show();
@@ -240,6 +240,10 @@ public class OverlayFragment extends Fragment {
             case "NOTHING":
                 handleCellNOTHING(currentCellPosition,currentPlayer);
                 break;
+            case "HOUSE":
+                Log.d(TAG, ""+ lobbyDTO.getCards().size());
+                Log.d(TAG, ""+lobbyDTO.isHasDecision());
+                Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
         }
