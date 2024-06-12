@@ -78,7 +78,7 @@ public class StopCellFragment extends Fragment {
                 name.setText("STOP SIGN: Retire early");
                 description.setText("Do you want to retire earlier?");
                 cost.setText("Cost: 0");
-                gain.setText("The earlier you retire, the more money you receive.");
+                gain.setText("Who doesn't want to retire early...?");
                 break;
         }
 
