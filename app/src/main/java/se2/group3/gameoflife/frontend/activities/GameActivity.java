@@ -30,7 +30,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class GameActivity extends AppCompatActivity {
 
     public interface VibrateCallback {
-        void onCallback(String message);
+        void onCallback();
     }
 
     private GameViewModel gameViewModel;
