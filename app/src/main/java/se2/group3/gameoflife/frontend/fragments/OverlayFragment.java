@@ -237,6 +237,7 @@ public class OverlayFragment extends Fragment {
                 } else{
                     Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
+                break;
             case "NOTHING":
                 handleCellNOTHING(currentCellPosition,currentPlayer);
                 break;
@@ -244,6 +245,7 @@ public class OverlayFragment extends Fragment {
                 Log.d(TAG, ""+ lobbyDTO.getCards().size());
                 Log.d(TAG, ""+lobbyDTO.isHasDecision());
                 Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                break;
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
         }
