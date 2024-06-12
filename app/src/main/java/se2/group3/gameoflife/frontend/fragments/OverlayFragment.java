@@ -23,6 +23,9 @@ import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
+import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
+import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
@@ -49,7 +52,16 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
-        gameViewModel.getLobby().observe(requireActivity(), this::handleCell);
+        gameViewModel.getLobby().observe(requireActivity(), new Observer<LobbyDTO>() {
+            @Override
+            public void onChanged(LobbyDTO lobbyDTO) {
+                if (lobbyDTO.isHasDecision()){
+                    makeDecision(lobbyDTO);
+                } else{
+                    handleCell(lobbyDTO);
+                }
+            }
+        });
 
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
@@ -170,9 +182,7 @@ public class OverlayFragment extends Fragment {
         }
         playerName = true;
     }
-    private void updateLobby(LobbyDTO lobbyDTO){
-        gameViewModel.setLobbyDTO(lobbyDTO);
-    }
+
 
     private void updateButton(Button[] playerButtons, List<PlayerDTO> players, PlayerDTO playerDTO){
         setPlayerNamesButton(players, playerButtons);
@@ -194,7 +204,6 @@ public class OverlayFragment extends Fragment {
 
     private void handleCell(LobbyDTO lobbyDTO){
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
-        gameViewModel.setLobbyDTO(lobbyDTO);
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         String cellType;
@@ -205,12 +214,6 @@ public class OverlayFragment extends Fragment {
             Log.e(TAG, "CellDTO error: " + e.getMessage());
             return;
         }
-
-        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-        OverlayFragment overlayFragment = new OverlayFragment();
-        transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
-
-        StopCellFragment stopCellFragment;
 
         Log.d(TAG, cellType);
         switch(cellType) {
@@ -223,46 +226,25 @@ public class OverlayFragment extends Fragment {
             case "FAMILY":
                 Toast.makeText(requireContext(), "You got an additional peg!", Toast.LENGTH_LONG).show();
                 break;
-            case "HOUSE":
-                if(lobbyDTO.getCards().size() != 2){
-                    Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
-                } else {
-                    HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
-                    transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
-                    break;
-                }
-            case "CAREER":
-                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
-                break;
             case "MID_LIFE":
                 Toast.makeText(requireContext(), "Life is not that easy...", Toast.LENGTH_LONG).show();
-                break;
-            case "MARRY":
-                stopCellFragment = StopCellFragment.newInstance(cellType);
-                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
-                break;
-            case "GROW_FAMILY":
-                stopCellFragment = StopCellFragment.newInstance(cellType);
-                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
-                break;
-
-            case "RETIRE_EARLY":
-                stopCellFragment = StopCellFragment.newInstance(cellType);
-                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
                 break;
             case "RETIREMENT":
                 Toast.makeText(requireContext(), "Welcome to retirement!", Toast.LENGTH_LONG).show();
                 break;
+            case "GRADUATE":
+                Toast.makeText(requireContext(), "Time for your exams...", Toast.LENGTH_LONG).show();
+                if(currentPlayer.isCollegeDegree()){
+                    Toast.makeText(requireContext(), "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
+                } else{
+                    Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+                }
             case "NOTHING":
                 handleCellNOTHING(currentCellPosition,currentPlayer);
                 break;
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
         }
-
-        transactionOverLay.addToBackStack(null);
-        transactionOverLay.commit();
     }
 
     private void handleCellNOTHING(int currentCellPosition, PlayerDTO player){
@@ -305,5 +287,44 @@ public class OverlayFragment extends Fragment {
                 Toast.makeText(requireContext(), "You are not on the fastest path to retirement...", Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    private void makeDecision(LobbyDTO lobbyDTO){
+        List<CardDTO> cards = lobbyDTO.getCards();
+        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
+        int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        String cellType;
+
+        try{
+            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+        } catch(NullPointerException e){
+            Log.e(TAG, "CellDTO error: " + e.getMessage());
+            return;
+        }
+
+
+        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+        OverlayFragment overlayFragment = new OverlayFragment();
+        transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
+
+
+        if (!cards.isEmpty()){
+            if(cards.get(0) instanceof HouseCardDTO){
+                if(lobbyDTO.getCards().size() != 2){
+                    Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                } else {
+                    HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
+                    transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
+                }
+            } else if (cards.get(0) instanceof CareerCardDTO){
+                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
+                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+            }
+        } else {
+            StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
+            transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
+        }
+
     }
 }
