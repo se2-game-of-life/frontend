@@ -181,12 +181,15 @@ public class GameViewModel extends ViewModel {
 
     public void setCellDTOHashMap(BoardDTO boardDTO) {
         for (List<CellDTO> row : boardDTO.getCells()) {
-            for (CellDTO cell : row) {
-                if (cell != null) {
-                    cellDTOHashMap.put(cell.getNumber(), cell);
+            if (row != null) {
+                for (CellDTO cell : row) {
+                    if (cell != null && cell.getId() != null && cell.getNumber() != 0) {
+                        cellDTOHashMap.put(cell.getNumber(), cell);
+                    }
                 }
             }
         }
     }
+
 
 }
