@@ -52,14 +52,11 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
-        gameViewModel.getLobby().observe(requireActivity(), new Observer<LobbyDTO>() {
-            @Override
-            public void onChanged(LobbyDTO lobbyDTO) {
-                if (lobbyDTO.isHasDecision()){
-                    makeDecision(lobbyDTO);
-                } else{
-                    handleCell(lobbyDTO);
-                }
+        gameViewModel.getLobby().observe(requireActivity(), lobbyDTO -> {
+            if (lobbyDTO.isHasDecision()){
+                makeDecision(lobbyDTO);
+            } else{
+                handleCell(lobbyDTO);
             }
         });
 
@@ -212,7 +209,7 @@ public class OverlayFragment extends Fragment {
         try{
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
         } catch(NullPointerException e){
-            Log.e(TAG, "CellDTO error: " + e.getMessage());
+            Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
             return;
         }
 
@@ -300,14 +297,12 @@ public class OverlayFragment extends Fragment {
         try{
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
         } catch(NullPointerException e){
-            Log.e(TAG, "CellDTO error: " + e.getMessage());
+            Log.e(TAG, "CellDTO error in makeDecision: " + e.getMessage());
             return;
         }
 
 
         FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-        OverlayFragment overlayFragment = new OverlayFragment();
-        transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
 
 
         if (!cards.isEmpty()){
@@ -326,6 +321,7 @@ public class OverlayFragment extends Fragment {
             StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
             transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
         }
+        transactionOverLay.commit();
 
     }
 }
