@@ -190,11 +190,12 @@ public class OverlayFragment extends Fragment {
         for (Button playerButton : playerButtons){
             if(playerButton.getText().equals(playerDTO.getPlayerName())){
                 if(playerDTO.getCareerCard() == null){
-                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: none "+
+                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: none "+ "\n#Pegs: " + playerDTO.getNumberOfPegs() +
                             "\n#houses: " + playerDTO.getHouses().size());
                 } else{
-                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: " +playerDTO.getCareerCard().toString()+
-                            "]\n#houses: " + playerDTO.getHouses().size());
+                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: " +playerDTO.getCareerCard().getName()+
+                            "\nSalary: " + playerDTO.getCareerCard().getSalary() + "\nBonus: " + playerDTO.getCareerCard().getBonus() + "\n#Pegs: " + playerDTO.getNumberOfPegs() +
+                            "\n#houses: " + playerDTO.getHouses().size());
                 }
             }
         }
