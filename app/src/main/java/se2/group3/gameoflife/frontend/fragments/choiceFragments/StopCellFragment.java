@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import se2.group3.gameoflife.frontend.R;
@@ -72,6 +73,19 @@ public class StopCellFragment extends Fragment {
                 description.setText("Do you want to retire earlier? /nCost: 0");
                 break;
         }
+
+        Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
+        Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
+
+        yesBTN.setOnClickListener(v -> {
+            gameViewModel.makeChoice(true);
+            navigateToOverlayFragment();
+        });
+
+        noBTN.setOnClickListener(v -> {
+            gameViewModel.makeChoice(false);
+            navigateToOverlayFragment();
+        });
 
 
         return rootView;
