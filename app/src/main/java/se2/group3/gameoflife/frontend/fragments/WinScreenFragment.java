@@ -76,9 +76,19 @@ public class WinScreenFragment extends Fragment {
         playerMoney[2] = rootView.findViewById(R.id.moneyThirdPlayer);
         playerMoney[3] = rootView.findViewById(R.id.moneyFourthPlayer);
 
+        TextView[] places = new TextView[4];
+        places[0] = rootView.findViewById(R.id.firstPlace);
+        places[1] = rootView.findViewById(R.id.secondPlace);
+        places[2] = rootView.findViewById(R.id.thirdPlace);
+        places[3] = rootView.findViewById(R.id.fourthPlace);
+
+
         for(int i = 0; i < players.size(); i++){
             playerNames[i].setText(players.get(i).getPlayerName());
+            playerNames[i].setVisibility(View.VISIBLE);
             playerMoney[i].setText(players.get(i).getMoney());
+            playerMoney[i].setVisibility(View.VISIBLE);
+            places[i].setVisibility(View.VISIBLE);
         }
     }
 
