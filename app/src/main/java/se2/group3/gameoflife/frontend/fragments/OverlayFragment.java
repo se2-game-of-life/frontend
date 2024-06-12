@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -48,7 +49,7 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
-        //gameViewModel.getLobby().observe(requireActivity(), this::handleCell);
+        gameViewModel.getLobby().observe(requireActivity(), this::handleCell);
 
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
@@ -197,6 +198,7 @@ public class OverlayFragment extends Fragment {
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         String cellType;
+
         try{
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
         } catch(NullPointerException e){
@@ -222,9 +224,13 @@ public class OverlayFragment extends Fragment {
                 Toast.makeText(requireContext(), "You got an additional peg!", Toast.LENGTH_LONG).show();
                 break;
             case "HOUSE":
-                HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
-                transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
-                break;
+                if(lobbyDTO.getCards().size() != 2){
+                    Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                } else {
+                    HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
+                    transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
+                    break;
+                }
             case "CAREER":
                 CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
                 transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
