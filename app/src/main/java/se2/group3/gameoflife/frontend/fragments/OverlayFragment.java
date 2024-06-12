@@ -24,6 +24,7 @@ import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class OverlayFragment extends Fragment {
@@ -204,6 +205,8 @@ public class OverlayFragment extends Fragment {
         OverlayFragment overlayFragment = new OverlayFragment();
         transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
 
+        StopCellFragment stopCellFragment;
+
         Log.d(TAG, cellType);
         switch(cellType) {
             case "CASH":
@@ -224,19 +227,23 @@ public class OverlayFragment extends Fragment {
                 transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
                 break;
             case "MID_LIFE":
-
+                Toast.makeText(requireContext(), "Life is not that easy...", Toast.LENGTH_LONG).show();
                 break;
             case "MARRY":
-
+                stopCellFragment = StopCellFragment.newInstance(cellType);
+                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
                 break;
             case "GROW_FAMILY":
+                stopCellFragment = StopCellFragment.newInstance(cellType);
+                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
                 break;
 
             case "RETIRE_EARLY":
+                stopCellFragment = StopCellFragment.newInstance(cellType);
+                transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
                 break;
-
             case "RETIREMENT":
-
+                Toast.makeText(requireContext(), "Welcome to retirement!", Toast.LENGTH_LONG).show();
                 break;
             case "NOTHING":
                 handleCellNOTHING(currentCellPosition,currentPlayer);
