@@ -234,6 +234,7 @@ public class OverlayFragment extends Fragment {
                 } else{
                     Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
+                break;
             case "NOTHING":
                 handleCellNOTHING(currentCellPosition,currentPlayer);
                 break;
