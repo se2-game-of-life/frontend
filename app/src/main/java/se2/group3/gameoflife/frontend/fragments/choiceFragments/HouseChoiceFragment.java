@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import java.util.List;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
+import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -54,9 +56,15 @@ public class HouseChoiceFragment extends Fragment {
         Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
         Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
 
-        house1BTN.setOnClickListener(v -> gameViewModel.makeChoice(true));
+        house1BTN.setOnClickListener(v -> {
+            gameViewModel.makeChoice(true);
+            navigateToOverlayFragment();
+        });
 
-        house2BTN.setOnClickListener(v -> gameViewModel.makeChoice(false));
+        house2BTN.setOnClickListener(v -> {
+            gameViewModel.makeChoice(false);
+            navigateToOverlayFragment();
+        });
 
         return rootView;
     }
@@ -80,5 +88,15 @@ public class HouseChoiceFragment extends Fragment {
         house1blackSellPrice.setText("Black Sell Price: " + houseCard1.getBlackSellPrice());
         house2blackSellPrice.setText("Black Sell Price: " + houseCard2.getBlackSellPrice());
 
+    }
+
+    private void navigateToOverlayFragment(){
+        if (getActivity() != null) {
+            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+            OverlayFragment overlayFragment = new OverlayFragment();
+            transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
+            transactionOverLay.addToBackStack(null);
+            transactionOverLay.commit();
+        }
     }
 }

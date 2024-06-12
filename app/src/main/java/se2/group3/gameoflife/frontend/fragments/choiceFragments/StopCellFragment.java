@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -73,5 +75,15 @@ public class StopCellFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void navigateToOverlayFragment(){
+        if (getActivity() != null) {
+            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+            OverlayFragment overlayFragment = new OverlayFragment();
+            transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
+            transactionOverLay.addToBackStack(null);
+            transactionOverLay.commit();
+        }
     }
 }
