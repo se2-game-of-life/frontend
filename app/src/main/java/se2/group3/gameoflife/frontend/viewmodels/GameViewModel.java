@@ -37,11 +37,14 @@ public class GameViewModel extends ViewModel {
         );
 
         //subscribe to vibrate-events for the lobby
-        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID() + "/vibrate", String.class)
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID() + "/vibrate", LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        callback::onCallback,
+                        value -> {
+                            lobbyDTO.setValue(value);
+                            callback.onCallback();
+                        },
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );

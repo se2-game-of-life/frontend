@@ -71,8 +71,7 @@ public class GameActivity extends AppCompatActivity {
             Log.d(TAG, "Error getting lobbyDTO: " + e.getMessage());
         }
 
-        gameViewModel.startGame(vibrationEvent -> vibrate());
-
+        gameViewModel.startGame(this::vibrate);
         vibrateTask.run();
 
         getSupportFragmentManager().beginTransaction()
