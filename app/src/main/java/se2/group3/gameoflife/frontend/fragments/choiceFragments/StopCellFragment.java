@@ -58,19 +58,27 @@ public class StopCellFragment extends Fragment {
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         TextView name = rootView.findViewById(R.id.stopCellName);
         TextView description = rootView.findViewById(R.id.stopCellDescribtion);
+        TextView cost = rootView.findViewById(R.id.stopCellCost);
+        TextView gain = rootView.findViewById(R.id.stopCellGain);
 
         switch (cellType){
             case "MARRY":
-                name.setText("STOP SIGN:/n Marriage");
-                description.setText("Do you want to get married? /nCost: 50k /nPegs: +1");
+                name.setText("STOP SIGN: Marriage");
+                description.setText("Do you want to get married?");
+                cost.setText("Cost: 50k");
+                gain.setText("Pegs: +1");
                 break;
             case "GROW_FAMILY":
-                name.setText("STOP SIGN:/n Family Time");
-                description.setText("Do you want to grow your family? /nCost: 50k /nPegs: +1");
+                name.setText("STOP SIGN: Family Time");
+                description.setText("Do you want to grow your family?");
+                cost.setText("Cost: 50k");
+                gain.setText("Pegs: +1");
                 break;
             case "RETIRE_EARLY":
-                name.setText("STOP SIGN:/n Retire early");
-                description.setText("Do you want to retire earlier? /nCost: 0");
+                name.setText("STOP SIGN: Retire early");
+                description.setText("Do you want to retire earlier?");
+                cost.setText("Cost: 0");
+                gain.setText("The earlier you retire, the more money you receive.");
                 break;
         }
 
