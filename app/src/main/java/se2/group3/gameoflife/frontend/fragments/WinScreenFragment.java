@@ -86,7 +86,7 @@ public class WinScreenFragment extends Fragment {
         for(int i = 0; i < players.size(); i++){
             playerNames[i].setText(players.get(i).getPlayerName());
             playerNames[i].setVisibility(View.VISIBLE);
-            playerMoney[i].setText(players.get(i).getMoney());
+            playerMoney[i].setText("$: " + players.get(i).getMoney());
             playerMoney[i].setVisibility(View.VISIBLE);
             places[i].setVisibility(View.VISIBLE);
         }
