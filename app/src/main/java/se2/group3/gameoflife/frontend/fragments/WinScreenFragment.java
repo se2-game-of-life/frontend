@@ -8,8 +8,16 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -40,6 +48,38 @@ public class WinScreenFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_win_screen, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
+        LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
+
+        sortPlayersByMoney(players);
+
+        updateUI(players);
+
         return rootView;
     }
+
+    private static void sortPlayersByMoney(List<PlayerDTO> players) {
+        players.sort(Comparator.comparingDouble(PlayerDTO::getMoney));
+    }
+
+    private void updateUI(List<PlayerDTO> players){
+        Button[] playerNames = new Button[4];
+        playerNames[0] = rootView.findViewById(R.id.nameFirstPlayer);
+        playerNames[1] = rootView.findViewById(R.id.nameSecondPlayer);
+        playerNames[2] = rootView.findViewById(R.id.nameThirdPlayer);
+        playerNames[3] = rootView.findViewById(R.id.nameFourthPlayer);
+
+        TextView[] playerMoney = new TextView[4];
+        playerMoney[0] = rootView.findViewById(R.id.moneyFirstPlayer);
+        playerMoney[1] = rootView.findViewById(R.id.moneySecondPlayer);
+        playerMoney[2] = rootView.findViewById(R.id.moneyThirdPlayer);
+        playerMoney[3] = rootView.findViewById(R.id.moneyFourthPlayer);
+
+        for(int i = 0; i < players.size(); i++){
+            playerNames[i].setText(players.get(i).getPlayerName());
+            playerMoney[i].setText(players.get(i).getMoney());
+        }
+    }
+
 }
