@@ -193,9 +193,8 @@ public class OverlayFragment extends Fragment {
                     playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: none "+
                             "\n#houses: " + playerDTO.getHouses().size());
                 } else{
-                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: " +playerDTO.getCareerCard().getName()+
-                            "\nSalary: " + playerDTO.getCareerCard().getSalary() + "\nBonus: " + playerDTO.getCareerCard().getBonus() + "\n#Pegs: " + playerDTO.getNumberOfPegs() +
-                            "\n#houses: " + playerDTO.getHouses().size());
+                    playerButton.setText("Money: " + playerDTO.getMoney() + "\nCollege: " + playerDTO.isCollegeDegree() + "\nJob: " +playerDTO.getCareerCard().toString()+
+                            "]\n#houses: " + playerDTO.getHouses().size());
                 }
             }
         }
