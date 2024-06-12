@@ -48,10 +48,8 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
-        PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
-        if(currentPlayer.getCurrentCellPosition() == 1 || currentPlayer.getCurrentCellPosition() == 14){
-            handleCellNOTHING(currentPlayer.getCurrentCellPosition(), currentPlayer);
-        }
+        //gameViewModel.getLobby().observe(requireActivity(), this::handleCell);
+
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
@@ -67,7 +65,6 @@ public class OverlayFragment extends Fragment {
         });
         spinButton.setOnClickListener(view -> {
             gameViewModel.spinWheel();
-            handleCell();
         });
 
         return rootView;
@@ -194,9 +191,10 @@ public class OverlayFragment extends Fragment {
     }
 
 
-    private void handleCell(){
+    private void handleCell(LobbyDTO lobbyDTO){
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
-        PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
+        gameViewModel.setLobbyDTO(lobbyDTO);
+        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         String cellType;
         try{
@@ -218,7 +216,7 @@ public class OverlayFragment extends Fragment {
                 Toast.makeText(requireContext(), "You got your salary!", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
-
+                Toast.makeText(requireContext(), "Action cell", Toast.LENGTH_LONG).show();
                 break;
             case "FAMILY":
                 Toast.makeText(requireContext(), "You got an additional peg!", Toast.LENGTH_LONG).show();
