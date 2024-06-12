@@ -1,4 +1,4 @@
-package se2.group3.gameoflife.frontend.fragments;
+package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
 import android.os.Bundle;
 
