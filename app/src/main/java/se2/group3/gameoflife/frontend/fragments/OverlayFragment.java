@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import java.util.HashMap;
@@ -20,6 +21,8 @@ import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
@@ -188,29 +191,33 @@ public class OverlayFragment extends Fragment {
     private void handleCell(){
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
-        Integer currentCellPosition = currentPlayer.getCurrentCellPosition();
+        int currentCellPosition = currentPlayer.getCurrentCellPosition();
         String cellType;
         try{
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
         } catch(NullPointerException e){
-            Log.e(TAG, "CellDTO error:" + e.getMessage());
+            Log.e(TAG, "CellDTO error: " + e.getMessage());
             return;
         }
+
         FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+        OverlayFragment overlayFragment = new OverlayFragment();
+        transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
 
         Log.d(TAG, cellType);
         switch(cellType) {
             case "CASH":
-
+                Toast.makeText(requireContext(), "You got your salary!", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
 
                 break;
             case "FAMILY":
-
+                Toast.makeText(requireContext(), "You got an additional peg!", Toast.LENGTH_LONG).show();
                 break;
             case "HOUSE":
-
+                HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
+                transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
                 break;
             case "CAREER":
                 CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
@@ -231,11 +238,56 @@ public class OverlayFragment extends Fragment {
             case "RETIREMENT":
 
                 break;
+            case "NOTHING":
+                handleCellNOTHING(currentCellPosition,currentPlayer);
+                break;
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
         }
 
         transactionOverLay.addToBackStack(null);
         transactionOverLay.commit();
+    }
+
+    private void handleCellNOTHING(int currentCellPosition, PlayerDTO player){
+        switch(currentCellPosition){
+            case 1:
+                Toast.makeText(requireContext(), "Welcome to college!", Toast.LENGTH_LONG).show();
+                break;
+            case 13:
+                if(player.isCollegeDegree()){
+                    Toast.makeText(requireContext(), "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
+                } else{
+                    Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 14:
+                Toast.makeText(requireContext(), "Welcome to the working life!", Toast.LENGTH_LONG).show();
+                break;
+            case 35:
+                Toast.makeText(requireContext(), "You got married - yey congrats!", Toast.LENGTH_LONG).show();
+                break;
+            case 45:
+                Toast.makeText(requireContext(), "No marriage? Okay.", Toast.LENGTH_LONG).show();
+                break;
+            case 58:
+                Toast.makeText(requireContext(), "Welcome to the family path.", Toast.LENGTH_LONG).show();
+                break;
+            case 74:
+                Toast.makeText(requireContext(), "No family? Okay.", Toast.LENGTH_LONG).show();
+                break;
+            case 92:
+                Toast.makeText(requireContext(), "You have slipped into a mid-life crisis.", Toast.LENGTH_LONG).show();
+                break;
+            case 102:
+                Toast.makeText(requireContext(), "Mid life crisis? Not for you!", Toast.LENGTH_LONG).show();
+                break;
+            case 113:
+                Toast.makeText(requireContext(), "You are on the fastest path to retirement.", Toast.LENGTH_LONG).show();
+                break;
+            case 116:
+                Toast.makeText(requireContext(), "You are not on the fastest path to retirement...", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 }
