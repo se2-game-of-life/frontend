@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -28,7 +26,6 @@ import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
-import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
@@ -244,6 +241,12 @@ public class OverlayFragment extends Fragment {
                 Log.d(TAG, ""+ lobbyDTO.getCards().size());
                 Log.d(TAG, ""+lobbyDTO.isHasDecision());
                 Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                break;
+            case "CAREER":
+                Log.d(TAG, ""+ lobbyDTO.getCards().size());
+                Log.d(TAG, ""+lobbyDTO.isHasDecision());
+                Toast.makeText(requireContext(), "Not enough money to buy a career.", Toast.LENGTH_LONG).show();
+                break;
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
         }
