@@ -49,7 +49,7 @@ public class OverlayFragment extends Fragment {
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
         PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
-        if(currentPlayer.getCurrentCellPosition() == 2 || currentPlayer.getCurrentCellPosition() == 14){
+        if(currentPlayer.getCurrentCellPosition() == 1 || currentPlayer.getCurrentCellPosition() == 14){
             handleCellNOTHING(currentPlayer.getCurrentCellPosition(), currentPlayer);
         }
 
