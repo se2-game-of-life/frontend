@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -47,6 +48,10 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         updateStatistics();
+        PlayerDTO currentPlayer = gameViewModel.getLobbyDTO().getCurrentPlayer();
+        if(currentPlayer.getCurrentCellPosition() == 2 || currentPlayer.getCurrentCellPosition() == 14){
+            handleCellNOTHING(currentPlayer.getCurrentCellPosition(), currentPlayer);
+        }
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
@@ -62,7 +67,7 @@ public class OverlayFragment extends Fragment {
         });
         spinButton.setOnClickListener(view -> {
             gameViewModel.spinWheel();
-            //handleCell();
+            handleCell();
         });
 
         return rootView;
