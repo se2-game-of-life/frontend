@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
@@ -24,6 +25,7 @@ public class ChoosePathFragment extends Fragment {
     private final String TAG = "Networking";
 
     ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     @Override
@@ -34,25 +36,17 @@ public class ChoosePathFragment extends Fragment {
         connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
-        btnCareer.setOnClickListener(v -> {
-            Disposable dis = connectionService.send("/app/lobby/choice", false)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToGameBoardFragment, error -> {
-                        Log.e(TAG, "Error Sending Create Lobby: " + error);
-                    });
-            dis.dispose();
-        });
+        btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
 
         Button btnCollege = rootView.findViewById(R.id.btnCollege);
         btnCollege.setOnClickListener(v -> {
-            Disposable dis = connectionService.send("/app/lobby/choice", true)
+            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToGameBoardFragment, error -> {
-                        Log.e(TAG, "Error Sending Create Lobby: " + error);
-                    });
-            dis.dispose();
+                    .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
         });
 
         return rootView;
