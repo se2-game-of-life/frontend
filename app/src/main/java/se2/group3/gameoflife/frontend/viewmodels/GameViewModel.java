@@ -9,15 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
-import java.util.HashMap;
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 import io.reactivex.schedulers.Schedulers;
-import se2.group3.gameoflife.frontend.dto.BoardDTO;
-import se2.group3.gameoflife.frontend.dto.CellDTO;
+import se2.group3.gameoflife.frontend.activities.GameActivity.VibrateCallback;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
@@ -27,9 +23,8 @@ public class GameViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
-    private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
 
-    public void startGame() {
+    public void startGame(VibrateCallback callback) {
         LobbyDTO lobby = lobbyDTO.getValue();
         if(lobby == null) throw new RuntimeException("LobbyDTO NULL in GameViewModel!");
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
@@ -37,6 +32,19 @@ public class GameViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        //subscribe to vibrate-events for the lobby
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID() + "/vibrate", LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        value -> {
+                            lobbyDTO.setValue(value);
+                            callback.onCallback();
+                        },
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
@@ -81,7 +89,7 @@ public class GameViewModel extends ViewModel {
             Log.e("Networking", "Error making choice: lobbyDTO was null!");
             return;
         }
-        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -90,7 +98,7 @@ public class GameViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/lobby/spin", "")
+        disposables.add(websocketClient.send("/app/game/spin", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -151,6 +159,10 @@ public class GameViewModel extends ViewModel {
         );
     }
 
+    public void dispose() {
+        disposables.dispose();
+    }
+
     public void setLobbyDTO(LobbyDTO lobbyDTO){
         if(lobbyDTO != null){
             this.lobbyDTO = new MutableLiveData<>(lobbyDTO);
@@ -175,17 +187,4 @@ public class GameViewModel extends ViewModel {
 
     public LiveData<String> getErrorMessage(){ return errorMessage;}
 
-    public HashMap<Integer, CellDTO> getCellDTOHashMap() {
-        return cellDTOHashMap;
-    }
-
-    public void setCellDTOHashMap(BoardDTO boardDTO) {
-        for (int row = 0; row < boardDTO.getCells().size(); row++) {
-            for (int col = 0; col < boardDTO.getCells().get(row).size(); col++) {
-                CellDTO cell = boardDTO.getCells().get(row).get(col);
-                if(cell == null) continue;
-                cellDTOHashMap.put(cell.getNumber(), cell);
-            }
-        }
-    }
 }
