@@ -73,6 +73,8 @@ public class OverlayFragment extends Fragment {
         spinButton.setOnClickListener(view -> {
             gameViewModel.spinWheel();
         });
+        cheatButton.setOnClickListener(view -> gameViewModel.cheat());
+        spinButton.setOnClickListener(view -> gameViewModel.spinWheel());
 
         return rootView;
     }
@@ -162,10 +164,6 @@ public class OverlayFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Error in onCreateView: " + e.getMessage());
         }
-    }
-
-    private void vibratePhone() {
-        //todo: implement vibrations
     }
 
     private void setPlayerNamesButton(List<PlayerDTO> players, Button[] playerButtons){

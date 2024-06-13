@@ -21,6 +21,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
+import se2.group3.gameoflife.frontend.activities.GameActivity.VibrateCallback;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
 import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
@@ -36,7 +37,7 @@ public class GameViewModel extends ViewModel {
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
     private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
 
-    public void startGame() {
+    public void startGame(VibrateCallback callback) {
         LobbyDTO lobby = lobbyDTO.getValue();
         if(lobby == null) throw new RuntimeException("LobbyDTO NULL in GameViewModel!");
         disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
@@ -44,6 +45,19 @@ public class GameViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         lobbyDTO::setValue,
+                        error -> errorMessage.setValue(error.getMessage())
+                )
+        );
+
+        //subscribe to vibrate-events for the lobby
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobby.getLobbyID() + "/vibrate", LobbyDTO.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        value -> {
+                            lobbyDTO.setValue(value);
+                            callback.onCallback();
+                        },
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
@@ -156,6 +170,10 @@ public class GameViewModel extends ViewModel {
                         error -> errorMessage.setValue(error.getMessage())
                 )
         );
+    }
+
+    public void dispose() {
+        disposables.dispose();
     }
 
     public void setLobbyDTO(LobbyDTO lobbyDTO){
