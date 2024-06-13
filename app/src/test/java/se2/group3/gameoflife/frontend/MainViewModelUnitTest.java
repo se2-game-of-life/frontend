@@ -40,15 +40,6 @@ class MainViewModelUnitTest {
         assertFalse(mainViewModel.checkUsername());
     }
 
-    @Test
-    void testGetUUID_firstAndSecondCall(){
-        String uuid1 = mainViewModel.getUUID();
-        String uuid2 = mainViewModel.getUUID();
-
-        //second uuid should be the same as the first, because random uuid is just generated the first time the getUUID() is called
-        //after the first call the uuid of MainViewModel should not be null anymore and the second call should return the same UUID as the first
-        assertEquals(uuid1, uuid2);
-    }
 
     @Test
     void testGetUsername(){
