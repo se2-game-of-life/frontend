@@ -53,8 +53,8 @@ public class HouseChoiceFragment extends Fragment {
         Log.d(TAG, "HouseChoiceFragment started.");
 
         List<HouseCardDTO> cardDTOList = gameViewModel.getLobbyDTO().getHouseCardDTOS();
-        HouseCardDTO houseCard1 = (HouseCardDTO) cardDTOList.get(0);
-        HouseCardDTO houseCard2 = (HouseCardDTO) cardDTOList.get(1);
+        HouseCardDTO houseCard1 = cardDTOList.get(0);
+        HouseCardDTO houseCard2 = cardDTOList.get(1);
 
         updateUI(houseCard1, houseCard2);
         Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);

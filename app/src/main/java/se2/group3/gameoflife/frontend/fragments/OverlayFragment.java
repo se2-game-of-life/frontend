@@ -241,12 +241,12 @@ public class OverlayFragment extends Fragment {
                 break;
             case "HOUSE":
                 Log.d(TAG, ""+ lobbyDTO.getHouseCardDTOS().size());
-                Log.d(TAG, ""+lobbyDTO.isHasDecision());
-                Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
+                Log.d(TAG, "House Case");
                 break;
             case "CAREER":
                 Log.d(TAG, ""+ lobbyDTO.getCareerCardDTOS().size());
-                Log.d(TAG, ""+lobbyDTO.isHasDecision());
+                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
                 Log.d(TAG, "Career Case");
                 break;
             default:
@@ -330,8 +330,9 @@ public class OverlayFragment extends Fragment {
             }
             if (!houseCardDTOS.isEmpty()) {
                 Log.d(TAG, "HouseCardList is not empty in LobbyDTO");
-                if (careerCardDTOS.size() != 2) {
+                if (houseCardDTOS.size() != 2) {
                     Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Not 2 houses provided...");
                 } else {
                     HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
                     transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
