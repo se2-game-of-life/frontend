@@ -69,6 +69,12 @@ public class OverlayFragment extends Fragment {
             Log.e(TAG, "Error subscribing: "+ e.getMessage());
         }
 
+        String uuid = connectionService.getUuidLiveData().getValue();
+        if(uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())){
+            rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
+        }
+
+
 
         connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyDTO1 -> {
             if (lobbyDTO1.isHasDecision()) {
