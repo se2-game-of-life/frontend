@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
-import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 
