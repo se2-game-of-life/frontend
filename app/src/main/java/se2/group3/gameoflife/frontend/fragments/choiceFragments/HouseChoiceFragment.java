@@ -1,7 +1,5 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
@@ -31,6 +28,7 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class HouseChoiceFragment extends Fragment {
     private View rootView;
     private GameViewModel gameViewModel;
+    private final String TAG = "Networking";
 
 
     public HouseChoiceFragment() {

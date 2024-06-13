@@ -35,6 +35,7 @@ public class ConnectionService extends Service {
         super.onCreate();
 
         this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://10.0.2.2:8080/gameoflife");
+        stompClient.connect();
         this.subscriptionHashMap = new HashMap<>();
         this.liveDataHashMap = new HashMap<>();
         this.uuidLiveData = new MutableLiveData<>();
@@ -43,8 +44,6 @@ public class ConnectionService extends Service {
 
         this.uuidLiveData.setValue(UUID.randomUUID().toString()); //create new uuid for identification
 
-        stompClient.connect();
-
         //send uuid for client mapping in the backend
         Disposable identifierDisposable = send("/app/setIdentifier", uuidLiveData.getValue())
                 .subscribeOn(Schedulers.io())
@@ -52,7 +51,7 @@ public class ConnectionService extends Service {
                 .subscribe(
                         () -> Log.d(TAG, "Exchanged Player UUID with Backend: " + uuidLiveData.getValue())
                 );
-        identifierDisposable.dispose();
+//        identifierDisposable.dispose();
     }
 
     @Override

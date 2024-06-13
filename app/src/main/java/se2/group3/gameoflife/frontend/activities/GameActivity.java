@@ -1,7 +1,5 @@
 package se2.group3.gameoflife.frontend.activities;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +32,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private GameViewModel gameViewModel;
+    private final String TAG = "Networking";
 
     private static final int MIN_INTERVAL = 1000;
     private static final int MAX_INTERVAL = 5000;

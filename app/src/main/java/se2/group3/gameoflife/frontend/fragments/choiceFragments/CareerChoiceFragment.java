@@ -1,29 +1,21 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.List;
 
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
-import se2.group3.gameoflife.frontend.fragments.GameBoardFragment;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
@@ -31,7 +23,6 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class CareerChoiceFragment extends Fragment {
     private View rootView;
     private GameViewModel gameViewModel;
-
 
     public CareerChoiceFragment() {
         // Required empty public constructor

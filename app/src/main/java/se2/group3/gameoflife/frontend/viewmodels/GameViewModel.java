@@ -13,6 +13,8 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.activities.GameActivity.VibrateCallback;
+import se2.group3.gameoflife.frontend.dto.BoardDTO;
+import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
