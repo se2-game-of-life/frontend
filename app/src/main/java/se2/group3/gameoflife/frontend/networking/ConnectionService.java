@@ -26,13 +26,15 @@ public class ConnectionService extends Service {
     private static final String TAG = "ConnectionService";
     private final StompClient stompClient;
     private final ObjectMapper objectMapper;
-    private final HashMap<String, Subscription<?>> subscriptions;
+    private final HashMap<String, Disposable> subscriptionHashMap;
+    private final HashMap<Class<?>, MutableLiveData<?>> liveDataHashMap;
 
     private final MutableLiveData<String> uuidLiveData;
 
     public ConnectionService(String url) {
         this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
-        this.subscriptions = new HashMap<>();
+        this.subscriptionHashMap = new HashMap<>();
+        this.liveDataHashMap = new HashMap<>();
         this.uuidLiveData = new MutableLiveData<>();
         this.objectMapper = new ObjectMapper();
         Log.d(TAG, "STOMP client initialized!");
@@ -41,7 +43,8 @@ public class ConnectionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        subscriptions.clear();
+        subscriptionHashMap.clear();
+        liveDataHashMap.clear();
         this.uuidLiveData.setValue(UUID.randomUUID().toString()); //create new uuid for identification
 
         stompClient.connect();
@@ -63,36 +66,57 @@ public class ConnectionService extends Service {
         Log.d(TAG, "STOMP client disconnected!");
     }
 
+    // GETTER FOR LIVE DATA
+
+    /**
+     * Use this method to get data from the lobby,
+     * make sure to LiveDataObject.observe() instead of LiveDataObject.getValue() for UI.
+     * @param dtoClass xxxxDTO.class, used as key for LiveDataHashMap
+     * @return MutableLiveData[xxxxDTO] or null if not present or error
+     * @param <T> Type of the DTO you wish to get.
+     */
+    @SuppressWarnings("unchecked") //this is safe because type is known @ runtime (credit: ChatGPT)
+    public <T> MutableLiveData<T> getLiveData(Class<T> dtoClass) {
+        try {
+            return (MutableLiveData<T>) liveDataHashMap.get(dtoClass);
+        } catch (ClassCastException e) {
+            Log.e(TAG, "Class cast exception, whilst trying to get Live Data: " + e);
+            return null;
+        }
+    }
+
     // SUBSCRIBE AND SEND METHODS
 
     public Completable unsubscribe(String topic) {
         return Completable.create(emitter -> {
-           if(!subscriptions.containsKey(topic)) {
+           if(!subscriptionHashMap.containsKey(topic)) {
                emitter.onComplete();
                return;
            }
 
-           Subscription<?> subscription = subscriptions.get(topic);
+           Disposable subscription = subscriptionHashMap.get(topic);
            if(subscription == null) {
                Log.e(TAG, "NullPointerException during HashMapAccess for topic: " + topic);
                emitter.onError(new NullPointerException());
                return;
            }
 
-           subscription.getDisposable().dispose();
-           subscriptions.remove(topic);
-
-           //todo: add more checks for null etc
+           if(!subscription.isDisposed()) subscription.dispose();
+           subscriptionHashMap.remove(topic);
         });
     }
 
     public  <T> Completable subscribe(String topic, Class<T> type) {
         return Completable.create(emitter -> {
-            if(subscriptions.containsKey(topic)) {
-                //todo: if we ever want to re-subscribe we need to check if the disposable in the subscription is not disposed
-                emitter.onComplete();
-                return;
+            if(subscriptionHashMap.containsKey(topic)) {
+                Disposable subscription = subscriptionHashMap.get(topic);
+                if(subscription != null && !subscription.isDisposed()) {
+                    emitter.onComplete();
+                    return;
+                }
+                emitter.onError(new IllegalStateException());
             }
+
             MutableLiveData<T> liveDataObject = new MutableLiveData<>();
             Disposable disposable = stompClient.topic(topic)
                     .subscribeOn(Schedulers.io())
@@ -109,8 +133,8 @@ public class ConnectionService extends Service {
                         Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString());
                         emitter.onError(errorMessage);
                     });
-            Subscription<T> newSubscription = new Subscription<>(disposable, liveDataObject);
-            this.subscriptions.put(topic, newSubscription);
+            this.liveDataHashMap.put(type, liveDataObject);
+            this.subscriptionHashMap.put(topic, disposable);
             emitter.onComplete();
         });
     }
@@ -126,11 +150,14 @@ public class ConnectionService extends Service {
                                 () -> {
                                     Log.d(TAG, "Tx: " + message);
                                     emitter.onComplete();
-                                },
-                                emitter::onError
+                                }, error -> {
+                                    Log.e(TAG, "Error subscribing to send: " + error.getMessage());
+                                    emitter.onError(error);
+                                }
                         );
                 emitter.setCancellable(disposable::dispose);
             } catch (JsonProcessingException e) {
+                Log.e(TAG, "Error processing JSON on send: " + e);
                 emitter.onError(e);
             }
         });

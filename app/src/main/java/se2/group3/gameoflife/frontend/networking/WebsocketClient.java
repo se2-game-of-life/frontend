@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
+@Deprecated
 public class WebsocketClient {
 
     private static volatile WebsocketClient INSTANCE = null;
