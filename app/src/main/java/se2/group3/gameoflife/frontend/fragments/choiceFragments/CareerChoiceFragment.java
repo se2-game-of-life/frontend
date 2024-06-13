@@ -39,6 +39,7 @@ public class CareerChoiceFragment extends Fragment {
     public static CareerChoiceFragment newInstance() {
         CareerChoiceFragment fragment = new CareerChoiceFragment();
         Bundle args = new Bundle();
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,9 +51,9 @@ public class CareerChoiceFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_career_choice, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
 
-        List<CardDTO> cardDTOList = gameViewModel.getLobbyDTO().getCards();
-        CareerCardDTO careerCard1 = (CareerCardDTO) cardDTOList.get(0);
-        CareerCardDTO careerCard2 = (CareerCardDTO) cardDTOList.get(1);
+        List<CareerCardDTO> cardDTOList = gameViewModel.getLobbyDTO().getCareerCardDTOS();
+        CareerCardDTO careerCard1 = cardDTOList.get(0);
+        CareerCardDTO careerCard2 = cardDTOList.get(1);
 
         updateUI(careerCard1, careerCard2);
         Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);

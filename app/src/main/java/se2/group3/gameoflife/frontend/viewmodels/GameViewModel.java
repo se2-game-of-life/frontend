@@ -2,6 +2,8 @@ package se2.group3.gameoflife.frontend.viewmodels;
 
 
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -9,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +22,10 @@ import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
+import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
+import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
+import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.networking.WebsocketClient;
 
 public class GameViewModel extends ViewModel {

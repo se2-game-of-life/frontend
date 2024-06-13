@@ -201,6 +201,7 @@ public class OverlayFragment extends Fragment {
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
         try{
@@ -239,14 +240,14 @@ public class OverlayFragment extends Fragment {
                 handleCellNOTHING(currentCellPosition,currentPlayer);
                 break;
             case "HOUSE":
-                Log.d(TAG, ""+ lobbyDTO.getCards().size());
+                Log.d(TAG, ""+ lobbyDTO.getHouseCardDTOS().size());
                 Log.d(TAG, ""+lobbyDTO.isHasDecision());
                 Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
                 break;
             case "CAREER":
-                Log.d(TAG, ""+ lobbyDTO.getCards().size());
+                Log.d(TAG, ""+ lobbyDTO.getCareerCardDTOS().size());
                 Log.d(TAG, ""+lobbyDTO.isHasDecision());
-                Toast.makeText(requireContext(), "Not enough money to buy a career.", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Career Case");
                 break;
             default:
                 Log.d(TAG, "Something went wrong in handleCell");
@@ -295,16 +296,18 @@ public class OverlayFragment extends Fragment {
         }
     }
 
-    private void makeDecision(LobbyDTO lobbyDTO){
-        List<CardDTO> cards = lobbyDTO.getCards();
+    private void makeDecision(LobbyDTO lobbyDTO) {
+        List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
+        List<HouseCardDTO> houseCardDTOS = lobbyDTO.getHouseCardDTOS();
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
         String cellType;
 
-        try{
+        try {
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in makeDecision: " + e.getMessage());
             return;
         }
@@ -312,24 +315,30 @@ public class OverlayFragment extends Fragment {
 
         FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
 
-
-        if (!cards.isEmpty()){
-            if(cards.get(0) instanceof HouseCardDTO){
-                if(lobbyDTO.getCards().size() != 2){
+        if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
+            StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
+            transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
+        } else {
+            if (!careerCardDTOS.isEmpty()) {
+                Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
+                if (careerCardDTOS.size() != 2) {
+                    Log.e(TAG, "Not 2 careers provided...");
+                } else {
+                    CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
+                    transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+                }
+            }
+            if (!houseCardDTOS.isEmpty()) {
+                Log.d(TAG, "HouseCardList is not empty in LobbyDTO");
+                if (careerCardDTOS.size() != 2) {
                     Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
                 } else {
                     HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
                     transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
                 }
-            } else if (cards.get(0) instanceof CareerCardDTO){
-                CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
             }
-        } else {
-            StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
-            transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
         }
         transactionOverLay.commit();
-
     }
+
 }

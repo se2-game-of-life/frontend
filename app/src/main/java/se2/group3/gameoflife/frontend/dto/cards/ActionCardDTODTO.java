@@ -1,8 +1,10 @@
 package se2.group3.gameoflife.frontend.dto.cards;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ActionCardDTODTO extends CardDTO {
 
 

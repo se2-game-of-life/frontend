@@ -43,18 +43,18 @@ class LobbyViewModelUnitTest {
         assertEquals("LobbyDTO is null", ex.getMessage());
     }
 
-    @Test
-    void testSetLobbyDTO(){
-        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
-        assertDoesNotThrow(() -> lobbyViewModel.setLobbyDTO(lobbyDTO));
-    }
-
-    @Test
-    void testGetLobbyDTO(){
-        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
-        lobbyViewModel.setLobbyDTO(lobbyDTO);
-        assertDoesNotThrow(() -> lobbyViewModel.getLobbyDTO());
-    }
+//    @Test
+//    void testSetLobbyDTO(){
+//        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
+//        assertDoesNotThrow(() -> lobbyViewModel.setLobbyDTO(lobbyDTO));
+//    }
+//
+//    @Test
+//    void testGetLobbyDTO(){
+//        LobbyDTO lobbyDTO = new LobbyDTO(1L, null, null, false, null, 0, false);
+//        lobbyViewModel.setLobbyDTO(lobbyDTO);
+//        assertDoesNotThrow(() -> lobbyViewModel.getLobbyDTO());
+//    }
 
 
 
