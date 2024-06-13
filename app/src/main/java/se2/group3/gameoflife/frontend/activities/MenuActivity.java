@@ -16,7 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
@@ -27,6 +27,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private final String TAG = "Networking";
     ConnectionService connectionService;
+    CompositeDisposable compositeDisposable;
     boolean isBound = false;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -53,6 +54,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        compositeDisposable.dispose();
         if(isBound) {
             unbindService(serviceConnection);
             isBound = false;
@@ -62,6 +64,8 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        compositeDisposable = new CompositeDisposable();
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu);
@@ -78,18 +82,19 @@ public class MenuActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
-
             String UUID = connectionService.getUuidLiveData().getValue();
-            connectionService.subscribe("/topic/lobbies/" + UUID, LobbyDTO.class);
+            compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + UUID, LobbyDTO.class)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe());
 
-            Disposable dis = connectionService.send("/app/lobby/create", playerName)
+            compositeDisposable.add(connectionService.send("/app/lobby/create", playerName)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
                         Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
                         startActivity(intent);
-                    }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error));
-            dis.dispose();
+                    }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
         });
 
         findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
@@ -105,14 +110,13 @@ public class MenuActivity extends AppCompatActivity {
                     long lobbyID = Long.parseLong(lobbyIDString);
                     connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
 
-                    Disposable dis = connectionService.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName)).
+                    compositeDisposable.add(connectionService.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName)).
                             subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
                                 Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
                                 startActivity(intent);
-                            }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error));
-                    dis.dispose();
+                            }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
                 }
             });
         });
