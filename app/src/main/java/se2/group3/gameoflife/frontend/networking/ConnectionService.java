@@ -24,27 +24,23 @@ import ua.naiksoftware.stomp.StompClient;
 
 public class ConnectionService extends Service {
     private static final String TAG = "ConnectionService";
-    private final StompClient stompClient;
-    private final ObjectMapper objectMapper;
-    private final HashMap<String, Disposable> subscriptionHashMap;
-    private final HashMap<Class<?>, MutableLiveData<?>> liveDataHashMap;
+    private StompClient stompClient;
+    private ObjectMapper objectMapper;
+    private HashMap<String, Disposable> subscriptionHashMap;
+    private HashMap<Class<?>, MutableLiveData<?>> liveDataHashMap;
+    private MutableLiveData<String> uuidLiveData;
 
-    private final MutableLiveData<String> uuidLiveData;
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-    public ConnectionService(String url) {
-        this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
+        this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://10.0.2.2:8080/gameoflife");
         this.subscriptionHashMap = new HashMap<>();
         this.liveDataHashMap = new HashMap<>();
         this.uuidLiveData = new MutableLiveData<>();
         this.objectMapper = new ObjectMapper();
         Log.d(TAG, "STOMP client initialized!");
-    }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        subscriptionHashMap.clear();
-        liveDataHashMap.clear();
         this.uuidLiveData.setValue(UUID.randomUUID().toString()); //create new uuid for identification
 
         stompClient.connect();

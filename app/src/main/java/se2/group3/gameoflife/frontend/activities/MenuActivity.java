@@ -1,7 +1,5 @@
 package se2.group3.gameoflife.frontend.activities;
 
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,25 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.JoinLobbyRequest;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.MenuViewModel;
 
 public class MenuActivity extends AppCompatActivity {
 
     private final String TAG = "Networking";
-    private MenuViewModel menuViewModel;
-    private ObjectMapper objectMapper;
     ConnectionService connectionService;
     boolean isBound = false;
 
@@ -72,9 +63,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
-        objectMapper = new ObjectMapper();
-
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -100,9 +88,7 @@ public class MenuActivity extends AppCompatActivity {
                     .subscribe(() -> {
                         Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
                         startActivity(intent);
-                    }, error -> {
-                        Log.e(TAG, "Error Sending Create Lobby: " + error);
-                    });
+                    }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error));
             dis.dispose();
         });
 
@@ -111,29 +97,24 @@ public class MenuActivity extends AppCompatActivity {
             findViewById(R.id.GObutton).setOnClickListener(v1 -> {
                 String playerName = getIntent().getStringExtra("username");
                 if(playerName == null) Log.e(TAG, "Error with the username intent!");
+
                 EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
                 String lobbyIDString = lobbyIDText.getText().toString();
+
                 if (!lobbyIDString.isEmpty()){
                     long lobbyID = Long.parseLong(lobbyIDString);
-                    menuViewModel.getLobby().observe(MenuActivity.this, lobbyDTO -> {
-                        Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
-                        try {
-                            intent.putExtra("lobbyDTO", objectMapper.writeValueAsString(lobbyDTO));
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                        startActivity(intent);
-                    });
-                    assert playerName != null;
-                    menuViewModel.joinLobby(lobbyID, playerName);
+                    connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
+
+                    Disposable dis = connectionService.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName)).
+                            subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(() -> {
+                                Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
+                                startActivity(intent);
+                            }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error));
+                    dis.dispose();
                 }
             });
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        menuViewModel.dispose();
-        super.onDestroy();
     }
 }
