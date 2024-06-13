@@ -1,9 +1,11 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -17,16 +19,22 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
+
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.dto.cards.CardDTO;
+
 import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class OverlayFragment extends Fragment {
@@ -34,7 +42,8 @@ public class OverlayFragment extends Fragment {
     private View rootView;
     public final String TAG = "Networking";
     private boolean playerName;
-
+    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public OverlayFragment() {
     }
@@ -48,24 +57,37 @@ public class OverlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-        updateStatistics();
-        gameViewModel.getLobby().observe(requireActivity(), lobbyDTO -> {
-            if (lobbyDTO.isHasDecision()){
-                makeDecision(lobbyDTO);
-            } else{
-                handleCell(lobbyDTO);
-            }
-        });
+        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+        Long lobbyID = lobbyDTO.getLobbyID();
 
+        connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
+
+
+        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyDTO1 -> {
+            if (lobbyDTO1.isHasDecision()) {
+                makeDecision(lobbyDTO1);
+            } else {
+                handleCell(lobbyDTO1);
+            }
+            updateStatistics();
+        });
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
 
         cheatButton.setOnClickListener(view -> {
-            gameViewModel.cheat();
+            compositeDisposable.add(connectionService.send("/app/cheat", "")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                    }, error -> Log.e(TAG, "Error cheating: " + error)));
         });
         spinButton.setOnClickListener(view -> {
-            gameViewModel.spinWheel();
+            compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                    }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
         });
 
         return rootView;
@@ -73,11 +95,11 @@ public class OverlayFragment extends Fragment {
 
     private void updateStatistics() {
         try {
-            LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
+            LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
             List<PlayerDTO> players = lobbyDTO.getPlayers();
 
             if (players == null || players.isEmpty()) {
-                Log.e(TAG, "Playerlist is null or empty");
+                Log.e(TAG, "Player list is null or empty");
                 return;
             }
 
@@ -109,7 +131,7 @@ public class OverlayFragment extends Fragment {
                 });
 
                 playerButtons[0].setOnLongClickListener(v -> {
-                    gameViewModel.report(0);
+                    report(0);
                     return true;
                 });
 
@@ -122,7 +144,7 @@ public class OverlayFragment extends Fragment {
                 });
 
                 playerButtons[1].setOnLongClickListener(v -> {
-                    gameViewModel.report(1);
+                    report(1);
                     return true;
                 });
 
@@ -135,7 +157,7 @@ public class OverlayFragment extends Fragment {
                 });
 
                 playerButtons[2].setOnLongClickListener(v -> {
-                    gameViewModel.report(2);
+                    report(2);
                     return true;
                 });
 
@@ -148,7 +170,7 @@ public class OverlayFragment extends Fragment {
                 });
 
                 playerButtons[3].setOnLongClickListener(v -> {
-                    gameViewModel.report(3);
+                    report(3);
                     return true;
                 });
             });
@@ -330,6 +352,22 @@ public class OverlayFragment extends Fragment {
             }
         }
         transactionOverLay.commit();
+    }
+
+    private void report(int player){
+        LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
+        if(lobby == null) {
+            Log.e("Networking", "Report has failed: lobbyDTO is not initialized yet!");
+            return;
+        }
+
+        String playerUUID = lobby.getPlayers().get(player).getPlayerUUID();
+        compositeDisposable.add(connectionService.send("/app/report", playerUUID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
+
     }
 
 }
