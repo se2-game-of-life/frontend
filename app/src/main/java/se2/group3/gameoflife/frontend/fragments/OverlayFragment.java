@@ -63,18 +63,10 @@ public class OverlayFragment extends Fragment {
 
         cheatButton.setOnClickListener(view -> {
             gameViewModel.cheat();
-            vibratePhone();
-        });
-        cheatButton.setOnLongClickListener(v -> {
-            //todo: implement fake cheat
-            vibratePhone();
-            return true;
         });
         spinButton.setOnClickListener(view -> {
             gameViewModel.spinWheel();
         });
-        cheatButton.setOnClickListener(view -> gameViewModel.cheat());
-        spinButton.setOnClickListener(view -> gameViewModel.spinWheel());
 
         return rootView;
     }
