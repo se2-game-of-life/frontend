@@ -15,9 +15,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -29,6 +33,8 @@ public class HouseChoiceFragment extends Fragment {
     private View rootView;
     private GameViewModel gameViewModel;
     private final String TAG = "Networking";
+    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     public HouseChoiceFragment() {
@@ -59,13 +65,17 @@ public class HouseChoiceFragment extends Fragment {
         Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
 
         house1BTN.setOnClickListener(v -> {
-            gameViewModel.makeChoice(true);
-            navigateToOverlayFragment();
+            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
         });
 
         house2BTN.setOnClickListener(v -> {
-            gameViewModel.makeChoice(false);
-            navigateToOverlayFragment();
+            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
         });
 
         return rootView;
