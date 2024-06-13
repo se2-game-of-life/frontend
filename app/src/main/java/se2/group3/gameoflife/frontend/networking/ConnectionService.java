@@ -68,6 +68,10 @@ public class ConnectionService extends Service {
 
     // GETTER FOR LIVE DATA
 
+    public MutableLiveData<String> getUuidLiveData() {
+        return this.uuidLiveData;
+    }
+
     /**
      * Use this method to get data from the lobby,
      * make sure to LiveDataObject.observe() instead of LiveDataObject.getValue() for UI.
@@ -181,7 +185,7 @@ public class ConnectionService extends Service {
     }
 
     public class ConnectionServiceBinder extends Binder {
-        ConnectionService getService() {
+        public ConnectionService getService() {
             return ConnectionService.this;
         }
     }
