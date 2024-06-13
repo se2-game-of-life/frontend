@@ -32,8 +32,15 @@ public class ChoosePathFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-        Long lobbyID = lobbyDTO.getLobbyID();
-        connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
+        long lobbyID = lobbyDTO.getLobbyID();
+        try{
+            connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+        } catch(NullPointerException e){
+            Log.e(TAG, "Error subscribing: "+ e.getMessage());
+        }
 
         Button btnCareer = rootView.findViewById(R.id.btnCareer);
         btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)

@@ -60,7 +60,14 @@ public class OverlayFragment extends Fragment {
         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
         Long lobbyID = lobbyDTO.getLobbyID();
 
-        connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
+        try{
+            connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+        } catch(NullPointerException e){
+            Log.e(TAG, "Error subscribing: "+ e.getMessage());
+        }
 
 
         connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyDTO1 -> {

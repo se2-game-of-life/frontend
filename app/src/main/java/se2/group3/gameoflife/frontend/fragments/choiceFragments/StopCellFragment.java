@@ -6,14 +6,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 /**
@@ -29,6 +34,9 @@ public class StopCellFragment extends Fragment {
     private static final String CELLTYPE = "celltype";
 
     private String cellType;
+    private final String TAG = "Networking";
+    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     public StopCellFragment() {
@@ -86,13 +94,17 @@ public class StopCellFragment extends Fragment {
         Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
 
         yesBTN.setOnClickListener(v -> {
-            gameViewModel.makeChoice(true);
-            navigateToOverlayFragment();
+            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
         });
 
         noBTN.setOnClickListener(v -> {
-            gameViewModel.makeChoice(false);
-            navigateToOverlayFragment();
+            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
         });
 
 
