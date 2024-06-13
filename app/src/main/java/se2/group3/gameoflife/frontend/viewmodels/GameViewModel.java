@@ -1,13 +1,12 @@
 package se2.group3.gameoflife.frontend.viewmodels;
 
-
-
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.HashMap;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -23,6 +22,7 @@ public class GameViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private MutableLiveData<LobbyDTO> lobbyDTO = new MutableLiveData<>();
+    private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
 
     public void startGame(VibrateCallback callback) {
         LobbyDTO lobby = lobbyDTO.getValue();
@@ -89,7 +89,7 @@ public class GameViewModel extends ViewModel {
             Log.e("Networking", "Error making choice: lobbyDTO was null!");
             return;
         }
-        disposables.add(websocketClient.subscribe("/topic/game/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
+        disposables.add(websocketClient.subscribe("/topic/lobbies/" + lobbyDTO.getValue().getLobbyID(), LobbyDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -98,7 +98,7 @@ public class GameViewModel extends ViewModel {
                 )
         );
 
-        disposables.add(websocketClient.send("/app/game/spin", "")
+        disposables.add(websocketClient.send("/app/lobby/spin", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -187,4 +187,17 @@ public class GameViewModel extends ViewModel {
 
     public LiveData<String> getErrorMessage(){ return errorMessage;}
 
+    public HashMap<Integer, CellDTO> getCellDTOHashMap() {
+        return cellDTOHashMap;
+    }
+
+    public void setCellDTOHashMap(BoardDTO boardDTO) {
+        for (int row = 0; row < boardDTO.getCells().size(); row++) {
+            for (int col = 0; col < boardDTO.getCells().get(row).size(); col++) {
+                CellDTO cell = boardDTO.getCells().get(row).get(col);
+                if(cell == null) continue;
+                cellDTOHashMap.put(cell.getNumber(), cell);
+            }
+        }
+    }
 }

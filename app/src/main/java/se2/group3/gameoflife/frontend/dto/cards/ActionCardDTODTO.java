@@ -1,10 +1,12 @@
 package se2.group3.gameoflife.frontend.dto.cards;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ActionCardDTODTO extends CardDTO {
 
-    private String id;
 
     private String name;
 
@@ -18,14 +20,13 @@ public class ActionCardDTODTO extends CardDTO {
 
     private int moneyAmount;
 
-    public ActionCardDTODTO(@JsonProperty("id") String id,
+    public ActionCardDTODTO(
                             @JsonProperty("name") String name,
                             @JsonProperty("description") String description,
                             @JsonProperty("affectOnePlayer") boolean affectOnePlayer,
                             @JsonProperty("affectAllPlayers") boolean affectAllPlayers,
                             @JsonProperty("affectBank") boolean affectBank,
                             @JsonProperty("moneyAmount") int moneyAmount) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.affectOnePlayer = affectOnePlayer;
@@ -34,13 +35,7 @@ public class ActionCardDTODTO extends CardDTO {
         this.moneyAmount = moneyAmount;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

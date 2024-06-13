@@ -1,11 +1,14 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +50,11 @@ public class HouseChoiceFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_house_choice, container, false);
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        Log.d(TAG, "HouseChoiceFragment started.");
 
-        List<CardDTO> cardDTOList = gameViewModel.getLobbyDTO().getCards();
-        HouseCardDTO houseCard1 = (HouseCardDTO) cardDTOList.get(0);
-        HouseCardDTO houseCard2 = (HouseCardDTO) cardDTOList.get(1);
+        List<HouseCardDTO> cardDTOList = gameViewModel.getLobbyDTO().getHouseCardDTOS();
+        HouseCardDTO houseCard1 = cardDTOList.get(0);
+        HouseCardDTO houseCard2 = cardDTOList.get(1);
 
         updateUI(houseCard1, houseCard2);
         Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
