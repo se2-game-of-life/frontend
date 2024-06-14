@@ -19,6 +19,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
@@ -28,9 +30,19 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 public class CareerChoiceFragment extends Fragment {
     public final String TAG = "Networking";
     private View rootView;
-    private GameViewModel gameViewModel;
-    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
+    ConnectionService connectionService;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
+
 
     public CareerChoiceFragment() {
         // Required empty public constructor
@@ -48,30 +60,39 @@ public class CareerChoiceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_career_choice, container, false);
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        compositeDisposable  = new CompositeDisposable();
+        GameActivity activity = (GameActivity) getActivity();
+        assert activity != null;
+        activity.getConnectionService(cs -> {
+            connectionService = cs;
+            assert connectionService != null;
 
-        List<CareerCardDTO> cardDTOList = gameViewModel.getLobbyDTO().getCareerCardDTOS();
-        CareerCardDTO careerCard1 = cardDTOList.get(0);
-        CareerCardDTO careerCard2 = cardDTOList.get(1);
+            LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+            if (lobbyDTO == null || lobbyDTO.getCareerCardDTOS() == null) {
+                Log.e(TAG, "LobbyDTO is null in CareerChoiceFragment.");
+            }
+            List<CareerCardDTO> cardDTOList = lobbyDTO.getCareerCardDTOS();
+            CareerCardDTO careerCard1 = cardDTOList.get(0);
+            CareerCardDTO careerCard2 = cardDTOList.get(1);
 
-        updateUI(careerCard1, careerCard2);
-        Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
-        Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
+            updateUI(careerCard1, careerCard2);
+            Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
+            Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
 
-        career1BTN.setOnClickListener(v -> {
-            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-        } );
+            career1BTN.setOnClickListener(v -> {
+                compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+            } );
 
-        career2BTN.setOnClickListener(v -> {
-            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+            career2BTN.setOnClickListener(v -> {
+                compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+            });
         });
-
         return rootView;
     }
 

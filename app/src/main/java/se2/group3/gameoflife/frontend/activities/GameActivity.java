@@ -127,14 +127,15 @@ public class GameActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainerView, new ChoosePathFragment())
                         .commit();
-            }
-        });
 
-        connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
-            if (lobby.isHasDecision()) {
-                makeDecision(lobby);
-            } else {
-                handleCell(lobby);
+
+                connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
+                    if (lobby.isHasDecision()) {
+                        makeDecision(lobby);
+                    } else {
+                        handleCell(lobby);
+                    }
+                });
             }
         });
     }

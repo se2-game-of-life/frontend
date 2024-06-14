@@ -28,7 +28,6 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  */
 public class StopCellFragment extends Fragment {
     private View rootView;
-    private GameViewModel gameViewModel;
 
 
     private static final String CELLTYPE = "celltype";
@@ -63,7 +62,6 @@ public class StopCellFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stop_cell, container, false);
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         TextView name = rootView.findViewById(R.id.stopCellName);
         TextView description = rootView.findViewById(R.id.stopCellDescribtion);
         TextView cost = rootView.findViewById(R.id.stopCellCost);
