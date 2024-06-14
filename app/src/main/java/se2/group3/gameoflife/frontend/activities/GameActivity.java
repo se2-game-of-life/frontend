@@ -131,11 +131,21 @@ public class GameActivity extends AppCompatActivity {
 
 
                 connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
-                    if (lobby.isHasDecision()) {
-                        makeDecision(lobby);
+                    String uuid = connectionService.getUuidLiveData().getValue();
+                    if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
+                        if (lobby.isHasDecision()) {
+                            makeDecision(lobby);
+                        } else {
+                            handleCell(lobby);
+                        }
                     } else {
-                        handleCell(lobby);
+                        if (lobby.isHasDecision()) {
+                            makeDecisionOtherPlayers(lobby);
+                        } else {
+                            showToastsForOtherPlayers(lobby);
+                        }
                     }
+
                 });
             }
         });
@@ -333,6 +343,130 @@ public class GameActivity extends AppCompatActivity {
             WinScreenFragment winScreenFragment = new WinScreenFragment();
             transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
             transactionOverLay.commit();
+        }
+    }
+
+    private void showToastsForOtherPlayers(LobbyDTO lobbyDTO){
+        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
+        int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        Log.d(TAG, "Current cell position: " + currentCellPosition);
+        String cellType;
+
+        try {
+            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+        } catch (NullPointerException e) {
+            Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
+            return;
+        }
+        String playerName = lobbyDTO.getCurrentPlayer().getPlayerName();
+
+        Log.d(TAG, cellType);
+        switch (cellType) {
+            case "CASH":
+                Toast.makeText(this, playerName + " got a bonus salary...", Toast.LENGTH_LONG).show();
+                break;
+            case "ACTION":
+                Toast.makeText(this, playerName + " landed on an action cell", Toast.LENGTH_LONG).show();
+                break;
+            case "FAMILY":
+                Toast.makeText(this, playerName+ "  got an additional peg!", Toast.LENGTH_LONG).show();
+                break;
+            case "MID_LIFE":
+                Toast.makeText(this, "Will " + playerName + " get an mid life crisis...?", Toast.LENGTH_LONG).show();
+                break;
+            case "RETIREMENT":
+                Toast.makeText(this, playerName + " retired!", Toast.LENGTH_LONG).show();
+                retire();
+                break;
+            case "GRADUATE":
+                Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
+                if (currentPlayer.isCollegeDegree()) {
+                    Toast.makeText(this, playerName + " aced the exams!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, playerName + " messed up the exams and did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "NOTHING":
+                handleToastsNOTHING(currentCellPosition, currentPlayer);
+                break;
+            case "HOUSE":
+                Log.d(TAG, "" + lobbyDTO.getHouseCardDTOS().size());
+                Log.d(TAG, "" + lobbyDTO.isHasDecision());
+                Log.d(TAG, "House Case");
+                break;
+            case "CAREER":
+                Log.d(TAG, "" + lobbyDTO.getCareerCardDTOS().size());
+                Log.d(TAG, "" + lobbyDTO.isHasDecision());
+                Log.d(TAG, "Career Case");
+                break;
+            default:
+                Log.d(TAG, "Something went wrong in handleCell");
+        }
+    }
+
+    private void handleToastsNOTHING(int currentCellPosition, PlayerDTO currentPlayer){
+        String playerName = currentPlayer.getPlayerName();
+
+        switch (currentCellPosition) {
+            case 1:
+                Toast.makeText(this, "Welcome to college, " + playerName + "!", Toast.LENGTH_LONG).show();
+                break;
+            case 13:
+                if (currentPlayer.isCollegeDegree()) {
+                    Toast.makeText(this, playerName + " aced his exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, playerName + " messed up his exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 14:
+                Toast.makeText(this, "Welcome to the working life, " + playerName + "!", Toast.LENGTH_LONG).show();
+                break;
+            case 35:
+                Toast.makeText(this, playerName + " got married - yey congrats!", Toast.LENGTH_LONG).show();
+                break;
+            case 45:
+                Toast.makeText(this, "No marriage for " + playerName + "? Okay.", Toast.LENGTH_LONG).show();
+                break;
+            case 58:
+                Toast.makeText(this, "Welcome to the family path, " + playerName + ".", Toast.LENGTH_LONG).show();
+                break;
+            case 74:
+                Toast.makeText(this, "No family for " + playerName + "? Okay.", Toast.LENGTH_LONG).show();
+                break;
+            case 92:
+                Toast.makeText(this, playerName + " has slipped into a mid-life crisis.", Toast.LENGTH_LONG).show();
+                break;
+            case 102:
+                Toast.makeText(this, "Mid life crisis? Not for " + playerName + "!", Toast.LENGTH_LONG).show();
+                break;
+            case 113:
+                Toast.makeText(this, playerName + " is on the fastest path to retirement.", Toast.LENGTH_LONG).show();
+                break;
+            case 116:
+                Toast.makeText(this, playerName + " is not on the fastest path to retirement...", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    private void makeDecisionOtherPlayers(LobbyDTO lobbyDTO) {
+        List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
+        List<HouseCardDTO> houseCardDTOS = lobbyDTO.getHouseCardDTOS();
+        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
+        int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
+        String playerName = lobbyDTO.getCurrentPlayer().getPlayerName();
+
+
+        if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
+            Toast.makeText(this, playerName + " makes a life-deciding decision...", Toast.LENGTH_LONG).show();
+        } else {
+            if (!careerCardDTOS.isEmpty()) {
+                Toast.makeText(this, playerName + " chooses a new career...", Toast.LENGTH_LONG).show();
+            }
+            if (!houseCardDTOS.isEmpty()) {
+                Toast.makeText(this, playerName + " buys a house...", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
