@@ -252,6 +252,7 @@ public class OverlayFragment extends Fragment {
                 break;
             case "RETIREMENT":
                 Toast.makeText(requireContext(), "Welcome to retirement!", Toast.LENGTH_LONG).show();
+                retire();
                 break;
             case "GRADUATE":
                 Toast.makeText(requireContext(), "Time for your exams...", Toast.LENGTH_LONG).show();
@@ -381,6 +382,17 @@ public class OverlayFragment extends Fragment {
                 .subscribe(() -> {
                 }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
 
+    }
+
+    private void retire(){
+        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+
+        if (lobbyDTO != null && !lobbyDTO.isHasStarted()){
+            FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+            WinScreenFragment winScreenFragment = new WinScreenFragment();
+            transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
+            transactionOverLay.commit();
+        }
     }
 
 }
