@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -292,11 +293,11 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
-        FragmentTransaction transactionOverLay = getSupportFragmentManager().beginTransaction();
-
         if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
             StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
-            transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView2, stopCellFragment);
+            transaction.commitAllowingStateLoss();
         } else {
             if (!careerCardDTOS.isEmpty()) {
                 Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
@@ -304,7 +305,9 @@ public class GameActivity extends AppCompatActivity {
                     Log.e(TAG, "Not 2 careers provided...");
                 } else {
                     CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                    transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+                    transaction.commit();
                 }
             }
             if (!houseCardDTOS.isEmpty()) {
@@ -314,11 +317,12 @@ public class GameActivity extends AppCompatActivity {
                     Log.e(TAG, "Not 2 houses provided...");
                 } else {
                     HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
-                    transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragmentContainerView2, houseChoiceFragment);
+                    transaction.commit();
                 }
             }
         }
-        transactionOverLay.commit();
     }
 
     private void retire() {

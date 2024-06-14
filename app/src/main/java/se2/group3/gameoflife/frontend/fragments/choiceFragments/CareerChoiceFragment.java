@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,14 +23,24 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
-
 
 public class CareerChoiceFragment extends Fragment {
     public final String TAG = "Networking";
     private View rootView;
-    ConnectionService connectionService;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ConnectionService connectionService;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public CareerChoiceFragment() {
+        // Required empty public constructor
+    }
+
+    public static CareerChoiceFragment newInstance() {
+        CareerChoiceFragment fragment = new CareerChoiceFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,60 +52,61 @@ public class CareerChoiceFragment extends Fragment {
         compositeDisposable.dispose();
     }
 
-
-    public CareerChoiceFragment() {
-        // Required empty public constructor
-    }
-    public static CareerChoiceFragment newInstance() {
-        CareerChoiceFragment fragment = new CareerChoiceFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_career_choice, container, false);
-        compositeDisposable  = new CompositeDisposable();
-        GameActivity activity = (GameActivity) getActivity();
-        assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
-
-            LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-            if (lobbyDTO == null || lobbyDTO.getCareerCardDTOS() == null) {
-                Log.e(TAG, "LobbyDTO is null in CareerChoiceFragment.");
-            }
-            List<CareerCardDTO> cardDTOList = lobbyDTO.getCareerCardDTOS();
-            CareerCardDTO careerCard1 = cardDTOList.get(0);
-            CareerCardDTO careerCard2 = cardDTOList.get(1);
-
-            updateUI(careerCard1, careerCard2);
-            Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
-            Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
-
-            career1BTN.setOnClickListener(v -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-            } );
-
-            career2BTN.setOnClickListener(v -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-            });
-        });
+        compositeDisposable = new CompositeDisposable();
         return rootView;
     }
 
-    private void updateUI(CareerCardDTO careerCard1, CareerCardDTO careerCard2){
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        GameActivity activity = (GameActivity) getActivity();
+        if (activity != null) {
+            activity.getConnectionService(cs -> {
+                connectionService = cs;
+                if (connectionService != null) {
+                    LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+                    if (lobbyDTO == null || lobbyDTO.getCareerCardDTOS() == null || lobbyDTO.getCareerCardDTOS().isEmpty()) {
+                        Log.e(TAG, "LobbyDTO is null or empty in CareerChoiceFragment.");
+                        return;
+                    }
+
+                    List<CareerCardDTO> cardDTOList = lobbyDTO.getCareerCardDTOS();
+                    if (cardDTOList.size() < 2) {
+                        Log.e(TAG, "Career card list does not have enough elements.");
+                        return;
+                    }
+
+                    CareerCardDTO careerCard1 = cardDTOList.get(0);
+                    CareerCardDTO careerCard2 = cardDTOList.get(1);
+
+                    updateUI(careerCard1, careerCard2);
+
+                    Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
+                    Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
+
+                    career1BTN.setOnClickListener(v -> {
+                        compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                    });
+
+                    career2BTN.setOnClickListener(v -> {
+                        compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                    });
+                }
+            });
+        }
+    }
+
+    private void updateUI(CareerCardDTO careerCard1, CareerCardDTO careerCard2) {
         TextView career1name = rootView.findViewById(R.id.career1Name);
         TextView career2name = rootView.findViewById(R.id.career2Name);
         TextView career1salary = rootView.findViewById(R.id.career1Salary);
@@ -110,12 +120,11 @@ public class CareerChoiceFragment extends Fragment {
         career2salary.setText("Salary: " + careerCard2.getSalary());
         career1bonus.setText("Bonus: " + careerCard1.getBonus());
         career2bonus.setText("Bonus: " + careerCard2.getBonus());
-
     }
 
-    private void navigateToOverlayFragment(){
-        if (getActivity() != null) {
-            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+    private void navigateToOverlayFragment() {
+        if (isAdded()) {
+            FragmentTransaction transactionOverLay = getParentFragmentManager().beginTransaction();
             OverlayFragment overlayFragment = new OverlayFragment();
             transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
             transactionOverLay.addToBackStack(null);

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,29 +23,12 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HouseChoiceFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HouseChoiceFragment extends Fragment {
     private View rootView;
     private final String TAG = "Networking";
-    ConnectionService connectionService;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
-    }
-
+    private ConnectionService connectionService;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public HouseChoiceFragment() {
         // Required empty public constructor
@@ -59,52 +41,69 @@ public class HouseChoiceFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_house_choice, container, false);
-        compositeDisposable  = new CompositeDisposable();
 
         Log.d(TAG, "HouseChoiceFragment started.");
 
-
-        GameActivity activity = (GameActivity) getActivity();
-        assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
-
-            LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-            if (lobbyDTO == null || lobbyDTO.getHouseCardDTOS() == null) {
-                Log.e(TAG, "LobbyDTO is null in HouseChoiceFragment.");
-            }
-            List<HouseCardDTO> cardDTOList = lobbyDTO.getHouseCardDTOS();
-            HouseCardDTO houseCard1 = cardDTOList.get(0);
-            HouseCardDTO houseCard2 = cardDTOList.get(1);
-
-            updateUI(houseCard1, houseCard2);
-            Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
-            Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
-
-            house1BTN.setOnClickListener(v -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-            });
-
-            house2BTN.setOnClickListener(v -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-            });
-        });
         return rootView;
     }
 
-    private void updateUI(HouseCardDTO houseCard1, HouseCardDTO houseCard2){
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        GameActivity activity = (GameActivity) getActivity();
+        if (activity != null) {
+            activity.getConnectionService(cs -> {
+                connectionService = cs;
+                if (connectionService != null) {
+                    LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+                    if (lobbyDTO == null || lobbyDTO.getHouseCardDTOS() == null) {
+                        Log.e(TAG, "LobbyDTO is null in HouseChoiceFragment.");
+                        return;
+                    }
+                    List<HouseCardDTO> cardDTOList = lobbyDTO.getHouseCardDTOS();
+                    HouseCardDTO houseCard1 = cardDTOList.get(0);
+                    HouseCardDTO houseCard2 = cardDTOList.get(1);
+
+                    updateUI(houseCard1, houseCard2);
+
+                    Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
+                    Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
+
+                    house1BTN.setOnClickListener(v -> {
+                        compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                    });
+
+                    house2BTN.setOnClickListener(v -> {
+                        compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                    });
+                }
+            });
+        }
+    }
+
+    private void updateUI(HouseCardDTO houseCard1, HouseCardDTO houseCard2) {
         TextView house1name = rootView.findViewById(R.id.house1Name);
         TextView house2name = rootView.findViewById(R.id.house2Name);
         TextView house1purchasePrice = rootView.findViewById(R.id.house1purchasePrice);
@@ -122,12 +121,11 @@ public class HouseChoiceFragment extends Fragment {
         house2redSellPrice.setText("Red Sell Price: " + houseCard2.getRedSellPrice());
         house1blackSellPrice.setText("Black Sell Price: " + houseCard1.getBlackSellPrice());
         house2blackSellPrice.setText("Black Sell Price: " + houseCard2.getBlackSellPrice());
-
     }
 
-    private void navigateToOverlayFragment(){
-        if (getActivity() != null) {
-            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+    private void navigateToOverlayFragment() {
+        if (isAdded()) {
+            FragmentTransaction transactionOverLay = getParentFragmentManager().beginTransaction();
             OverlayFragment overlayFragment = new OverlayFragment();
             transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
             transactionOverLay.addToBackStack(null);
