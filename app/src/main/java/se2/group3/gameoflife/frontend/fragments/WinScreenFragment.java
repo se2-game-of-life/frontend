@@ -3,7 +3,6 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +26,20 @@ import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
  * create an instance of this fragment.
  */
 public class WinScreenFragment extends Fragment {
-    private GameViewModel gameViewModel;
     private View rootView;
 
+    ConnectionService connectionService;
+    CompositeDisposable compositeDisposable;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
     public WinScreenFragment() {
         // Required empty public constructor
     }
@@ -46,15 +57,26 @@ public class WinScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_win_screen, container, false);
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        compositeDisposable  = new CompositeDisposable();
 
-        LobbyDTO lobbyDTO = gameViewModel.getLobbyDTO();
 
-        List<PlayerDTO> players = lobbyDTO.getPlayers();
+        GameActivity activity = (GameActivity) getActivity();
+        assert activity != null;
+        activity.getConnectionService(cs -> {
+            connectionService = cs;
+            assert connectionService != null;
 
-        sortPlayersByMoney(players);
+            connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
+                List<PlayerDTO> players = lobby.getPlayers();
 
-        updateUI(players);
+                sortPlayersByMoney(players);
+
+                updateUI(players);
+
+            });
+        });
+
+
 
         return rootView;
     }
