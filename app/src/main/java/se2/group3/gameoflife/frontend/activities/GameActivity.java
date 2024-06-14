@@ -132,16 +132,16 @@ public class GameActivity extends AppCompatActivity {
 
                 connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
                     String uuid = connectionService.getUuidLiveData().getValue();
-                    if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                        if (lobby.isHasDecision()) {
+                    if(lobby.isHasDecision()){
+                        if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
                             makeDecision(lobby);
-                        } else {
-                            handleCell(lobby);
-                        }
-                    } else {
-                        if (lobby.isHasDecision()) {
+                        } else{
                             makeDecisionOtherPlayers(lobby);
-                        } else {
+                        }
+                    } else{
+                        if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
+                            handleCell(lobby);
+                        } else{
                             showToastsForOtherPlayers(lobby);
                         }
                     }
