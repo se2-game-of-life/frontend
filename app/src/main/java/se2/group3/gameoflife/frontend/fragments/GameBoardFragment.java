@@ -52,10 +52,15 @@ public class GameBoardFragment extends Fragment {
 
         GameActivity activity = (GameActivity) getActivity();
         assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
-            fetchBoardData();
+
+        activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+            if(isBound) {
+                Log.d(TAG, "Bound");
+                connectionService = activity.getService();
+                LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
+                assert lobby != null;
+                fetchBoardData();
+            }
         });
 
         return rootView;

@@ -95,15 +95,13 @@ public class MenuActivity extends AppCompatActivity {
             compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + UUID, LobbyDTO.class)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe());
-
-            compositeDisposable.add(connectionService.send("/app/lobby/create", playerName)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                        Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
-                        startActivity(intent);
-                    }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
+                    .subscribe(() -> compositeDisposable.add(connectionService.send("/app/lobby/create", playerName)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(() -> {
+                                Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
+                                startActivity(intent);
+                            }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)))));
         });
 
         findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
@@ -117,15 +115,16 @@ public class MenuActivity extends AppCompatActivity {
 
                 if (!lobbyIDString.isEmpty()) {
                     long lobbyID = Long.parseLong(lobbyIDString);
-                    connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
-
-                    compositeDisposable.add(connectionService.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName)).
-                            subscribeOn(Schedulers.io())
+                    compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
+                            .observeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                                Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
-                                startActivity(intent);
-                            }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
+                            .subscribe(() -> compositeDisposable.add(connectionService.send("/app/lobby/join", new JoinLobbyRequest(lobbyID, playerName)).
+                                    subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(() -> {
+                                        Intent intent = new Intent(MenuActivity.this, LobbyActivity.class);
+                                        startActivity(intent);
+                                    }, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)))));
                 }
             });
         });

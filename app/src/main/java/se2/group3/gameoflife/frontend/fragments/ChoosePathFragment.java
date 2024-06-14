@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +18,14 @@ import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 
 import se2.group3.gameoflife.frontend.activities.GameActivity;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 
 
 public class ChoosePathFragment extends Fragment {
 
-    private final String TAG = "Networking";
+    private final String TAG = "ConnectionService";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
 
@@ -38,25 +40,27 @@ public class ChoosePathFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
         compositeDisposable = new CompositeDisposable();
 
+        Button btnCareer = rootView.findViewById(R.id.btnCareer);
+        Button btnCollege = rootView.findViewById(R.id.btnCollege);
+
         GameActivity activity = (GameActivity) getActivity();
         assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
 
-            Button btnCareer = rootView.findViewById(R.id.btnCareer);
-            btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
+        activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+            if (isBound) {
+                connectionService = activity.getService();
+                assert connectionService != null;
 
-            Button btnCollege = rootView.findViewById(R.id.btnCollege);
-            btnCollege.setOnClickListener(v -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
-            });
+                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
+
+                btnCollege.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
+            }
         });
 
         return rootView;

@@ -48,34 +48,37 @@ public class OverlayFragment extends Fragment {
 
         GameActivity activity = (GameActivity) getActivity();
         assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
 
-            connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
-                String uuid = connectionService.getUuidLiveData().getValue();
-                if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                    rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
-                }
+        activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+            if(isBound) {
+                connectionService = activity.getService();
+                assert connectionService != null;
 
-                updateStatistics(lobby);
-            });
+                connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
+                    String uuid = connectionService.getUuidLiveData().getValue();
+                    if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
+                        rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
+                    }
 
-            cheatButton.setOnClickListener(view -> {
-                compositeDisposable.add(connectionService.send("/app/cheat", "")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> {
-                        }, error -> Log.e(TAG, "Error cheating: " + error)));
-            });
+                    updateStatistics(lobby);
+                });
 
-            spinButton.setOnClickListener(view -> {
-                compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> {
-                        }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
-            });
+                cheatButton.setOnClickListener(view -> {
+                    compositeDisposable.add(connectionService.send("/app/cheat", "")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(() -> {
+                            }, error -> Log.e(TAG, "Error cheating: " + error)));
+                });
+
+                spinButton.setOnClickListener(view -> {
+                    compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(() -> {
+                            }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
+                });
+            }
         });
 
         return rootView;

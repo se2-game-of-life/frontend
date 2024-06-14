@@ -22,13 +22,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -39,9 +39,9 @@ import se2.group3.gameoflife.frontend.fragments.WinScreenFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
-import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class GameActivity extends AppCompatActivity {
@@ -139,15 +139,15 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
-  
-    public void setFragmentVisibility(){
+
+    public void setFragmentVisibility() {
         View fragment = findViewById(R.id.fragmentContainerView2);
-        if(fragment != null){
+        if (fragment != null) {
             fragment.setVisibility(View.VISIBLE);
         }
     }
 
-    private void startVibrationFeature(VibrationCallback callback){
+    private void startVibrationFeature(VibrationCallback callback) {
         vibrateTask.run();
         LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
         assert lobby != null;
@@ -167,22 +167,30 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void handleCell(LobbyDTO lobbyDTO){
+    public ConnectionService getService() {
+        return connectionService;
+    }
+
+    public MutableLiveData<Boolean> getIsBound() {
+        return this.serviceBound;
+    }
+
+    private void handleCell(LobbyDTO lobbyDTO) {
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
-        try{
+        try {
             cellType = cellDTOHashMap.get(currentCellPosition).getType();
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
             return;
         }
 
         Log.d(TAG, cellType);
-        switch(cellType) {
+        switch (cellType) {
             case "CASH":
                 Toast.makeText(this, "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
                 break;
@@ -201,23 +209,23 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case "GRADUATE":
                 Toast.makeText(this, "Time for your exams...", Toast.LENGTH_LONG).show();
-                if(currentPlayer.isCollegeDegree()){
+                if (currentPlayer.isCollegeDegree()) {
                     Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else{
+                } else {
                     Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
                 break;
             case "NOTHING":
-                handleCellNOTHING(currentCellPosition,currentPlayer);
+                handleCellNOTHING(currentCellPosition, currentPlayer);
                 break;
             case "HOUSE":
-                Log.d(TAG, ""+ lobbyDTO.getHouseCardDTOS().size());
-                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
+                Log.d(TAG, "" + lobbyDTO.getHouseCardDTOS().size());
+                Log.d(TAG, "" + lobbyDTO.isHasDecision());
                 Log.d(TAG, "House Case");
                 break;
             case "CAREER":
-                Log.d(TAG, ""+ lobbyDTO.getCareerCardDTOS().size());
-                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
+                Log.d(TAG, "" + lobbyDTO.getCareerCardDTOS().size());
+                Log.d(TAG, "" + lobbyDTO.isHasDecision());
                 Log.d(TAG, "Career Case");
                 break;
             default:
@@ -225,15 +233,15 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void handleCellNOTHING(int currentCellPosition, PlayerDTO player){
-        switch(currentCellPosition){
+    private void handleCellNOTHING(int currentCellPosition, PlayerDTO player) {
+        switch (currentCellPosition) {
             case 1:
                 Toast.makeText(this, "Welcome to college!", Toast.LENGTH_LONG).show();
                 break;
             case 13:
-                if(player.isCollegeDegree()){
+                if (player.isCollegeDegree()) {
                     Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else{
+                } else {
                     Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -312,10 +320,11 @@ public class GameActivity extends AppCompatActivity {
         }
         transactionOverLay.commit();
     }
-    private void retire(){
+
+    private void retire() {
         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
 
-        if (lobbyDTO != null && !lobbyDTO.isHasStarted()){
+        if (lobbyDTO != null && !lobbyDTO.isHasStarted()) {
             FragmentTransaction transactionOverLay = getSupportFragmentManager().beginTransaction();
             WinScreenFragment winScreenFragment = new WinScreenFragment();
             transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);

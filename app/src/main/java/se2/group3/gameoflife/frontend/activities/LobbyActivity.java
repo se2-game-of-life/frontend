@@ -113,7 +113,13 @@ public class LobbyActivity extends AppCompatActivity {
 
         serviceBound.observe(this, isBound -> {
             if (isBound) {
-                connectionService.getLiveData(LobbyDTO.class).observe(this, this::updateLobby);
+                connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
+                    compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe());
+                    updateLobby(lobby);
+                });
             }
         });
     }

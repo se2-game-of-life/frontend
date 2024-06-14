@@ -127,14 +127,28 @@ public class ConnectionService extends Service {
                 emitter.onError(new IllegalStateException());
             }
 
-            MutableLiveData<T> liveDataObject = new MutableLiveData<>();
+            MutableLiveData<T> newLiveDataObject = new MutableLiveData<>();
+
             Disposable disposable = stompClient.topic(topic)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(stompMessage -> {
                         try {
                             Log.d(TAG, "Rx: " + stompMessage.getPayload());
-                            liveDataObject.setValue(type.cast(toObject(stompMessage.getPayload(), type)));
+
+                            T value = type.cast(toObject(stompMessage.getPayload(), type));
+                            if (liveDataHashMap.containsKey(type)) {
+                                try {
+                                    MutableLiveData<T> liveData = (MutableLiveData<T>) liveDataHashMap.get(type);
+                                    assert liveData != null;
+                                    liveData.setValue(value);
+                                } catch (ClassCastException e) {
+                                    Log.e(TAG, "Error Casting!");
+                                    emitter.onError(e);
+                                }
+                            } else {
+                                newLiveDataObject.setValue(value);
+                            }
                         } catch (ClassCastException | JsonProcessingException e) {
                             Log.e(TAG, "Error Deserializing Data: " + e);
                             emitter.onError(e);
@@ -143,7 +157,7 @@ public class ConnectionService extends Service {
                         Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString());
                         emitter.onError(errorMessage);
                     });
-            this.liveDataHashMap.put(type, liveDataObject);
+            if(!liveDataHashMap.containsKey(type)) this.liveDataHashMap.put(type, newLiveDataObject);
             this.subscriptionHashMap.put(topic, disposable);
             emitter.onComplete();
         });
