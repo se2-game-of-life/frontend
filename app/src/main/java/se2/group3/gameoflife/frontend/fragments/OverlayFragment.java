@@ -4,7 +4,6 @@ package se2.group3.gameoflife.frontend.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,10 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,20 +23,13 @@ import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 
 import se2.group3.gameoflife.frontend.activities.GameActivity;
-import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 
-import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
-import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
-import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
-import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
-import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 public class OverlayFragment extends Fragment {
-    private GameViewModel gameViewModel;
     private View rootView;
     public final String TAG = "Networking";
     private boolean playerName;
@@ -64,8 +54,6 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         compositeDisposable  = new CompositeDisposable();
 
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
 
@@ -79,13 +67,6 @@ public class OverlayFragment extends Fragment {
                 String uuid = connectionService.getUuidLiveData().getValue();
                 if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
                     rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
-                }
-
-                //todo: move this into game activity
-                if (lobby.isHasDecision()) {
-                    makeDecision(lobby);
-                } else {
-                    handleCell(lobby);
                 }
 
                 updateStatistics(lobby);
@@ -224,151 +205,6 @@ public class OverlayFragment extends Fragment {
     }
 
 
-    private void handleCell(LobbyDTO lobbyDTO){
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
-        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
-        int currentCellPosition = currentPlayer.getCurrentCellPosition();
-        Log.d(TAG, "Current cell position: " + currentCellPosition);
-        String cellType;
-
-        try{
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
-        } catch(NullPointerException e){
-            Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
-            return;
-        }
-
-        Log.d(TAG, cellType);
-        switch(cellType) {
-            case "CASH":
-                Toast.makeText(requireContext(), "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
-                break;
-            case "ACTION":
-                Toast.makeText(requireContext(), "Action cell", Toast.LENGTH_LONG).show();
-                break;
-            case "FAMILY":
-                Toast.makeText(requireContext(), "You got an additional peg!", Toast.LENGTH_LONG).show();
-                break;
-            case "MID_LIFE":
-                Toast.makeText(requireContext(), "Life is not that easy...", Toast.LENGTH_LONG).show();
-                break;
-            case "RETIREMENT":
-                Toast.makeText(requireContext(), "Welcome to retirement!", Toast.LENGTH_LONG).show();
-                retire();
-                break;
-            case "GRADUATE":
-                Toast.makeText(requireContext(), "Time for your exams...", Toast.LENGTH_LONG).show();
-                if(currentPlayer.isCollegeDegree()){
-                    Toast.makeText(requireContext(), "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else{
-                    Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case "NOTHING":
-                handleCellNOTHING(currentCellPosition,currentPlayer);
-                break;
-            case "HOUSE":
-                Log.d(TAG, ""+ lobbyDTO.getHouseCardDTOS().size());
-                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
-                Log.d(TAG, "House Case");
-                break;
-            case "CAREER":
-                Log.d(TAG, ""+ lobbyDTO.getCareerCardDTOS().size());
-                Log.d(TAG, ""+ lobbyDTO.isHasDecision());
-                Log.d(TAG, "Career Case");
-                break;
-            default:
-                Log.d(TAG, "Something went wrong in handleCell");
-        }
-    }
-
-    private void handleCellNOTHING(int currentCellPosition, PlayerDTO player){
-        switch(currentCellPosition){
-            case 1:
-                Toast.makeText(requireContext(), "Welcome to college!", Toast.LENGTH_LONG).show();
-                break;
-            case 13:
-                if(player.isCollegeDegree()){
-                    Toast.makeText(requireContext(), "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else{
-                    Toast.makeText(requireContext(), "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case 14:
-                Toast.makeText(requireContext(), "Welcome to the working life!", Toast.LENGTH_LONG).show();
-                break;
-            case 35:
-                Toast.makeText(requireContext(), "You got married - yey congrats!", Toast.LENGTH_LONG).show();
-                break;
-            case 45:
-                Toast.makeText(requireContext(), "No marriage? Okay.", Toast.LENGTH_LONG).show();
-                break;
-            case 58:
-                Toast.makeText(requireContext(), "Welcome to the family path.", Toast.LENGTH_LONG).show();
-                break;
-            case 74:
-                Toast.makeText(requireContext(), "No family? Okay.", Toast.LENGTH_LONG).show();
-                break;
-            case 92:
-                Toast.makeText(requireContext(), "You have slipped into a mid-life crisis.", Toast.LENGTH_LONG).show();
-                break;
-            case 102:
-                Toast.makeText(requireContext(), "Mid life crisis? Not for you!", Toast.LENGTH_LONG).show();
-                break;
-            case 113:
-                Toast.makeText(requireContext(), "You are on the fastest path to retirement.", Toast.LENGTH_LONG).show();
-                break;
-            case 116:
-                Toast.makeText(requireContext(), "You are not on the fastest path to retirement...", Toast.LENGTH_LONG).show();
-                break;
-        }
-    }
-
-    private void makeDecision(LobbyDTO lobbyDTO) {
-        List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
-        List<HouseCardDTO> houseCardDTOS = lobbyDTO.getHouseCardDTOS();
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
-        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
-        int currentCellPosition = currentPlayer.getCurrentCellPosition();
-        Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
-        String cellType;
-
-        try {
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
-        } catch (NullPointerException e) {
-            Log.e(TAG, "CellDTO error in makeDecision: " + e.getMessage());
-            return;
-        }
-
-
-        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-
-        if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
-            StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
-            transactionOverLay.replace(R.id.fragmentContainerView2, stopCellFragment);
-        } else {
-            if (!careerCardDTOS.isEmpty()) {
-                Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
-                if (careerCardDTOS.size() != 2) {
-                    Log.e(TAG, "Not 2 careers provided...");
-                } else {
-                    CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                    transactionOverLay.replace(R.id.fragmentContainerView2, careerChoiceFragment);
-                }
-            }
-            if (!houseCardDTOS.isEmpty()) {
-                Log.d(TAG, "HouseCardList is not empty in LobbyDTO");
-                if (houseCardDTOS.size() != 2) {
-                    Toast.makeText(requireContext(), "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Not 2 houses provided...");
-                } else {
-                    HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
-                    transactionOverLay.replace(R.id.fragmentContainerView2, houseChoiceFragment);
-                }
-            }
-        }
-        transactionOverLay.commit();
-    }
 
     private void report(int player){
         LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
@@ -386,15 +222,6 @@ public class OverlayFragment extends Fragment {
 
     }
 
-    private void retire(){
-        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
 
-        if (lobbyDTO != null && !lobbyDTO.isHasStarted()){
-            FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-            WinScreenFragment winScreenFragment = new WinScreenFragment();
-            transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
-            transactionOverLay.commit();
-        }
-    }
 
 }
