@@ -141,6 +141,7 @@ public class GameActivity extends AppCompatActivity {
                     } else{
                         if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
                             handleCell(lobby);
+                            showToastsForOtherPlayers(lobby);
                         } else{
                             showToastsForOtherPlayers(lobby);
                         }
@@ -203,31 +204,31 @@ public class GameActivity extends AppCompatActivity {
         Log.d(TAG, cellType);
         switch (cellType) {
             case "CASH":
-                Toast.makeText(this, "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
-                Toast.makeText(this, "Action cell", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Action cell", Toast.LENGTH_LONG).show();
                 break;
             case "FAMILY":
-                Toast.makeText(this, "You got an additional peg!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "You got an additional peg!", Toast.LENGTH_LONG).show();
                 break;
             case "MID_LIFE":
                 Toast.makeText(this, "Life is not that easy...", Toast.LENGTH_LONG).show();
                 break;
             case "RETIREMENT":
-                Toast.makeText(this, "Welcome to retirement!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Welcome to retirement!", Toast.LENGTH_LONG).show();
                 retire();
                 break;
             case "GRADUATE":
-                Toast.makeText(this, "Time for your exams...", Toast.LENGTH_LONG).show();
-                if (currentPlayer.isCollegeDegree()) {
-                    Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-                }
+//                Toast.makeText(this, "Time for your exams...", Toast.LENGTH_LONG).show();
+//                if (currentPlayer.isCollegeDegree()) {
+//                    Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+//                }
                 break;
             case "NOTHING":
-                handleCellNOTHING(currentCellPosition, currentPlayer);
+                //handleCellNOTHING(currentCellPosition, currentPlayer);
                 break;
             case "HOUSE":
                 Log.d(TAG, "" + lobbyDTO.getHouseCardDTOS().size());
@@ -348,8 +349,8 @@ public class GameActivity extends AppCompatActivity {
 
     private void showToastsForOtherPlayers(LobbyDTO lobbyDTO){
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
-        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
-        int currentCellPosition = currentPlayer.getCurrentCellPosition();
+        PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
+        int currentCellPosition = previousPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
@@ -359,7 +360,7 @@ public class GameActivity extends AppCompatActivity {
             Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
             return;
         }
-        String playerName = lobbyDTO.getCurrentPlayer().getPlayerName();
+        String playerName = previousPlayer.getPlayerName();
 
         Log.d(TAG, cellType);
         switch (cellType) {
@@ -381,14 +382,14 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case "GRADUATE":
                 Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
-                if (currentPlayer.isCollegeDegree()) {
+                if (previousPlayer.isCollegeDegree()) {
                     Toast.makeText(this, playerName + " aced the exams!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, playerName + " messed up the exams and did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
                 break;
             case "NOTHING":
-                handleToastsNOTHING(currentCellPosition, currentPlayer);
+                handleToastsNOTHING(currentCellPosition, previousPlayer);
                 break;
             case "HOUSE":
                 Log.d(TAG, "" + lobbyDTO.getHouseCardDTOS().size());
@@ -455,7 +456,7 @@ public class GameActivity extends AppCompatActivity {
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
-        String playerName = lobbyDTO.getCurrentPlayer().getPlayerName();
+        String playerName = currentPlayer.getPlayerName();
 
 
         if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
@@ -468,6 +469,29 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(this, playerName + " buys a house...", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private PlayerDTO findPreviousPlayer(LobbyDTO lobbyDTO){
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
+        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
+
+        int index = 0;
+        for(int i = 0; i < players.size(); i++){
+            if(currentPlayer.getPlayerUUID().equals(players.get(i).getPlayerUUID())){
+                index = i;
+            }
+        }
+
+        Log.d(TAG, "Current index: "+index);
+        int previousIndex = 0;
+        if (index >= 1){
+            previousIndex = index-1;
+        } else{
+            previousIndex = players.size()-1;
+        }
+
+        Log.d(TAG, "previous index: " + previousIndex);
+        return players.get(previousIndex);
     }
 
 }
