@@ -25,6 +25,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -45,8 +46,7 @@ public class OverlayFragment extends Fragment {
     ConnectionService connectionService;
     CompositeDisposable compositeDisposable;
 
-    public OverlayFragment() {
-    }
+    public OverlayFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,65 +54,66 @@ public class OverlayFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
-
-        connectionService = requireActivity().getSystemService(ConnectionService.class);
         compositeDisposable  = new CompositeDisposable();
 
-
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-        Long lobbyID = lobbyDTO.getLobbyID();
-
-        try{
-            connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
-        } catch(NullPointerException e){
-            Log.e(TAG, "Error subscribing: "+ e.getMessage());
-        }
-
-        String uuid = connectionService.getUuidLiveData().getValue();
-        if(uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())){
-            rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
-        }
-
-        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyDTO1 -> {
-            if (lobbyDTO1.isHasDecision()) {
-                makeDecision(lobbyDTO1);
-            } else {
-                handleCell(lobbyDTO1);
-            }
-            updateStatistics();
-        });
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
 
-        cheatButton.setOnClickListener(view -> {
-            compositeDisposable.add(connectionService.send("/app/cheat", "")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                    }, error -> Log.e(TAG, "Error cheating: " + error)));
-        });
-        spinButton.setOnClickListener(view -> {
-            compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                    }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
+        GameActivity activity = (GameActivity) getActivity();
+        assert activity != null;
+        activity.getConnectionService(cs -> {
+            connectionService = cs;
+            assert connectionService != null;
+
+            connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
+                String uuid = connectionService.getUuidLiveData().getValue();
+                if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
+                    rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
+                }
+
+                //todo: move this into game activity
+                if (lobby.isHasDecision()) {
+                    makeDecision(lobby);
+                } else {
+                    handleCell(lobby);
+                }
+
+                updateStatistics(lobby);
+            });
+
+            cheatButton.setOnClickListener(view -> {
+                compositeDisposable.add(connectionService.send("/app/cheat", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error cheating: " + error)));
+            });
+
+            spinButton.setOnClickListener(view -> {
+                compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
+            });
         });
 
         return rootView;
     }
 
-    private void updateStatistics() {
+    private void updateStatistics(LobbyDTO lobby) {
         try {
-            LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-            List<PlayerDTO> players = lobbyDTO.getPlayers();
+            List<PlayerDTO> players = lobby.getPlayers();
 
             if (players == null || players.isEmpty()) {
                 Log.e(TAG, "Player list is null or empty");
