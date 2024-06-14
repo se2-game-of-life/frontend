@@ -54,13 +54,13 @@ public class ChoosePathFragment extends Fragment {
                 collegeBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
+                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending College/Career Choice (true): " + error))));
 
 
                 careerBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
+                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending College/Career Choice (false): " + error))));
 
             }
         });
