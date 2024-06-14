@@ -83,10 +83,19 @@ public class CareerChoiceFragment extends Fragment {
                     CareerCardDTO careerCard1 = cardDTOList.get(0);
                     CareerCardDTO careerCard2 = cardDTOList.get(1);
 
-                    updateUI(careerCard1, careerCard2);
-
                     Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
                     Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
+
+                    String uuid = connectionService.getUuidLiveData().getValue();
+                    if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
+                        career1BTN.setVisibility(View.VISIBLE);
+                        career2BTN.setVisibility(View.VISIBLE);
+                    } else {
+                        career1BTN.setVisibility(View.GONE);
+                        career2BTN.setVisibility(View.GONE);
+                    }
+
+                    updateUI(careerCard1, careerCard2);
 
                     career1BTN.setOnClickListener(v -> {
                         compositeDisposable.add(connectionService.send("/app/lobby/choice", true)

@@ -57,7 +57,9 @@ public class OverlayFragment extends Fragment {
                 connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
                     String uuid = connectionService.getUuidLiveData().getValue();
                     if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                        rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
+                        spinButton.setVisibility(View.VISIBLE);
+                    } else {
+                        spinButton.setVisibility(View.GONE);
                     }
 
                     updateStatistics(lobby);

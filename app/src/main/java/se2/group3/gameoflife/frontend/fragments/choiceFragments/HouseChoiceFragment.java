@@ -85,6 +85,15 @@ public class HouseChoiceFragment extends Fragment {
                     Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
                     Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
 
+                    String uuid = connectionService.getUuidLiveData().getValue();
+                    if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
+                        house1BTN.setVisibility(View.VISIBLE);
+                        house2BTN.setVisibility(View.VISIBLE);
+                    } else {
+                        house1BTN.setVisibility(View.GONE);
+                        house2BTN.setVisibility(View.GONE);
+                    }
+
                     house1BTN.setOnClickListener(v -> {
                         compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
                                 .subscribeOn(Schedulers.io())

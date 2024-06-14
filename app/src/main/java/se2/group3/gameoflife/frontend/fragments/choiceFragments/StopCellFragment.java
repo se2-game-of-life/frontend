@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
@@ -98,6 +99,17 @@ public class StopCellFragment extends Fragment {
                     if (connectionService != null) {
                         Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
                         Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
+                        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
+                            String uuid = connectionService.getUuidLiveData().getValue();
+                            if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
+                                yesBTN.setVisibility(View.VISIBLE);
+                                noBTN.setVisibility(View.VISIBLE);
+                            } else {
+                                yesBTN.setVisibility(View.GONE);
+                                noBTN.setVisibility(View.GONE);
+                            }
+                        });
+
 
                         yesBTN.setOnClickListener(v -> {
                             compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
