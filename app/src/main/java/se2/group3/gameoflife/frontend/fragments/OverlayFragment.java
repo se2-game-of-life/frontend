@@ -113,6 +113,7 @@ public class OverlayFragment extends Fragment {
 
     private void updateStatistics(LobbyDTO lobby) {
         try {
+
             List<PlayerDTO> players = lobby.getPlayers();
 
             if (players == null || players.isEmpty()) {
@@ -136,60 +137,57 @@ public class OverlayFragment extends Fragment {
                 playerButton.setText(player.getPlayerName());
             }
 
-            gameViewModel.getLobby().observe(getViewLifecycleOwner(), lobbyDTO1 -> {
-                List<PlayerDTO> playersChanged = lobbyDTO1.getPlayers();
 
-                playerButtons[0].setOnClickListener(v -> {
-                    if(playerName){
-                        updateButton(playerButtons, playersChanged, playersChanged.get(0));
-                    } else{
-                        setPlayerNamesButton(players, playerButtons);
-                    }
+            playerButtons[0].setOnClickListener(v -> {
+                if(playerName){
+                    updateButton(playerButtons, players, players.get(0));
+                } else{
+                    setPlayerNamesButton(players, playerButtons);
+                }
+            });
+
+            playerButtons[0].setOnLongClickListener(v -> {
+                report(0);
+                return true;
+            });
+
+            playerButtons[1].setOnClickListener(v -> {
+                if(playerName){
+                    updateButton(playerButtons, players, players.get(1));
+                } else{
+                    setPlayerNamesButton(players, playerButtons);
+                }
+            });
+
+            playerButtons[1].setOnLongClickListener(v -> {
+                report(1);
+                return true;
+            });
+
+            playerButtons[2].setOnClickListener(v -> {
+                if(playerName){
+                    updateButton(playerButtons, players, players.get(2));
+                } else{
+                    setPlayerNamesButton(players, playerButtons);
+                }
+            });
+
+            playerButtons[2].setOnLongClickListener(v -> {
+                report(2);
+                return true;
+            });
+
+            playerButtons[3].setOnClickListener(v -> {
+                if(playerName){
+                    updateButton(playerButtons, players, players.get(3));
+                } else{
+                    setPlayerNamesButton(players, playerButtons);
+                }
                 });
 
-                playerButtons[0].setOnLongClickListener(v -> {
-                    report(0);
-                    return true;
-                });
-
-                playerButtons[1].setOnClickListener(v -> {
-                    if(playerName){
-                        updateButton(playerButtons, playersChanged, playersChanged.get(1));
-                    } else{
-                        setPlayerNamesButton(players, playerButtons);
-                    }
-                });
-
-                playerButtons[1].setOnLongClickListener(v -> {
-                    report(1);
-                    return true;
-                });
-
-                playerButtons[2].setOnClickListener(v -> {
-                    if(playerName){
-                        updateButton(playerButtons, playersChanged, playersChanged.get(2));
-                    } else{
-                        setPlayerNamesButton(players, playerButtons);
-                    }
-                });
-
-                playerButtons[2].setOnLongClickListener(v -> {
-                    report(2);
-                    return true;
-                });
-
-                playerButtons[3].setOnClickListener(v -> {
-                    if(playerName){
-                        updateButton(playerButtons, playersChanged, playersChanged.get(3));
-                    } else{
-                        setPlayerNamesButton(players, playerButtons);
-                    }
-                });
-
-                playerButtons[3].setOnLongClickListener(v -> {
-                    report(3);
-                    return true;
-                });
+            playerButtons[3].setOnLongClickListener(v -> {
+                report(3);
+                return true;
             });
 
         } catch (Exception e) {
