@@ -10,82 +10,69 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-
 
 import java.util.Objects;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import se2.group3.gameoflife.frontend.activities.GameActivity;
-import se2.group3.gameoflife.frontend.networking.WebsocketClient;
-
-
+import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
 
 
 public class GameBoardFragment extends Fragment {
 
     private static final String TAG = "Networking";
-
-    private GameViewModel viewModel;
-    private final WebsocketClient websocketClient = WebsocketClient.getInstance();
-    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-
-    private final CompositeDisposable disposables = new CompositeDisposable();
-
-    private View rootView;
+    private CompositeDisposable compositeDisposable;
+    private ConnectionService connectionService;
+    private GameViewModel gameViewModel;
 
     public GameBoardFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
 
-        rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
+        compositeDisposable = new CompositeDisposable();
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         makeOverlayVisible();
 
-        // Initialize viewModel
-        viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-
-
-        fetchBoardData();
+        GameActivity activity = (GameActivity) getActivity();
+        assert activity != null;
+        activity.getConnectionService(cs -> {
+            connectionService = cs;
+            assert connectionService != null;
+            fetchBoardData();
+        });
 
         return rootView;
     }
 
     private void fetchBoardData() {
-        Log.d(TAG, "fetchBoardData started");
-
-        disposables.add(websocketClient.subscribe("/topic/board/" + viewModel.getLobbyDTO().getCurrentPlayer().getPlayerUUID(), BoardDTO.class) //todo: needs uuid from player
+        LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
+        assert lobby != null;
+        compositeDisposable.add(connectionService.subscribe("/topic/board/" + lobby.getLobbyID(), BoardDTO.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::updateBoardUI,
-                        error -> Log.e(TAG, "Error fetching board data!", error)
-                )
-        );
+                .subscribe(() -> connectionService.getLiveData(BoardDTO.class).observe(getViewLifecycleOwner(), this::updateBoardUI)));
 
-        try {
-            String temp = "I am a fetch request!";
-            disposables.add(websocketClient.send("/app/fetch", temp)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {}, error -> errorMessage.setValue(error.getMessage()))
-            );
-            Log.d(TAG, "Fetch board request sent!");
-        } catch (Exception e) {
-            Log.e(TAG, "Error sending fetch board request!", e);
-        }
+        compositeDisposable.add(connectionService.send("/app/fetch", "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
     }
 
     private void updateBoardUI(BoardDTO boardDTO) {
@@ -102,7 +89,7 @@ public class GameBoardFragment extends Fragment {
         // Check if BoardDTO is not null
         if (boardDTO != null && boardDTO.getCells() != null) {
             Log.d(TAG, "Populate GridLayout with cells from BoardDTO");
-            viewModel.setCellDTOHashMap(boardDTO);
+            gameViewModel.setCellDTOHashMap(boardDTO);
 
             // Populate GridLayout with cells from BoardDTO
             for (int row = 0; row < boardDTO.getCells().size(); row++) {
@@ -113,7 +100,6 @@ public class GameBoardFragment extends Fragment {
                     // Create a new TextView for each cell
                     TextView cell1 = new TextView(getContext());
                     PlayerCellView cell2 = new PlayerCellView(getContext());
-
 
 
                     GridLayout.LayoutParams params = new GridLayout.LayoutParams(
@@ -131,40 +117,29 @@ public class GameBoardFragment extends Fragment {
 
                     // Set text and appearance of cells based on cellDTO presence
                     if (cellDTO != null) {
-                        if(Objects.equals(cellDTO.getType(), "ACTION")) {
+                        if (Objects.equals(cellDTO.getType(), "ACTION")) {
                             cell1.setBackgroundResource(R.drawable.cell_action_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "FAMILY")) {
+                        } else if (Objects.equals(cellDTO.getType(), "FAMILY")) {
                             cell1.setBackgroundResource(R.drawable.cell_addpeg_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "HOUSE")) {
+                        } else if (Objects.equals(cellDTO.getType(), "HOUSE")) {
                             cell1.setBackgroundResource(R.drawable.cell_house_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "CASH")) {
+                        } else if (Objects.equals(cellDTO.getType(), "CASH")) {
                             cell1.setBackgroundResource(R.drawable.cell_payday_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "CAREER")) {
+                        } else if (Objects.equals(cellDTO.getType(), "CAREER")) {
                             cell1.setBackgroundResource(R.drawable.cell_career_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
+                        } else if (Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "GRADUATE")) {
+                        } else if (Objects.equals(cellDTO.getType(), "GRADUATE")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "MARRY")) {
+                        } else if (Objects.equals(cellDTO.getType(), "MARRY")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "MID_LIFE")) {
+                        } else if (Objects.equals(cellDTO.getType(), "MID_LIFE")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "RETIRE_EARLY")) {
+                        } else if (Objects.equals(cellDTO.getType(), "RETIRE_EARLY")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "RETIREMENT")) {
+                        } else if (Objects.equals(cellDTO.getType(), "RETIREMENT")) {
                             cell1.setBackgroundResource(R.drawable.retirement_background);
-                        }
-                        else if(Objects.equals(cellDTO.getType(), "NOTHING")) {
+                        } else if (Objects.equals(cellDTO.getType(), "NOTHING")) {
                             cell1.setBackgroundResource(R.drawable.cell_nothing_background);
                         }
                     }
@@ -190,10 +165,9 @@ public class GameBoardFragment extends Fragment {
 
     }
 
-
-    private void makeOverlayVisible(){
+    private void makeOverlayVisible() {
         GameActivity gameActivity = (GameActivity) getActivity();
-        if(gameActivity != null){
+        if (gameActivity != null) {
             gameActivity.setFragmentVisibility();
         }
     }
@@ -268,8 +242,6 @@ public class GameBoardFragment extends Fragment {
 
         }
     }
-
-
 
 
 }
