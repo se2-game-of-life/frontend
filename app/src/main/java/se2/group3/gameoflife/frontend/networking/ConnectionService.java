@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
@@ -29,10 +30,12 @@ public class ConnectionService extends Service {
     private HashMap<String, Disposable> subscriptionHashMap;
     private HashMap<Class<?>, MutableLiveData<?>> liveDataHashMap;
     private MutableLiveData<String> uuidLiveData;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        compositeDisposable = new CompositeDisposable();
 
         this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://10.0.2.2:8080/gameoflife");
         stompClient.connect();
@@ -45,19 +48,17 @@ public class ConnectionService extends Service {
         this.uuidLiveData.setValue(UUID.randomUUID().toString()); //create new uuid for identification
 
         //send uuid for client mapping in the backend
-        Disposable identifierDisposable = send("/app/setIdentifier", uuidLiveData.getValue())
+        compositeDisposable.add(send("/app/setIdentifier", uuidLiveData.getValue())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> Log.d(TAG, "Exchanged Player UUID with Backend: " + uuidLiveData.getValue())
-                );
-//        identifierDisposable.dispose();
+                .subscribe(() -> Log.d(TAG, "Exchanged Player UUID with Backend: " + uuidLiveData.getValue())));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         stompClient.disconnect();
+        compositeDisposable.dispose();
         Log.d(TAG, "STOMP client disconnected!");
     }
 
@@ -76,10 +77,20 @@ public class ConnectionService extends Service {
      */
     @SuppressWarnings("unchecked") //this is safe because type is known @ runtime (credit: ChatGPT)
     public <T> MutableLiveData<T> getLiveData(Class<T> dtoClass) {
+        if (liveDataHashMap == null) {
+            Log.e(TAG, "liveDataHashMap is null");
+            return null;
+        }
+
+        if (!liveDataHashMap.containsKey(dtoClass)) {
+            Log.e(TAG, "No entry found in liveDataHashMap for class: " + dtoClass.getName());
+            return null;
+        }
+
         try {
             return (MutableLiveData<T>) liveDataHashMap.get(dtoClass);
         } catch (ClassCastException e) {
-            Log.e(TAG, "Class cast exception, whilst trying to get Live Data: " + e);
+            Log.e(TAG, "Class cast exception while trying to get Live Data: " + e);
             return null;
         }
     }

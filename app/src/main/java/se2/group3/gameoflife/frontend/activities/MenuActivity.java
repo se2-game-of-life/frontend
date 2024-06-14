@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,9 +27,10 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 public class MenuActivity extends AppCompatActivity {
 
     private final String TAG = "Networking";
-    ConnectionService connectionService;
-    CompositeDisposable compositeDisposable;
-    boolean isBound = false;
+    private ConnectionService connectionService;
+    private CompositeDisposable compositeDisposable;
+    private boolean isBound = false;
+    private final MutableLiveData<Boolean> serviceBound = new MutableLiveData<>();
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -36,11 +38,13 @@ public class MenuActivity extends AppCompatActivity {
             ConnectionService.ConnectionServiceBinder binder = (ConnectionService.ConnectionServiceBinder) service;
             connectionService = binder.getService();
             isBound = true;
+            serviceBound.setValue(true);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             isBound = false;
+            serviceBound.setValue(false);
         }
     };
 
@@ -54,11 +58,16 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        compositeDisposable.dispose();
-        if(isBound) {
+        if (isBound) {
             unbindService(serviceConnection);
             isBound = false;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 
     @Override
@@ -106,7 +115,7 @@ public class MenuActivity extends AppCompatActivity {
                 EditText lobbyIDText = findViewById(R.id.lobbyCodeEntry);
                 String lobbyIDString = lobbyIDText.getText().toString();
 
-                if (!lobbyIDString.isEmpty()){
+                if (!lobbyIDString.isEmpty()) {
                     long lobbyID = Long.parseLong(lobbyIDString);
                     connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class);
 
