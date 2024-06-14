@@ -42,8 +42,8 @@ public class OverlayFragment extends Fragment {
     private View rootView;
     public final String TAG = "Networking";
     private boolean playerName;
-    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    ConnectionService connectionService;
+    CompositeDisposable compositeDisposable;
 
     public OverlayFragment() {
     }
@@ -56,6 +56,11 @@ public class OverlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
+
+        connectionService = requireActivity().getSystemService(ConnectionService.class);
+        compositeDisposable  = new CompositeDisposable();
+
+
         gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
         Long lobbyID = lobbyDTO.getLobbyID();
@@ -73,8 +78,6 @@ public class OverlayFragment extends Fragment {
         if(uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())){
             rootView.findViewById(R.id.spinButton).setVisibility(View.VISIBLE);
         }
-
-
 
         connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyDTO1 -> {
             if (lobbyDTO1.isHasDecision()) {

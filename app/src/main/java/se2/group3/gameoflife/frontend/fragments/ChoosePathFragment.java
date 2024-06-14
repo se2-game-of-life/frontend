@@ -16,43 +16,47 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
+import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 
 
 public class ChoosePathFragment extends Fragment {
+
     private final String TAG = "Networking";
+    private ConnectionService connectionService;
+    private CompositeDisposable compositeDisposable;
 
-    ConnectionService connectionService = requireActivity().getSystemService(ConnectionService.class);
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_choose_path, container, false);
-        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-        long lobbyID = lobbyDTO.getLobbyID();
-        try{
-            connectionService.subscribe("/topic/lobbies/" + lobbyID, LobbyDTO.class)
+
+        GameActivity activity = (GameActivity) getActivity();
+        assert activity != null;
+        activity.getConnectionService(cs -> {
+            connectionService = cs;
+            assert connectionService != null;
+            compositeDisposable = new CompositeDisposable();
+
+            Button btnCareer = rootView.findViewById(R.id.btnCareer);
+            btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
-        } catch(NullPointerException e){
-            Log.e(TAG, "Error subscribing: "+ e.getMessage());
-        }
+                    .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
 
-        Button btnCareer = rootView.findViewById(R.id.btnCareer);
-        btnCareer.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error))));
-
-        Button btnCollege = rootView.findViewById(R.id.btnCollege);
-        btnCollege.setOnClickListener(v -> {
-            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
+            Button btnCollege = rootView.findViewById(R.id.btnCollege);
+            btnCollege.setOnClickListener(v -> {
+                compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::navigateToGameBoardFragment, error -> Log.e(TAG, "Error Sending Create Lobby: " + error)));
+            });
         });
 
         return rootView;

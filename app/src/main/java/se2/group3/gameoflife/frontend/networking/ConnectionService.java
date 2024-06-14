@@ -149,6 +149,15 @@ public class ConnectionService extends Service {
         });
     }
 
+    public Disposable subscribeEvent(String topic, VibrationCallback callback) {
+        return stompClient.topic(topic)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(stompMessage -> {
+                        callback.onCallback();
+                    }, errorMessage -> Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString()));
+    }
+
     public Completable send(String destination, Object payload) {
         return Completable.create(emitter -> {
             try {
