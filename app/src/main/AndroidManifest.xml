@@ -19,6 +19,8 @@
         android:theme="@style/Theme.Frontend"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <service android:name=".networking.ConnectionService" />
         <activity
             android:name=".activities.GameActivity"
             android:exported="false"

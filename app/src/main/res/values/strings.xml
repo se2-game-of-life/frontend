@@ -41,4 +41,10 @@
     <string name="cheat">Cheat</string>
     <string name="spin">Spin</string>
     <string name="and_the_winner_is">And the winner is...</string>
+    <string name="choose_a_career">Choose a career</string>
+    <string name="choose">Choose</string>
+    <string name="choose_a_house">Choose a house</string>
+    <string name="stop_cell">STOP CELL</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 </resources>

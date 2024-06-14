@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ public class GameBoardFragment extends Fragment {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
+    private View rootView;
+
     public GameBoardFragment() {
         // Required empty public constructor
     }
@@ -47,13 +50,12 @@ public class GameBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
+        rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         makeOverlayVisible();
 
         // Initialize viewModel
         viewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-
 
 
         fetchBoardData();
@@ -100,6 +102,7 @@ public class GameBoardFragment extends Fragment {
         // Check if BoardDTO is not null
         if (boardDTO != null && boardDTO.getCells() != null) {
             Log.d(TAG, "Populate GridLayout with cells from BoardDTO");
+            viewModel.setCellDTOHashMap(boardDTO);
 
             // Populate GridLayout with cells from BoardDTO
             for (int row = 0; row < boardDTO.getCells().size(); row++) {
@@ -143,7 +146,6 @@ public class GameBoardFragment extends Fragment {
                         else if(Objects.equals(cellDTO.getType(), "CAREER")) {
                             cell1.setBackgroundResource(R.drawable.cell_career_background);
                         }
-
                         else if(Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
@@ -160,7 +162,10 @@ public class GameBoardFragment extends Fragment {
                             cell1.setBackgroundResource(R.drawable.cell_stop_background);
                         }
                         else if(Objects.equals(cellDTO.getType(), "RETIREMENT")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
+                            cell1.setBackgroundResource(R.drawable.retirement_background);
+                        }
+                        else if(Objects.equals(cellDTO.getType(), "NOTHING")) {
+                            cell1.setBackgroundResource(R.drawable.cell_nothing_background);
                         }
                     }
 
@@ -263,6 +268,7 @@ public class GameBoardFragment extends Fragment {
 
         }
     }
+
 
 
 
