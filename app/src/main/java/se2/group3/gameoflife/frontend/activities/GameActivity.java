@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,7 +28,6 @@ import java.util.Random;
 
 import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
-import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
@@ -140,10 +138,10 @@ public class GameActivity extends AppCompatActivity {
                         }
                     } else{
                         if(uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())){
+                            handleNextCell(lobby);
                             handleCell(lobby);
-                            showToastsForOtherPlayers(lobby);
                         } else{
-                            showToastsForOtherPlayers(lobby);
+                            handleCell(lobby);
                         }
                     }
 
@@ -187,7 +185,7 @@ public class GameActivity extends AppCompatActivity {
         return this.serviceBound;
     }
 
-    private void handleCell(LobbyDTO lobbyDTO) {
+    private void handleNextCell(LobbyDTO lobbyDTO) {
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
@@ -204,31 +202,25 @@ public class GameActivity extends AppCompatActivity {
         Log.d(TAG, cellType);
         switch (cellType) {
             case "CASH":
-                //Toast.makeText(this, "You got your bonus salary, yey!", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "CASH Case");
                 break;
             case "ACTION":
-                //Toast.makeText(this, "Action cell", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "ACTION Case");
                 break;
             case "FAMILY":
-                //Toast.makeText(this, "You got an additional peg!", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "FAMILY Case");
                 break;
             case "MID_LIFE":
                 Toast.makeText(this, "Life is not that easy...", Toast.LENGTH_LONG).show();
                 break;
             case "RETIREMENT":
-                //Toast.makeText(this, "Welcome to retirement!", Toast.LENGTH_LONG).show();
-                retire();
+                Log.d(TAG, "Retirement Case");
                 break;
             case "GRADUATE":
-//                Toast.makeText(this, "Time for your exams...", Toast.LENGTH_LONG).show();
-//                if (currentPlayer.isCollegeDegree()) {
-//                    Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-//                }
+                Log.d(TAG, "Graduate Case");
                 break;
             case "NOTHING":
-                //handleCellNOTHING(currentCellPosition, currentPlayer);
+                Log.d(TAG, "NOTHING Case");
                 break;
             case "HOUSE":
                 Log.d(TAG, "" + lobbyDTO.getHouseCardDTOS().size());
@@ -245,47 +237,6 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void handleCellNOTHING(int currentCellPosition, PlayerDTO player) {
-        switch (currentCellPosition) {
-            case 1:
-                Toast.makeText(this, "Welcome to college!", Toast.LENGTH_LONG).show();
-                break;
-            case 13:
-                if (player.isCollegeDegree()) {
-                    Toast.makeText(this, "You aced your exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "You messed up your exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case 14:
-                Toast.makeText(this, "Welcome to the working life!", Toast.LENGTH_LONG).show();
-                break;
-            case 35:
-                Toast.makeText(this, "You got married - yey congrats!", Toast.LENGTH_LONG).show();
-                break;
-            case 45:
-                Toast.makeText(this, "No marriage? Okay.", Toast.LENGTH_LONG).show();
-                break;
-            case 58:
-                Toast.makeText(this, "Welcome to the family path.", Toast.LENGTH_LONG).show();
-                break;
-            case 74:
-                Toast.makeText(this, "No family? Okay.", Toast.LENGTH_LONG).show();
-                break;
-            case 92:
-                Toast.makeText(this, "You have slipped into a mid-life crisis.", Toast.LENGTH_LONG).show();
-                break;
-            case 102:
-                Toast.makeText(this, "Mid life crisis? Not for you!", Toast.LENGTH_LONG).show();
-                break;
-            case 113:
-                Toast.makeText(this, "You are on the fastest path to retirement.", Toast.LENGTH_LONG).show();
-                break;
-            case 116:
-                Toast.makeText(this, "You are not on the fastest path to retirement...", Toast.LENGTH_LONG).show();
-                break;
-        }
-    }
 
     private void makeDecision(LobbyDTO lobbyDTO) {
         List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
@@ -347,7 +298,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void showToastsForOtherPlayers(LobbyDTO lobbyDTO){
+    private void handleCell(LobbyDTO lobbyDTO){
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
         int currentCellPosition = previousPlayer.getCurrentCellPosition();
@@ -378,7 +329,9 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case "RETIREMENT":
                 Toast.makeText(this, playerName + " retired!", Toast.LENGTH_LONG).show();
-                retire();
+                if(!lobbyDTO.isHasStarted()){
+                    retire();
+                }
                 break;
             case "GRADUATE":
                 Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
@@ -417,7 +370,7 @@ public class GameActivity extends AppCompatActivity {
                 if (currentPlayer.isCollegeDegree()) {
                     Toast.makeText(this, playerName + " aced his exams. Congrats to your degree!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, playerName + " messed up his exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, playerName + " messed up the exams... You did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
                 }
                 break;
             case 14:
@@ -457,7 +410,6 @@ public class GameActivity extends AppCompatActivity {
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
         String playerName = currentPlayer.getPlayerName();
-
 
         if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
             Toast.makeText(this, playerName + " makes a life-deciding decision...", Toast.LENGTH_LONG).show();
