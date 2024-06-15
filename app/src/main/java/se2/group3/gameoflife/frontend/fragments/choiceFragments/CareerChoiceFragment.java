@@ -133,7 +133,7 @@ public class CareerChoiceFragment extends Fragment {
 
     private void navigateToOverlayFragment() {
         if (isAdded()) {
-            FragmentTransaction transactionOverLay = getParentFragmentManager().beginTransaction();
+            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
             OverlayFragment overlayFragment = new OverlayFragment();
             transactionOverLay.replace(R.id.fragmentContainerView2, overlayFragment);
             transactionOverLay.addToBackStack(null);
