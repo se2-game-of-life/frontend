@@ -63,11 +63,13 @@ public class CareerChoiceFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
-            activity.getConnectionService(cs -> {
-                connectionService = cs;
-                if (connectionService != null) {
+            activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+                if (isBound) {
+                    connectionService = activity.getService();
+                    if (connectionService != null) {
                     LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
                     if (lobbyDTO == null || lobbyDTO.getCareerCardDTOS() == null || lobbyDTO.getCareerCardDTOS().isEmpty()) {
                         Log.e(TAG, "LobbyDTO is null or empty in CareerChoiceFragment.");
@@ -110,6 +112,7 @@ public class CareerChoiceFragment extends Fragment {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
                     });
+                    }
                 }
             });
         }

@@ -68,45 +68,47 @@ public class HouseChoiceFragment extends Fragment {
 
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
-            activity.getConnectionService(cs -> {
-                connectionService = cs;
-                if (connectionService != null) {
-                    LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
-                    if (lobbyDTO == null || lobbyDTO.getHouseCardDTOS() == null) {
-                        Log.e(TAG, "LobbyDTO is null in HouseChoiceFragment.");
-                        return;
+            activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+                if (isBound) {
+                    connectionService = activity.getService();
+                    if (connectionService != null) {
+                        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+                        if (lobbyDTO == null || lobbyDTO.getHouseCardDTOS() == null) {
+                            Log.e(TAG, "LobbyDTO is null in HouseChoiceFragment.");
+                            return;
+                        }
+                        List<HouseCardDTO> cardDTOList = lobbyDTO.getHouseCardDTOS();
+                        HouseCardDTO houseCard1 = cardDTOList.get(0);
+                        HouseCardDTO houseCard2 = cardDTOList.get(1);
+
+                        updateUI(houseCard1, houseCard2);
+
+                        Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
+                        Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
+
+                        String uuid = connectionService.getUuidLiveData().getValue();
+                        if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
+                            house1BTN.setVisibility(View.VISIBLE);
+                            house2BTN.setVisibility(View.VISIBLE);
+                        } else {
+                            house1BTN.setVisibility(View.GONE);
+                            house2BTN.setVisibility(View.GONE);
+                        }
+
+                        house1BTN.setOnClickListener(v -> {
+                            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                        });
+
+                        house2BTN.setOnClickListener(v -> {
+                            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
+                        });
                     }
-                    List<HouseCardDTO> cardDTOList = lobbyDTO.getHouseCardDTOS();
-                    HouseCardDTO houseCard1 = cardDTOList.get(0);
-                    HouseCardDTO houseCard2 = cardDTOList.get(1);
-
-                    updateUI(houseCard1, houseCard2);
-
-                    Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
-                    Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
-
-                    String uuid = connectionService.getUuidLiveData().getValue();
-                    if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
-                        house1BTN.setVisibility(View.VISIBLE);
-                        house2BTN.setVisibility(View.VISIBLE);
-                    } else {
-                        house1BTN.setVisibility(View.GONE);
-                        house2BTN.setVisibility(View.GONE);
-                    }
-
-                    house1BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
-
-                    house2BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
                 }
             });
         }

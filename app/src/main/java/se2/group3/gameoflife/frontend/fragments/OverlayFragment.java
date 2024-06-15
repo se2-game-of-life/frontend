@@ -46,8 +46,7 @@ public class OverlayFragment extends Fragment {
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
 
-        GameActivity activity = (GameActivity) getActivity();
-        assert activity != null;
+        GameActivity activity = (GameActivity) requireActivity();
 
         activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
             if(isBound) {

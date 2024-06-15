@@ -269,7 +269,7 @@ public class GameActivity extends AppCompatActivity {
                     CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragmentContainerView2, careerChoiceFragment);
-                    transaction.commit();
+                    transaction.commitAllowingStateLoss();
                 }
             }
             if (!houseCardDTOS.isEmpty()) {
@@ -281,7 +281,7 @@ public class GameActivity extends AppCompatActivity {
                     HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragmentContainerView2, houseChoiceFragment);
-                    transaction.commit();
+                    transaction.commitAllowingStateLoss();
                 }
             }
         }
