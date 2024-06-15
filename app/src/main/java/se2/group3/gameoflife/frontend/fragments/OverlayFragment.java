@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class OverlayFragment extends Fragment {
 
         Button spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
+        Button legendButton = rootView.findViewById(R.id.legendBTN);
 
         GameActivity activity = (GameActivity) requireActivity();
 
@@ -78,6 +80,19 @@ public class OverlayFragment extends Fragment {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
                             }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
+                });
+
+                legendButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isAdded()) {
+                            FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+                            LegendFragment legendFragment = new LegendFragment();
+                            transactionOverLay.replace(R.id.fragmentContainerView2, legendFragment);
+                            transactionOverLay.addToBackStack(null);
+                            transactionOverLay.commit();
+                        }
+                    }
                 });
             }
         });
