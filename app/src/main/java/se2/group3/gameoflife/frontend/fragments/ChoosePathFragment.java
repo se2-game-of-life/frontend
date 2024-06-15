@@ -70,8 +70,8 @@ public class ChoosePathFragment extends Fragment {
 
     private void navigateToGameBoardFragment() {
         if (getActivity() != null) {
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            FragmentTransaction transactionOverLay = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
             GameBoardFragment gameBoardFragment = new GameBoardFragment();
             OverlayFragment overlayFragment = new OverlayFragment();
 
