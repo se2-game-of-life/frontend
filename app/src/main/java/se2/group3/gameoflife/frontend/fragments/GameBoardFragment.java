@@ -160,7 +160,7 @@ public class GameBoardFragment extends Fragment {
                             cell1.setBackgroundResource(R.drawable.retirement_background);
                         } else if (Objects.equals(cellDTO.getType(), "NOTHING")) {
                             cell1.setBackgroundResource(R.drawable.cell_nothing_background);
-                        }else if (Objects.equals(cellDTO.getType(), "TELEPORT")) {
+                        } else if (Objects.equals(cellDTO.getType(), "TELEPORT")) {
                             cell1.setBackgroundResource(R.drawable.cell_teleport_background);
                         }
                     }
