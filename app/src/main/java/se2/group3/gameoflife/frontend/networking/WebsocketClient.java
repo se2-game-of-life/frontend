@@ -1,8 +1,5 @@
 package se2.group3.gameoflife.frontend.networking;
 
-
-import static se2.group3.gameoflife.frontend.activities.MainActivity.TAG;
-
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,11 +13,13 @@ import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
+@Deprecated
 public class WebsocketClient {
 
     private static volatile WebsocketClient INSTANCE = null;
     private final StompClient stompClient;
     private final ObjectMapper objectMapper;
+    private final String TAG = "Networking";
 
     private WebsocketClient(String url) {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);

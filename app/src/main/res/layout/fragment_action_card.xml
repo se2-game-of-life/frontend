@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background1"
+    android:orientation="vertical"
+    tools:context=".fragments.choiceFragments.ActionCardFragment">
+
+    <TextView
+        android:id="@+id/actionCardTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="15"
+        android:text="TextView" />
+
+
+    <TextView
+        android:id="@+id/actionCardDescription"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="15"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/actionCardMoney"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="15"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/actionCardAffectedPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="15"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:text="@string/i_understand"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+</LinearLayout>
