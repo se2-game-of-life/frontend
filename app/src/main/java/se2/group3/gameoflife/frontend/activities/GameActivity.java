@@ -41,11 +41,12 @@ import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
+
 
 public class GameActivity extends AppCompatActivity {
 
-    private GameViewModel gameViewModel;
+    private GameBoardViewModel gameViewModel;
     private boolean gameHasStarted = false;
     private static final int MIN_INTERVAL = 1000;
     private static final int MAX_INTERVAL = 5000;
@@ -110,7 +111,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(this).get(GameBoardViewModel.class);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);

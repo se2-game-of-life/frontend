@@ -15,12 +15,12 @@ import android.widget.TextView;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
 public class ActionCardFragment extends Fragment {
 
     private View rootView;
-    private GameViewModel gameViewModel;
+    private GameBoardViewModel gameViewModel;
 
 
     public ActionCardFragment() {
@@ -40,7 +40,7 @@ public class ActionCardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_action_card, container, false);
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameBoardViewModel.class);
 
         //todo: lobbyDTO is not available yet, klau den code aus an fragment raus :)
 
