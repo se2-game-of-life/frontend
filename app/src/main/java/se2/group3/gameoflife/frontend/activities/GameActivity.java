@@ -248,7 +248,6 @@ public class GameActivity extends AppCompatActivity {
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
         int currentCellPosition = previousPlayer.getCurrentCellPosition();
-        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
