@@ -190,39 +190,6 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-    private void updatePlayerDots(List<PlayerDTO> playerDTOS){
-        if(playerDTOS != null){
-            for (int i = 0; i < playerDTOS.size(); i++){
-                CellDTO cell = gameViewModel.getCellDTOHashMap().get(playerDTOS.get(i).getCurrentCellPosition());
-                if(cell != null){
-                    updatePlayerDot(cell.getRow(), cell.getCol(), i+1);
-                }
-            }
-        }else{
-            Log.e(TAG, "New player list was null");
-        }
-    }
-
-    private void deletePlayerDots(List<PlayerDTO> oldPlayers){
-        if (oldPlayers != null) {
-            for (int i = 0; i < oldPlayers.size(); i++) {
-                PlayerDTO oldPlayer = oldPlayers.get(i);
-                if (oldPlayer != null) {
-                    CellDTO oldCell = gameViewModel.getCellDTOHashMap().get(oldPlayer.getCurrentCellPosition());
-                    if (oldCell != null) {
-                        clearPlayerDot(oldCell.getRow(), oldCell.getCol(), i + 1);
-                    } else {
-                        Log.e(TAG, "Old cell was null for player: " + oldPlayer.getPlayerName() + " at position: " + oldPlayer.getCurrentCellPosition());
-                    }
-                } else {
-                    Log.e(TAG, "Old player at index " + i + " is null");
-                }
-            }
-        } else {
-            Log.e(TAG, "Old player list was null");
-        }
-    }
-
     private void updatePlayerDot(int row, int col, int playerNumber) {
         Log.d(TAG, "updatePlayerUI started");
 
@@ -291,6 +258,38 @@ public class GameBoardFragment extends Fragment {
                     break;
             }
 
+        }
+    }
+    private void updatePlayerDots(List<PlayerDTO> playerDTOS){
+        if(playerDTOS != null){
+            for (int i = 0; i < playerDTOS.size(); i++){
+                CellDTO cell = gameViewModel.getCellDTOHashMap().get(playerDTOS.get(i).getCurrentCellPosition());
+                if(cell != null){
+                    updatePlayerDot(cell.getRow(), cell.getCol(), i+1);
+                }
+            }
+        }else{
+            Log.e(TAG, "New player list was null");
+        }
+    }
+
+    private void deletePlayerDots(List<PlayerDTO> oldPlayers){
+        if (oldPlayers != null) {
+            for (int i = 0; i < oldPlayers.size(); i++) {
+                PlayerDTO oldPlayer = oldPlayers.get(i);
+                if (oldPlayer != null) {
+                    CellDTO oldCell = gameViewModel.getCellDTOHashMap().get(oldPlayer.getCurrentCellPosition());
+                    if (oldCell != null) {
+                        clearPlayerDot(oldCell.getRow(), oldCell.getCol(), i + 1);
+                    } else {
+                        Log.e(TAG, "Old cell was null for player: " + oldPlayer.getPlayerName() + " at position: " + oldPlayer.getCurrentCellPosition());
+                    }
+                } else {
+                    Log.e(TAG, "Old player at index " + i + " is null");
+                }
+            }
+        } else {
+            Log.e(TAG, "Old player list was null");
         }
     }
 
