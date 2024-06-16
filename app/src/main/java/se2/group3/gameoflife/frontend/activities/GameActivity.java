@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,6 +40,7 @@ import se2.group3.gameoflife.frontend.fragments.choiceFragments.ActionCardFragme
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.TeleportChoiceFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
@@ -201,11 +203,14 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
-        if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty()) {
+        if (careerCardDTOS.isEmpty() && houseCardDTOS.isEmpty() && (!cellType.equals("TELEPORT"))) {
             StopCellFragment stopCellFragment = StopCellFragment.newInstance(cellType);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainerView2, stopCellFragment);
             transaction.commitAllowingStateLoss();
+        } else if(cellType.equals("TELEPORT")){
+            //todo Anastasiia add call to fragment
+
         } else {
             if (!careerCardDTOS.isEmpty()) {
                 Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
