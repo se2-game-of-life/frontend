@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,8 +24,9 @@ import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
+import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
 
 public class GameBoardFragment extends Fragment {
@@ -31,7 +34,7 @@ public class GameBoardFragment extends Fragment {
     private static final String TAG = "Networking";
     private CompositeDisposable compositeDisposable;
     private ConnectionService connectionService;
-    private GameViewModel gameViewModel;
+    private GameBoardViewModel gameViewModel;
 
     public GameBoardFragment() {
         // Required empty public constructor
@@ -47,7 +50,7 @@ public class GameBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_game_board, container, false);
         compositeDisposable = new CompositeDisposable();
-        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameBoardViewModel.class);
         makeOverlayVisible();
 
         GameActivity activity = (GameActivity) getActivity();
@@ -60,6 +63,16 @@ public class GameBoardFragment extends Fragment {
                 LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
                 assert lobby != null;
                 fetchBoardData();
+
+                connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyUpdated -> {
+                    try{
+                        deletePlayerDots(gameViewModel.getOldLobbyDTO().getPlayers());
+                    }catch(Exception e){
+                        Log.e(TAG, "Deleting playerDots was called to early.");
+                    }
+                    updatePlayerDots(lobbyUpdated.getPlayers());
+                    gameViewModel.setOldLobbyDTO(lobbyUpdated);
+                });
             }
         });
 
@@ -90,6 +103,7 @@ public class GameBoardFragment extends Fragment {
         // Clear existing views from GridLayout
         gridLayout1.removeAllViews();
         gridLayout2.removeAllViews();
+
 
         // Check if BoardDTO is not null
         if (boardDTO != null && boardDTO.getCells() != null) {
@@ -158,16 +172,15 @@ public class GameBoardFragment extends Fragment {
             Log.e(TAG, "BoardDTO or cells are null");
         }
 
-        updatePlayerDot(2, 2, 1);
-        updatePlayerDot(2, 2, 2);
-        updatePlayerDot(2, 2, 3);
-        updatePlayerDot(2, 2, 4);
-        /*
-        //To move a player yu need to clear their previous cot and add a new one
-        clearPlayerDot(2, 2, 4);
-        updatePlayerDot(2, 3, 4);
-        */
-
+        LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+        List<PlayerDTO> players = lobbyDTO.getPlayers();
+        if(players == null){
+            Log.e(TAG, "Players are null");
+        } else{
+            updatePlayerDots(players);
+            gameViewModel.setOldLobbyDTO(lobbyDTO);
+            Log.d(TAG, "Old Lobby DTO " + lobbyDTO.getPlayers().size());
+        }
     }
 
     private void makeOverlayVisible() {
@@ -245,6 +258,38 @@ public class GameBoardFragment extends Fragment {
                     break;
             }
 
+        }
+    }
+    private void updatePlayerDots(List<PlayerDTO> playerDTOS){
+        if(playerDTOS != null){
+            for (int i = 0; i < playerDTOS.size(); i++){
+                CellDTO cell = gameViewModel.getCellDTOHashMap().get(playerDTOS.get(i).getCurrentCellPosition());
+                if(cell != null){
+                    updatePlayerDot(cell.getRow(), cell.getCol(), i+1);
+                }
+            }
+        }else{
+            Log.e(TAG, "New player list was null");
+        }
+    }
+
+    private void deletePlayerDots(List<PlayerDTO> oldPlayers){
+        if (oldPlayers != null) {
+            for (int i = 0; i < oldPlayers.size(); i++) {
+                PlayerDTO oldPlayer = oldPlayers.get(i);
+                if (oldPlayer != null) {
+                    CellDTO oldCell = gameViewModel.getCellDTOHashMap().get(oldPlayer.getCurrentCellPosition());
+                    if (oldCell != null) {
+                        clearPlayerDot(oldCell.getRow(), oldCell.getCol(), i + 1);
+                    } else {
+                        Log.e(TAG, "Old cell was null for player: " + oldPlayer.getPlayerName() + " at position: " + oldPlayer.getCurrentCellPosition());
+                    }
+                } else {
+                    Log.e(TAG, "Old player at index " + i + " is null");
+                }
+            }
+        } else {
+            Log.e(TAG, "Old player list was null");
         }
     }
 

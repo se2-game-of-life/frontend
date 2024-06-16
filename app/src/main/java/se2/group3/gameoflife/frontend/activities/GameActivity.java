@@ -35,17 +35,19 @@ import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
 import se2.group3.gameoflife.frontend.fragments.WinScreenFragment;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.ActionCardFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
-import se2.group3.gameoflife.frontend.viewmodels.GameViewModel;
+import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
+
 
 public class GameActivity extends AppCompatActivity {
 
-    private GameViewModel gameViewModel;
+    private GameBoardViewModel gameViewModel;
     private boolean gameHasStarted = false;
     private static final int MIN_INTERVAL = 1000;
     private static final int MAX_INTERVAL = 5000;
@@ -110,7 +112,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        gameViewModel = new ViewModelProvider(this).get(GameBoardViewModel.class);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
@@ -264,7 +266,13 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(this, playerName + " got a bonus salary...", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
-                Toast.makeText(this, playerName + " landed on an action cell", Toast.LENGTH_LONG).show();
+                if(!lobbyDTO.getActionCardDTOs().isEmpty()) {
+                ActionCardFragment actionCardFragment = ActionCardFragment.newInstance(playerName);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentContainerView2, actionCardFragment);
+                transaction.commitAllowingStateLoss();
+                Toast.makeText(this, playerName + " got an action card...", Toast.LENGTH_LONG).show();
+                }
                 break;
             case "FAMILY":
                 Toast.makeText(this, playerName+ "  got an additional peg!", Toast.LENGTH_LONG).show();

@@ -6,9 +6,12 @@ import java.util.HashMap;
 
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
+import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 
-public class GameViewModel extends ViewModel {
+public class GameBoardViewModel extends ViewModel {
+
     private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
+    private LobbyDTO oldLobbyDTO;
 
     public HashMap<Integer, CellDTO> getCellDTOHashMap() {
         return cellDTOHashMap;
@@ -22,5 +25,13 @@ public class GameViewModel extends ViewModel {
                 cellDTOHashMap.put(cell.getNumber(), cell);
             }
         }
+    }
+
+    public LobbyDTO getOldLobbyDTO() {
+        return oldLobbyDTO;
+    }
+
+    public void setOldLobbyDTO(LobbyDTO oldLobbyDTO) {
+        this.oldLobbyDTO = oldLobbyDTO;
     }
 }

@@ -56,4 +56,5 @@
     <string name="stopCell">Stop Cell: It is time for an important life decision. Will you pass your exams? Will you get married, start a family? Do you want to retire early? Make important decisions at stop cells.</string>
     <string name="retireCell">Retirement Cell: Yey finally retired. Your houses and family members are sold and the one with the most money wins. The earlier you retire, the more money you get on top.</string>
     <string name="cellQuestion">Cells?</string>
+    <string name="actioncard">ACTIONCARD</string>
 </resources>
