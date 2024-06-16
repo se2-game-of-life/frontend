@@ -8,6 +8,17 @@
     tools:context=".fragments.choiceFragments.ActionCardFragment">
 
     <TextView
+        android:id="@+id/actionCardHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="15"
+        android:text="@string/actioncard"
+        android:textAlignment="center"
+        android:textColor="#FA7951"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/actionCardTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

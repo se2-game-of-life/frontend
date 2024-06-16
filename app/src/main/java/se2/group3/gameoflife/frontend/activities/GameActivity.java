@@ -35,6 +35,7 @@ import se2.group3.gameoflife.frontend.dto.cards.CareerCardDTO;
 import se2.group3.gameoflife.frontend.dto.cards.HouseCardDTO;
 import se2.group3.gameoflife.frontend.fragments.ChoosePathFragment;
 import se2.group3.gameoflife.frontend.fragments.WinScreenFragment;
+import se2.group3.gameoflife.frontend.fragments.choiceFragments.ActionCardFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.CareerChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
@@ -265,7 +266,13 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(this, playerName + " got a bonus salary...", Toast.LENGTH_LONG).show();
                 break;
             case "ACTION":
-                Toast.makeText(this, playerName + " landed on an action cell", Toast.LENGTH_LONG).show();
+                if(!lobbyDTO.getActionCardDTOs().isEmpty()) {
+                ActionCardFragment actionCardFragment = ActionCardFragment.newInstance(playerName);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentContainerView2, actionCardFragment);
+                transaction.commitAllowingStateLoss();
+                Toast.makeText(this, playerName + " got an action card...", Toast.LENGTH_LONG).show();
+                }
                 break;
             case "FAMILY":
                 Toast.makeText(this, playerName+ "  got an additional peg!", Toast.LENGTH_LONG).show();
