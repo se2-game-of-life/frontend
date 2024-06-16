@@ -70,7 +70,7 @@ public class WinScreenFragment extends Fragment {
                         connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
                             List<PlayerDTO> players = lobby.getPlayers();
 
-                            sortPlayersByMoney(players);
+                            players.sort(Comparator.comparingDouble(PlayerDTO::getMoney).reversed());
 
                             updateUI(players);
 
@@ -86,9 +86,6 @@ public class WinScreenFragment extends Fragment {
         return rootView;
     }
 
-    private static void sortPlayersByMoney(List<PlayerDTO> players) {
-        players.sort(Comparator.comparingDouble(PlayerDTO::getMoney));
-    }
 
     private void updateUI(List<PlayerDTO> players){
         Button[] playerNames = new Button[4];
