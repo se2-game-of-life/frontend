@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
+import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 /**
@@ -59,22 +61,25 @@ public class WinScreenFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_win_screen, container, false);
         compositeDisposable  = new CompositeDisposable();
 
-
         GameActivity activity = (GameActivity) getActivity();
-        assert activity != null;
-        activity.getConnectionService(cs -> {
-            connectionService = cs;
-            assert connectionService != null;
+        if (activity != null) {
+            activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
+                if (isBound) {
+                    connectionService = activity.getService();
+                    if (connectionService != null) {
+                        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
+                            List<PlayerDTO> players = lobby.getPlayers();
 
-            connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
-                List<PlayerDTO> players = lobby.getPlayers();
+                            sortPlayersByMoney(players);
 
-                sortPlayersByMoney(players);
+                            updateUI(players);
 
-                updateUI(players);
+                        });
 
+                    }
+                }
             });
-        });
+        }
 
 
 
