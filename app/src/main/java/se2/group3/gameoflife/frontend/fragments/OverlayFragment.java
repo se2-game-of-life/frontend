@@ -82,16 +82,13 @@ public class OverlayFragment extends Fragment {
                             }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
                 });
 
-                legendButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isAdded()) {
-                            FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-                            LegendFragment legendFragment = new LegendFragment();
-                            transactionOverLay.replace(R.id.fragmentContainerView2, legendFragment);
-                            transactionOverLay.addToBackStack(null);
-                            transactionOverLay.commit();
-                        }
+                legendButton.setOnClickListener(v -> {
+                    if (isAdded()) {
+                        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+                        LegendFragment legendFragment = new LegendFragment();
+                        transactionOverLay.replace(R.id.fragmentContainerView2, legendFragment);
+                        transactionOverLay.addToBackStack(null);
+                        transactionOverLay.commit();
                     }
                 });
             }
