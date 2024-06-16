@@ -208,9 +208,11 @@ public class GameActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainerView2, stopCellFragment);
             transaction.commitAllowingStateLoss();
-        } else if(cellType.equals("TELEPORT")){
-            //todo Anastasiia add call to fragment
-
+        } else if (cellType.equals("TELEPORT")) {
+            TeleportChoiceFragment teleportChoiceFragment = TeleportChoiceFragment.newInstance();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView2, teleportChoiceFragment);
+            transaction.commitAllowingStateLoss();
         } else {
             if (!careerCardDTOS.isEmpty()) {
                 Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
