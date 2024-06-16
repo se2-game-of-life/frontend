@@ -248,7 +248,6 @@ public class GameActivity extends AppCompatActivity {
         HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
         int currentCellPosition = previousPlayer.getCurrentCellPosition();
-        PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
@@ -288,7 +287,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case "GRADUATE":
                 Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
-                if (currentPlayer.isCollegeDegree()) {
+                if (previousPlayer.isCollegeDegree()) {
                     Toast.makeText(this, playerName + " aced the exams!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, playerName + " messed up the exams and did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
