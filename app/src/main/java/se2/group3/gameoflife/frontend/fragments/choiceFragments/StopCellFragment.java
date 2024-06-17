@@ -19,7 +19,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
@@ -30,7 +29,7 @@ public class StopCellFragment extends Fragment {
     private String cellType;
     private final String TAG = "Networking";
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     public StopCellFragment() {
         // Required empty public constructor
@@ -58,8 +57,7 @@ public class StopCellFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stop_cell, container, false);
 
-        Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
-        Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
+        compositeDisposable = new CompositeDisposable();
 
         TextView name = rootView.findViewById(R.id.stopCellName);
         TextView description = rootView.findViewById(R.id.stopCellDescribtion);
@@ -103,19 +101,15 @@ public class StopCellFragment extends Fragment {
                         Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
                         Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
 
-                        yesBTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
+                        yesBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
 
-                        noBTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
+                        noBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
                     }
                 }
             });
