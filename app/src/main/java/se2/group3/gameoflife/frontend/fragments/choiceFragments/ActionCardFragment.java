@@ -29,12 +29,10 @@ import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 public class ActionCardFragment extends Fragment {
 
     private static String playername = "";
-    private final static String PLAYERNAME = "";
+    private final static String NAME = "";
     private static final String TAG = "NETWORKING";
     private View rootView;
-    private GameBoardViewModel gameViewModel;
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     public ActionCardFragment() {
@@ -45,7 +43,7 @@ public class ActionCardFragment extends Fragment {
         ActionCardFragment fragment = new ActionCardFragment();
         Bundle args = new Bundle();
 
-        args.putString(PLAYERNAME, playername);
+        args.putString(NAME, playername);
 
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +53,7 @@ public class ActionCardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            playername = getArguments().getString(PLAYERNAME);
+            playername = getArguments().getString(NAME);
         }
     }
     @Override

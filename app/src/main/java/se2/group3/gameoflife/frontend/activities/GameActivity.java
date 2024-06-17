@@ -22,9 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Random;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -189,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
     private void makeDecision(LobbyDTO lobbyDTO) {
         List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
         List<HouseCardDTO> houseCardDTOS = lobbyDTO.getHouseCardDTOS();
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
@@ -260,7 +259,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void handleCell(LobbyDTO lobbyDTO){
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
         int currentCellPosition = previousPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
