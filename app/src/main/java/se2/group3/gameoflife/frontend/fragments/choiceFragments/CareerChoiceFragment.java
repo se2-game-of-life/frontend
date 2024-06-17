@@ -28,7 +28,7 @@ public class CareerChoiceFragment extends Fragment {
     public final String TAG = "Networking";
     private View rootView;
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     public CareerChoiceFragment() {
         // Required empty public constructor
@@ -77,10 +77,6 @@ public class CareerChoiceFragment extends Fragment {
                     }
 
                     List<CareerCardDTO> cardDTOList = lobbyDTO.getCareerCardDTOS();
-                    if (cardDTOList.size() < 2) {
-                        Log.e(TAG, "Career card list does not have enough elements.");
-                        return;
-                    }
 
                     CareerCardDTO careerCard1 = cardDTOList.get(0);
                     CareerCardDTO careerCard2 = cardDTOList.get(1);
@@ -88,14 +84,6 @@ public class CareerChoiceFragment extends Fragment {
                     Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
                     Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
 
-                    String uuid = connectionService.getUuidLiveData().getValue();
-                    if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
-                        career1BTN.setVisibility(View.VISIBLE);
-                        career2BTN.setVisibility(View.VISIBLE);
-                    } else {
-                        career1BTN.setVisibility(View.GONE);
-                        career2BTN.setVisibility(View.GONE);
-                    }
 
                     updateUI(careerCard1, careerCard2);
 
@@ -117,6 +105,8 @@ public class CareerChoiceFragment extends Fragment {
             });
         }
     }
+
+
 
     private void updateUI(CareerCardDTO careerCard1, CareerCardDTO careerCard2) {
         TextView career1name = rootView.findViewById(R.id.career1Name);
