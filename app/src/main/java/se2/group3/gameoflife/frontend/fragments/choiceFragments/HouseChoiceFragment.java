@@ -28,7 +28,7 @@ public class HouseChoiceFragment extends Fragment {
     private View rootView;
     private final String TAG = "Networking";
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     public HouseChoiceFragment() {
         // Required empty public constructor
@@ -56,7 +56,7 @@ public class HouseChoiceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_house_choice, container, false);
-
+        compositeDisposable = new CompositeDisposable();
         Log.d(TAG, "HouseChoiceFragment started.");
 
         return rootView;
@@ -85,15 +85,6 @@ public class HouseChoiceFragment extends Fragment {
 
                         Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
                         Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
-
-                        String uuid = connectionService.getUuidLiveData().getValue();
-                        if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
-                            house1BTN.setVisibility(View.VISIBLE);
-                            house2BTN.setVisibility(View.VISIBLE);
-                        } else {
-                            house1BTN.setVisibility(View.GONE);
-                            house2BTN.setVisibility(View.GONE);
-                        }
 
                         house1BTN.setOnClickListener(v -> {
                             compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
