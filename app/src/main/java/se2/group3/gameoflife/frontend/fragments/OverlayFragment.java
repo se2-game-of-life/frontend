@@ -31,6 +31,7 @@ public class OverlayFragment extends Fragment {
     CompositeDisposable compositeDisposable;
 
     public OverlayFragment() {
+        // Required empty public constructor
     }
 
     @Override
