@@ -433,7 +433,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "Current index: "+index);
-        int previousIndex = 0;
+        int previousIndex;
         if (index >= 1){
             previousIndex = index-1;
         } else{
