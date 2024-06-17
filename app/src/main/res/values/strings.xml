@@ -44,17 +44,19 @@
     <string name="choose_a_career">Choose a career</string>
     <string name="choose">Choose</string>
     <string name="choose_a_house">Choose a house</string>
+    <string name="choose_to_teleport">"Teleport or stay?"</string>
     <string name="stop_cell">STOP CELL</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="i_understand">I understand</string>
-    <string name="actionCell">Action Cell: If you land on this cell an action is performed. It can affect your money or the money of your fellow players. </string>
+    <string name="actionCell">Action Cell: If you land on this cell, an action is performed. It can affect your money or the money of your fellow players, changing the game. </string>
     <string name="familyCell">Family Cell: It is time to expand the family. If you land on this field, you will get a peg added to your car. These are then sold for 50k/peg when you retire.</string>
     <string name="careerCell">Career Cell: Time for a new job. Choose one of two professions. Your current profession may also be included. Let`s see what life has in store for you.</string>
     <string name="houseCell">House Cell: Time to buy a house. You can choose between two houses. Look carefully at the prices. Fate will decide whether the house is sold at the red or black sell price when you retire!</string>
     <string name="nothingCell">Wait Cell: This cell appears after stop cells. You have just made a difficult life decision. For this reason, you only move to the next wait cell in the next round so as not to overwork yourself.</string>
     <string name="stopCell">Stop Cell: It is time for an important life decision. Will you pass your exams? Will you get married, start a family? Do you want to retire early? Make important decisions at stop cells.</string>
     <string name="retireCell">Retirement Cell: Yey finally retired. Your houses and family members are sold and the one with the most money wins. The earlier you retire, the more money you get on top.</string>
+    <string name="teleportCell">Teleport Cell: You have the option to teleport forward by 2 cells, advancing your progress, or remain in your current cell, keeping your existing position. The choice is yours.</string>
     <string name="cellQuestion">Cells?</string>
     <string name="actioncard">ACTIONCARD</string>
 </resources>

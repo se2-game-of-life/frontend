@@ -22,13 +22,13 @@
             android:text="Cell Legend"
             android:textAlignment="textStart"
             android:textColor="@color/teal_700"
-            android:textSize="34sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnBacktoGame"
             android:layout_width="140dp"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_weight="10"
             android:background="@drawable/x_button_background"
             android:text="@string/X"
@@ -126,6 +126,29 @@
             android:layout_weight="15"
             android:textAllCaps="false"
             android:text="@string/houseCell"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/teleportDraw"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/cell_teleport_background" />
+
+        <TextView
+            android:id="@+id/teleportDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:textAllCaps="false"
+            android:text="@string/teleportCell"
             android:textStyle="bold" />
     </LinearLayout>
 
