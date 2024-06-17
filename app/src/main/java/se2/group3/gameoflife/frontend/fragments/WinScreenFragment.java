@@ -28,7 +28,7 @@ public class WinScreenFragment extends Fragment {
     ConnectionService connectionService;
     CompositeDisposable compositeDisposable;
     private boolean playerName;
-    public final String TAG = "Networking";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,9 +134,12 @@ public class WinScreenFragment extends Fragment {
     }
 
     private void updateStatistics(LobbyDTO lobby) {
-        List<PlayerDTO> players = lobby.getPlayers();
+        List<PlayerDTO> players;
+        String TAG = "Networking";
 
-        if (players == null || players.isEmpty()) {
+        try{
+            players = lobby.getPlayers();
+        } catch(NullPointerException e){
             Log.e(TAG, "Player list is null or empty");
             return;
         }

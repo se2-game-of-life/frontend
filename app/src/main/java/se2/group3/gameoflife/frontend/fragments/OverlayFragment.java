@@ -95,9 +95,11 @@ public class OverlayFragment extends Fragment {
     }
 
     private void updateStatistics(LobbyDTO lobby) {
-        List<PlayerDTO> players = lobby.getPlayers();
+        List<PlayerDTO> players;
 
-        if (players == null || players.isEmpty()) {
+        try{
+            players = lobby.getPlayers();
+        } catch(NullPointerException e){
             Log.e(TAG, "Player list is null or empty");
             return;
         }
