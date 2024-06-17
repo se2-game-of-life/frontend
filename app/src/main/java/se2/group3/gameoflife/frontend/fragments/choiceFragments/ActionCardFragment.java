@@ -27,7 +27,7 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 public class ActionCardFragment extends Fragment {
 
     private String playername = "";
-    private final static String NAME = "";
+    private static final String NAME = "";
     private static final String TAG = "NETWORKING";
     private View rootView;
     private ConnectionService connectionService;
@@ -85,9 +85,7 @@ public class ActionCardFragment extends Fragment {
 
                         Button actionCardBTN = rootView.findViewById(R.id.ok);
 
-                        actionCardBTN.setOnClickListener(v -> {
-                            navigateToOverlayFragment();
-                        });
+                        actionCardBTN.setOnClickListener(v -> navigateToOverlayFragment());
 
                     }
                 }

@@ -26,7 +26,7 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
     private boolean isBound = false;
@@ -91,8 +91,8 @@ public class MenuActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
-            String UUID = connectionService.getUuidLiveData().getValue();
-            compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + UUID, LobbyDTO.class)
+            String uuid = connectionService.getUuidLiveData().getValue();
+            compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + uuid, LobbyDTO.class)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> compositeDisposable.add(connectionService.send("/app/lobby/create", playerName)

@@ -22,7 +22,7 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class ChoosePathFragment extends Fragment {
 
-    private final String TAG = "ConnectionService";
+    private static final String TAG = "ConnectionService";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
 

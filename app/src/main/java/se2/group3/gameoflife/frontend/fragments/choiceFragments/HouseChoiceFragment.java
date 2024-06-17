@@ -28,7 +28,7 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class HouseChoiceFragment extends Fragment {
     private View rootView;
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
 

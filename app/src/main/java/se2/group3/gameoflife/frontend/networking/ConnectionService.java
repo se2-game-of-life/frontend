@@ -16,12 +16,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ConnectionService extends Service {
     private static final String TAG = "ConnectionService";
@@ -132,28 +134,7 @@ public class ConnectionService extends Service {
             Disposable disposable = stompClient.topic(topic)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(stompMessage -> {
-                        try {
-                            Log.d(TAG, "Rx: " + stompMessage.getPayload());
-
-                            T value = type.cast(toObject(stompMessage.getPayload(), type));
-                            if (liveDataHashMap.containsKey(type)) {
-                                try {
-                                    MutableLiveData<T> liveData = (MutableLiveData<T>) liveDataHashMap.get(type);
-                                    assert liveData != null;
-                                    liveData.setValue(value);
-                                } catch (ClassCastException e) {
-                                    Log.e(TAG, "Error Casting!");
-                                    emitter.onError(e);
-                                }
-                            } else {
-                                newLiveDataObject.setValue(value);
-                            }
-                        } catch (ClassCastException | JsonProcessingException e) {
-                            Log.e(TAG, "Error Deserializing Data: " + e);
-                            emitter.onError(e);
-                        }
-                    }, errorMessage -> {
+                    .subscribe(stompMessage -> handleDataFromSubscribe(type, emitter, stompMessage, newLiveDataObject), errorMessage -> {
                         Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString());
                         emitter.onError(errorMessage);
                     });
@@ -163,13 +144,40 @@ public class ConnectionService extends Service {
         });
     }
 
+    private <T> void handleDataFromSubscribe(Class<T> type, CompletableEmitter emitter, StompMessage stompMessage, MutableLiveData<T> newLiveDataObject) {
+        try {
+            Log.d(TAG, "Rx: " + stompMessage.getPayload());
+
+            T value = type.cast(toObject(stompMessage.getPayload(), type));
+            if (liveDataHashMap.containsKey(type)) {
+                updateLiveDataObject(type, emitter, value);
+            } else {
+                newLiveDataObject.setValue(value);
+            }
+        } catch (ClassCastException | JsonProcessingException e) {
+            Log.e(TAG, "Error Deserializing Data: " + e);
+            emitter.onError(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void updateLiveDataObject(Class<T> type, CompletableEmitter emitter, T value) {
+        try {
+            MutableLiveData<T> liveData = (MutableLiveData<T>) liveDataHashMap.get(type);
+            assert liveData != null;
+            liveData.setValue(value);
+        } catch (ClassCastException e) {
+            Log.e(TAG, "Error Casting!");
+            emitter.onError(e);
+        }
+    }
+
     public Disposable subscribeEvent(String topic, VibrationCallback callback) {
         return stompClient.topic(topic)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(stompMessage -> {
-                        callback.onCallback();
-                    }, errorMessage -> Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString()));
+                    .subscribe(stompMessage -> callback.onCallback(),
+                            errorMessage -> Log.e(TAG, "Error Subscribing to Topic: " + errorMessage.toString()));
     }
 
     public Completable send(String destination, Object payload) {

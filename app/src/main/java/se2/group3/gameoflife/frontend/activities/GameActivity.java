@@ -41,7 +41,6 @@ import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragm
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.TeleportChoiceFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
 import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
@@ -64,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
         }
     };
 
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
     private boolean isBound = false;
@@ -123,8 +122,8 @@ public class GameActivity extends AppCompatActivity {
             return insets;
         });
 
-        serviceBound.observe(this, isBound -> {
-            if (isBound) {
+        serviceBound.observe(this, isConnectionServiceBound -> {
+            if (isConnectionServiceBound) {
                 connectionService.getLiveData(LobbyDTO.class).observe(this, v -> startVibrationFeature(this::vibrate));
                 Log.d(TAG, "Attempting to load Decision fragment!");
                 getSupportFragmentManager().beginTransaction()
@@ -168,14 +167,6 @@ public class GameActivity extends AppCompatActivity {
         v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
-    public void getConnectionService(ConnectionServiceCallback callback) {
-        serviceBound.observe(this, isBound -> {
-            if (isBound) {
-                connectionService.getLiveData(LobbyDTO.class).observe(this, v -> callback.onCallback(connectionService));
-            }
-        });
-    }
-
     public ConnectionService getService() {
         return connectionService;
     }
@@ -195,7 +186,9 @@ public class GameActivity extends AppCompatActivity {
         String cellType;
 
         try {
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+            CellDTO cell = cellDTOHashMap.get(currentCellPosition);
+            assert cell != null;
+            cellType = cell.getType();
         } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in makeDecision: " + e.getMessage());
             return;
@@ -266,7 +259,9 @@ public class GameActivity extends AppCompatActivity {
         String cellType;
 
         try {
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+            CellDTO cell = cellDTOHashMap.get(currentCellPosition);
+            assert cell != null;
+            cellType = cell.getType();
         } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
             return;

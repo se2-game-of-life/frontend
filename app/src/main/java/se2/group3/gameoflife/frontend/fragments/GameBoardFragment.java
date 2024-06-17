@@ -12,9 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -57,7 +55,7 @@ public class GameBoardFragment extends Fragment {
         assert activity != null;
 
         activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-            if(isBound) {
+            if (isBound) {
                 Log.d(TAG, "Bound");
                 connectionService = activity.getService();
                 LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
@@ -65,9 +63,9 @@ public class GameBoardFragment extends Fragment {
                 fetchBoardData();
 
                 connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobbyUpdated -> {
-                    try{
+                    try {
                         deletePlayerDots(gameViewModel.getOldLobbyDTO().getPlayers());
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         Log.e(TAG, "Deleting playerDots was called to early.");
                     }
                     updatePlayerDots(lobbyUpdated.getPlayers());
@@ -135,35 +133,7 @@ public class GameBoardFragment extends Fragment {
                     gridLayout2.addView(cell2);
 
                     // Set text and appearance of cells based on cellDTO presence
-                    if (cellDTO != null) {
-                        if (Objects.equals(cellDTO.getType(), "ACTION")) {
-                            cell1.setBackgroundResource(R.drawable.cell_action_background);
-                        } else if (Objects.equals(cellDTO.getType(), "FAMILY")) {
-                            cell1.setBackgroundResource(R.drawable.cell_addpeg_background);
-                        } else if (Objects.equals(cellDTO.getType(), "HOUSE")) {
-                            cell1.setBackgroundResource(R.drawable.cell_house_background);
-                        } else if (Objects.equals(cellDTO.getType(), "CASH")) {
-                            cell1.setBackgroundResource(R.drawable.cell_payday_background);
-                        } else if (Objects.equals(cellDTO.getType(), "CAREER")) {
-                            cell1.setBackgroundResource(R.drawable.cell_career_background);
-                        } else if (Objects.equals(cellDTO.getType(), "GROW_FAMILY")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        } else if (Objects.equals(cellDTO.getType(), "GRADUATE")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        } else if (Objects.equals(cellDTO.getType(), "MARRY")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        } else if (Objects.equals(cellDTO.getType(), "MID_LIFE")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        } else if (Objects.equals(cellDTO.getType(), "RETIRE_EARLY")) {
-                            cell1.setBackgroundResource(R.drawable.cell_stop_background);
-                        } else if (Objects.equals(cellDTO.getType(), "RETIREMENT")) {
-                            cell1.setBackgroundResource(R.drawable.retirement_background);
-                        } else if (Objects.equals(cellDTO.getType(), "NOTHING")) {
-                            cell1.setBackgroundResource(R.drawable.cell_nothing_background);
-                        } else if (Objects.equals(cellDTO.getType(), "TELEPORT")) {
-                            cell1.setBackgroundResource(R.drawable.cell_teleport_background);
-                        }
-                    }
+                    renderCell(cellDTO, cell1);
 
                     // Add cell to the GridLayout
                     gridLayout1.addView(cell1);
@@ -175,13 +145,54 @@ public class GameBoardFragment extends Fragment {
         }
 
         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
+        assert lobbyDTO != null;
         List<PlayerDTO> players = lobbyDTO.getPlayers();
-        if(players == null){
+        if (players == null) {
             Log.e(TAG, "Players are null");
-        } else{
+        } else {
             updatePlayerDots(players);
             gameViewModel.setOldLobbyDTO(lobbyDTO);
             Log.d(TAG, "Old Lobby DTO " + lobbyDTO.getPlayers().size());
+        }
+    }
+
+    private static void renderCell(CellDTO cellDTO, TextView cellView) {
+        if (cellDTO == null) return;
+        
+        switch (cellDTO.getType()) {
+            case "ACTION":
+                cellView.setBackgroundResource(R.drawable.cell_action_background);
+                break;
+            case "FAMILY":
+                cellView.setBackgroundResource(R.drawable.cell_addpeg_background);
+                break;
+            case "HOUSE":
+                cellView.setBackgroundResource(R.drawable.cell_house_background);
+                break;
+            case "CASH":
+                cellView.setBackgroundResource(R.drawable.cell_payday_background);
+                break;
+            case "CAREER":
+                cellView.setBackgroundResource(R.drawable.cell_career_background);
+                break;
+            case "GROW_FAMILY":
+            case "GRADUATE":
+            case "MARRY":
+            case "MID_LIFE":
+            case "RETIRE_EARLY":
+                cellView.setBackgroundResource(R.drawable.cell_stop_background);
+                break;
+            case "RETIREMENT":
+                cellView.setBackgroundResource(R.drawable.retirement_background);
+                break;
+            case "NOTHING":
+                cellView.setBackgroundResource(R.drawable.cell_nothing_background);
+                break;
+            case "TELEPORT":
+                cellView.setBackgroundResource(R.drawable.cell_teleport_background);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + cellDTO.getType());
         }
     }
 
@@ -262,20 +273,21 @@ public class GameBoardFragment extends Fragment {
 
         }
     }
-    private void updatePlayerDots(List<PlayerDTO> playerDTOS){
-        if(playerDTOS != null){
-            for (int i = 0; i < playerDTOS.size(); i++){
+
+    private void updatePlayerDots(List<PlayerDTO> playerDTOS) {
+        if (playerDTOS != null) {
+            for (int i = 0; i < playerDTOS.size(); i++) {
                 CellDTO cell = gameViewModel.getCellDTOHashMap().get(playerDTOS.get(i).getCurrentCellPosition());
-                if(cell != null){
-                    updatePlayerDot(cell.getRow(), cell.getCol(), i+1);
+                if (cell != null) {
+                    updatePlayerDot(cell.getRow(), cell.getCol(), i + 1);
                 }
             }
-        }else{
+        } else {
             Log.e(TAG, "New player list was null");
         }
     }
 
-    private void deletePlayerDots(List<PlayerDTO> oldPlayers){
+    private void deletePlayerDots(List<PlayerDTO> oldPlayers) {
         if (oldPlayers != null) {
             for (int i = 0; i < oldPlayers.size(); i++) {
                 PlayerDTO oldPlayer = oldPlayers.get(i);
