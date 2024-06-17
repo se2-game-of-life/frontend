@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class WinScreenFragment extends Fragment {
 
     ConnectionService connectionService;
     CompositeDisposable compositeDisposable;
+    private boolean playerName;
+    public final String TAG = "Networking";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,7 @@ public class WinScreenFragment extends Fragment {
                             players.sort(Comparator.comparingDouble(PlayerDTO::getMoney).reversed());
 
                             updateUI(players);
+                            updateStatistics(lobby);
 
                         });
 
@@ -72,6 +76,30 @@ public class WinScreenFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void setPlayerNamesButton(List<PlayerDTO> players, Button[] playerButtons) {
+        for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+            PlayerDTO player = players.get(i);
+            Button playerButton = playerButtons[i];
+            playerButton.setText(player.getPlayerName());
+        }
+        playerName = true;
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateButton(Button[] playerButtons, List<PlayerDTO> players, PlayerDTO playerDTO) {
+        setPlayerNamesButton(players, playerButtons);
+
+        for (Button playerButton : playerButtons) {
+            if (playerButton.getText().equals(playerDTO.getPlayerName())) {
+                playerButton.setText( "College: " + playerDTO.isCollegeDegree() + "\nJob: " + playerDTO.getCareerCard().getName() +
+                         "\n#Pegs: " + playerDTO.getNumberOfPegs() +
+                        "\n#houses: " + playerDTO.getHouses().size());
+
+            }
+        }
+        playerName = false;
     }
 
 
@@ -103,6 +131,67 @@ public class WinScreenFragment extends Fragment {
             playerMoney[i].setVisibility(View.VISIBLE);
             places[i].setVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateStatistics(LobbyDTO lobby) {
+        List<PlayerDTO> players = lobby.getPlayers();
+
+        if (players == null || players.isEmpty()) {
+            Log.e(TAG, "Player list is null or empty");
+            return;
+        }
+
+        Button[] playerButtons = new Button[4];
+        playerButtons[0] = rootView.findViewById(R.id.nameFirstPlayer);
+        playerButtons[1] = rootView.findViewById(R.id.nameSecondPlayer);
+        playerButtons[2] = rootView.findViewById(R.id.nameThirdPlayer);
+        playerButtons[3] = rootView.findViewById(R.id.nameFourthPlayer);
+
+        setPlayerNamesButton(players, playerButtons);
+
+        for (int i = 0; i < players.size() && i < playerButtons.length; i++) {
+            PlayerDTO player = players.get(i);
+            Button playerButton = playerButtons[i];
+            playerButton.setVisibility(View.VISIBLE);
+            playerButton.setText(player.getPlayerName());
+        }
+
+
+        playerButtons[0].setOnClickListener(v -> {
+            if (playerName) {
+                updateButton(playerButtons, players, players.get(0));
+            } else {
+                setPlayerNamesButton(players, playerButtons);
+            }
+        });
+
+
+        playerButtons[1].setOnClickListener(v -> {
+            if (playerName) {
+                updateButton(playerButtons, players, players.get(1));
+            } else {
+                setPlayerNamesButton(players, playerButtons);
+            }
+        });
+
+
+        playerButtons[2].setOnClickListener(v -> {
+            if (playerName) {
+                updateButton(playerButtons, players, players.get(2));
+            } else {
+                setPlayerNamesButton(players, playerButtons);
+            }
+        });
+
+
+        playerButtons[3].setOnClickListener(v -> {
+            if (playerName) {
+                updateButton(playerButtons, players, players.get(3));
+            } else {
+                setPlayerNamesButton(players, playerButtons);
+            }
+        });
+
     }
 
 }
