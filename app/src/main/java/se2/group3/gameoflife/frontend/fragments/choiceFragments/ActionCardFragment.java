@@ -1,7 +1,9 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -67,7 +69,7 @@ public class ActionCardFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
@@ -97,6 +99,7 @@ public class ActionCardFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateUI(ActionCardDTODTO actionCard) {
 
         TextView title = rootView.findViewById(R.id.actionCardTitle);
@@ -109,14 +112,14 @@ public class ActionCardFragment extends Fragment {
         if (actionCard.getMoneyAmount() >= 0) {
             money.setText(playername + " got " + actionCard.getMoneyAmount() + " money");
         } else {
-            money.setText(playername + " loose " + actionCard.getMoneyAmount() + " money");
+            money.setText(playername + " looses " + actionCard.getMoneyAmount() + " money");
         }
         if (actionCard.isAffectAllPlayers()) {
             affect.setText("All players are affected");
         } else if (actionCard.isAffectBank()) {
             affect.setText("The Bank is affected");
         } else {
-            affect.setText(playername + " are affected");
+            affect.setText(playername + " is affected");
         }
     }
 
