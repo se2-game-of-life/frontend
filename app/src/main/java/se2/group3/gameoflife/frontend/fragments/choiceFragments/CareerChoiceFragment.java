@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -34,12 +35,6 @@ public class CareerChoiceFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CareerChoiceFragment newInstance() {
-        CareerChoiceFragment fragment = new CareerChoiceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,19 +82,15 @@ public class CareerChoiceFragment extends Fragment {
 
                     updateUI(careerCard1, careerCard2);
 
-                    career1BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
+                    career1BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
 
-                    career2BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
+                    career2BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
                     }
                 }
             });
@@ -108,6 +99,7 @@ public class CareerChoiceFragment extends Fragment {
 
 
 
+    @SuppressLint("SetTextI18n")
     private void updateUI(CareerCardDTO careerCard1, CareerCardDTO careerCard2) {
         TextView career1name = rootView.findViewById(R.id.career1Name);
         TextView career2name = rootView.findViewById(R.id.career2Name);

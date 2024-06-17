@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,11 +21,6 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WinScreenFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WinScreenFragment extends Fragment {
     private View rootView;
 
@@ -45,12 +41,6 @@ public class WinScreenFragment extends Fragment {
     }
 
 
-    public static WinScreenFragment newInstance() {
-        WinScreenFragment fragment = new WinScreenFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
 
     @Override
@@ -85,6 +75,7 @@ public class WinScreenFragment extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateUI(List<PlayerDTO> players){
         Button[] playerNames = new Button[4];
         playerNames[0] = rootView.findViewById(R.id.nameFirstPlayer);

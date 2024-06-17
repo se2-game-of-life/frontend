@@ -1,5 +1,6 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -34,12 +35,6 @@ public class HouseChoiceFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HouseChoiceFragment newInstance() {
-        HouseChoiceFragment fragment = new HouseChoiceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,25 +81,22 @@ public class HouseChoiceFragment extends Fragment {
                         Button house1BTN = rootView.findViewById(R.id.chooseHouse1BTN);
                         Button house2BTN = rootView.findViewById(R.id.chooseHouse2BTN);
 
-                        house1BTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
+                        house1BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
 
-                        house2BTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
+                        house2BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
                     }
                 }
             });
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateUI(HouseCardDTO houseCard1, HouseCardDTO houseCard2) {
         TextView house1name = rootView.findViewById(R.id.house1Name);
         TextView house2name = rootView.findViewById(R.id.house2Name);
