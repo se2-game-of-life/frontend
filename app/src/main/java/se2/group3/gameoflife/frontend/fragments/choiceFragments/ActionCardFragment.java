@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 
 
-import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
@@ -24,11 +23,10 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
 public class ActionCardFragment extends Fragment {
 
-    private static String playername = "";
+    private String playername = "";
     private final static String NAME = "";
     private static final String TAG = "NETWORKING";
     private View rootView;
