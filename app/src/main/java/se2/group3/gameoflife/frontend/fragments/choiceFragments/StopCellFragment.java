@@ -102,17 +102,6 @@ public class StopCellFragment extends Fragment {
                     if (connectionService != null) {
                         Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
                         Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
-                        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
-                            String uuid = connectionService.getUuidLiveData().getValue();
-                            if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                                yesBTN.setVisibility(View.VISIBLE);
-                                noBTN.setVisibility(View.VISIBLE);
-                            } else {
-                                yesBTN.setVisibility(View.GONE);
-                                noBTN.setVisibility(View.GONE);
-                            }
-                        });
-
 
                         yesBTN.setOnClickListener(v -> {
                             compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
