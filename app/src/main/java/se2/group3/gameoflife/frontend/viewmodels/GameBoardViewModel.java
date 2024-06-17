@@ -10,7 +10,7 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 
 public class GameBoardViewModel extends ViewModel {
 
-    private HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
+    private final HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
     private LobbyDTO oldLobbyDTO;
 
     public HashMap<Integer, CellDTO> getCellDTOHashMap() {
