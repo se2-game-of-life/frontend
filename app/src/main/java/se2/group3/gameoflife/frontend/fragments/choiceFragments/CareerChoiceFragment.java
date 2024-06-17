@@ -1,7 +1,9 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,18 +30,12 @@ public class CareerChoiceFragment extends Fragment {
     public final String TAG = "Networking";
     private View rootView;
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     public CareerChoiceFragment() {
         // Required empty public constructor
     }
 
-    public static CareerChoiceFragment newInstance() {
-        CareerChoiceFragment fragment = new CareerChoiceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public class CareerChoiceFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -77,10 +73,6 @@ public class CareerChoiceFragment extends Fragment {
                     }
 
                     List<CareerCardDTO> cardDTOList = lobbyDTO.getCareerCardDTOS();
-                    if (cardDTOList.size() < 2) {
-                        Log.e(TAG, "Career card list does not have enough elements.");
-                        return;
-                    }
 
                     CareerCardDTO careerCard1 = cardDTOList.get(0);
                     CareerCardDTO careerCard2 = cardDTOList.get(1);
@@ -88,36 +80,27 @@ public class CareerChoiceFragment extends Fragment {
                     Button career1BTN = rootView.findViewById(R.id.chooseCareer1BTN);
                     Button career2BTN = rootView.findViewById(R.id.chooseCareer2BTN);
 
-                    String uuid = connectionService.getUuidLiveData().getValue();
-                    if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
-                        career1BTN.setVisibility(View.VISIBLE);
-                        career2BTN.setVisibility(View.VISIBLE);
-                    } else {
-                        career1BTN.setVisibility(View.GONE);
-                        career2BTN.setVisibility(View.GONE);
-                    }
 
                     updateUI(careerCard1, careerCard2);
 
-                    career1BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
+                    career1BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
 
-                    career2BTN.setOnClickListener(v -> {
-                        compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                    });
+                    career2BTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
                     }
                 }
             });
         }
     }
 
+
+
+    @SuppressLint("SetTextI18n")
     private void updateUI(CareerCardDTO careerCard1, CareerCardDTO careerCard2) {
         TextView career1name = rootView.findViewById(R.id.career1Name);
         TextView career2name = rootView.findViewById(R.id.career2Name);

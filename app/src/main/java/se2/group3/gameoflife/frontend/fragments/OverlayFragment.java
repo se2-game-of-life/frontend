@@ -31,6 +31,7 @@ public class OverlayFragment extends Fragment {
     CompositeDisposable compositeDisposable;
 
     public OverlayFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -66,21 +67,17 @@ public class OverlayFragment extends Fragment {
                     updateStatistics(lobby);
                 });
 
-                cheatButton.setOnClickListener(view -> {
-                    compositeDisposable.add(connectionService.send("/app/cheat", "")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                            }, error -> Log.e(TAG, "Error cheating: " + error)));
-                });
+                cheatButton.setOnClickListener(view -> compositeDisposable.add(connectionService.send("/app/cheat", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error cheating: " + error))));
 
-                spinButton.setOnClickListener(view -> {
-                    compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                            }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
-                });
+                spinButton.setOnClickListener(view -> compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error spin the wheel:  " + error))));
 
                 legendButton.setOnClickListener(v -> {
                     if (isAdded()) {
@@ -98,9 +95,11 @@ public class OverlayFragment extends Fragment {
     }
 
     private void updateStatistics(LobbyDTO lobby) {
-        List<PlayerDTO> players = lobby.getPlayers();
+        List<PlayerDTO> players;
 
-        if (players == null || players.isEmpty()) {
+        try{
+            players = lobby.getPlayers();
+        } catch(NullPointerException e){
             Log.e(TAG, "Player list is null or empty");
             return;
         }

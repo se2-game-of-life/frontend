@@ -1,7 +1,9 @@
 package se2.group3.gameoflife.frontend.fragments.choiceFragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,7 +19,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
@@ -28,7 +29,7 @@ public class StopCellFragment extends Fragment {
     private String cellType;
     private final String TAG = "Networking";
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     public StopCellFragment() {
         // Required empty public constructor
@@ -50,13 +51,13 @@ public class StopCellFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stop_cell, container, false);
 
-        Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
-        Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
+        compositeDisposable = new CompositeDisposable();
 
         TextView name = rootView.findViewById(R.id.stopCellName);
         TextView description = rootView.findViewById(R.id.stopCellDescribtion);
@@ -88,7 +89,7 @@ public class StopCellFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         GameActivity activity = (GameActivity) getActivity();
@@ -99,31 +100,16 @@ public class StopCellFragment extends Fragment {
                     if (connectionService != null) {
                         Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
                         Button noBTN = rootView.findViewById(R.id.stopCellNoBTN);
-                        connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
-                            String uuid = connectionService.getUuidLiveData().getValue();
-                            if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                                yesBTN.setVisibility(View.VISIBLE);
-                                noBTN.setVisibility(View.VISIBLE);
-                            } else {
-                                yesBTN.setVisibility(View.GONE);
-                                noBTN.setVisibility(View.GONE);
-                            }
-                        });
 
+                        yesBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
 
-                        yesBTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
-
-                        noBTN.setOnClickListener(v -> {
-                            compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error)));
-                        });
+                        noBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", false)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::navigateToOverlayFragment, error -> Log.e(TAG, "Error making choice: " + error))));
                     }
                 }
             });

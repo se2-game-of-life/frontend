@@ -215,28 +215,36 @@ public class GameActivity extends AppCompatActivity {
             transaction.commitAllowingStateLoss();
         } else {
             if (!careerCardDTOS.isEmpty()) {
-                Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
-                if (careerCardDTOS.size() != 2) {
-                    Log.e(TAG, "Not 2 careers provided...");
-                } else {
-                    CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragmentContainerView2, careerChoiceFragment);
-                    transaction.commitAllowingStateLoss();
-                }
+                careerDecision(careerCardDTOS);
             }
             if (!houseCardDTOS.isEmpty()) {
-                Log.d(TAG, "HouseCardList is not empty in LobbyDTO");
-                if (houseCardDTOS.size() != 2) {
-                    Toast.makeText(this, "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Not 2 houses provided...");
-                } else {
-                    HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragmentContainerView2, houseChoiceFragment);
-                    transaction.commitAllowingStateLoss();
-                }
+                houseDecision(houseCardDTOS);
             }
+        }
+    }
+
+    private void houseDecision(List<HouseCardDTO> houseCardDTOS){
+        Log.d(TAG, "HouseCardList is not empty in LobbyDTO");
+        if (houseCardDTOS.size() != 2) {
+            Toast.makeText(this, "Not enough money to buy a house.", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Not 2 houses provided...");
+        } else {
+            HouseChoiceFragment houseChoiceFragment = new HouseChoiceFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView2, houseChoiceFragment);
+            transaction.commitAllowingStateLoss();
+        }
+    }
+
+    private void careerDecision(List<CareerCardDTO> careerCardDTOS){
+        Log.d(TAG, "CareerCardList is not empty in LobbyDTO");
+        if (careerCardDTOS.size() != 2) {
+            Log.e(TAG, "Not 2 careers provided...");
+        } else {
+            CareerChoiceFragment careerChoiceFragment = new CareerChoiceFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView2, careerChoiceFragment);
+            transaction.commitAllowingStateLoss();
         }
     }
 
@@ -293,12 +301,7 @@ public class GameActivity extends AppCompatActivity {
                 }
                 break;
             case "GRADUATE":
-                Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
-                if (previousPlayer.isCollegeDegree()) {
-                    Toast.makeText(this, playerName + " aced the exams!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, playerName + " messed up the exams and did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
-                }
+                graduateCase(playerName, previousPlayer);
                 break;
             case "NOTHING":
                 handleToastsNOTHING(currentCellPosition, previousPlayer, lobbyDTO);
@@ -318,9 +321,17 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void graduateCase(String playerName, PlayerDTO previousPlayer){
+        Toast.makeText(this, playerName + " gets ready for exams...", Toast.LENGTH_LONG).show();
+        if (previousPlayer.isCollegeDegree()) {
+            Toast.makeText(this, playerName + " aced the exams!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, playerName + " messed up the exams and did not pass college, maybe in another life?", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void handleToastsNOTHING(int currentCellPosition, PlayerDTO previousPlayer, LobbyDTO lobbyDTO){
         String playerName = previousPlayer.getPlayerName();
-
         switch (currentCellPosition) {
             case 1:
                 Log.d(TAG, "College");
@@ -422,7 +433,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "Current index: "+index);
-        int previousIndex = 0;
+        int previousIndex;
         if (index >= 1){
             previousIndex = index-1;
         } else{
