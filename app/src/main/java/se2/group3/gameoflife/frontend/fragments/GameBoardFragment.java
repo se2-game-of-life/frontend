@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -159,6 +159,8 @@ public class GameBoardFragment extends Fragment {
                         } else if (Objects.equals(cellDTO.getType(), "RETIREMENT")) {
                             cell1.setBackgroundResource(R.drawable.retirement_background);
                         } else if (Objects.equals(cellDTO.getType(), "NOTHING")) {
+                            cell1.setBackgroundResource(R.drawable.cell_nothing_background);
+                        } else if(Objects.equals(cellDTO.getType(), "TELEPORT")) {
                             cell1.setBackgroundResource(R.drawable.cell_nothing_background);
                         }
                     }

@@ -67,21 +67,17 @@ public class OverlayFragment extends Fragment {
                     updateStatistics(lobby);
                 });
 
-                cheatButton.setOnClickListener(view -> {
-                    compositeDisposable.add(connectionService.send("/app/cheat", "")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                            }, error -> Log.e(TAG, "Error cheating: " + error)));
-                });
+                cheatButton.setOnClickListener(view -> compositeDisposable.add(connectionService.send("/app/cheat", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error cheating: " + error))));
 
-                spinButton.setOnClickListener(view -> {
-                    compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                            }, error -> Log.e(TAG, "Error spin the wheel:  " + error)));
-                });
+                spinButton.setOnClickListener(view -> compositeDisposable.add(connectionService.send("/app/lobby/spin", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                        }, error -> Log.e(TAG, "Error spin the wheel:  " + error))));
 
                 legendButton.setOnClickListener(v -> {
                     if (isAdded()) {
