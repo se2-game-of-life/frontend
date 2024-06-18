@@ -1,6 +1,7 @@
 package se2.group3.gameoflife.frontend.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import java.util.List;
 import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
+import se2.group3.gameoflife.frontend.activities.MainActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.PlayerDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
@@ -47,6 +49,7 @@ public class WinScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_win_screen, container, false);
         compositeDisposable  = new CompositeDisposable();
+        Button endGameBTN = rootView.findViewById(R.id.endWholeGameBTN);
 
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
@@ -62,6 +65,11 @@ public class WinScreenFragment extends Fragment {
                             updateUI(players);
                             updateStatistics(lobby);
 
+
+                            endGameBTN.setOnClickListener(v -> {
+                                Intent intent = new Intent(requireActivity(), MainActivity.class);
+                                startActivity(intent);
+                            });
                         });
 
                     }
