@@ -59,4 +59,5 @@
     <string name="teleportCell">Teleport Cell: You have the option to teleport forward by 2 cells, advancing your progress, or remain in your current cell, keeping your existing position. The choice is yours.</string>
     <string name="cellQuestion">Cells?</string>
     <string name="actioncard">ACTIONCARD</string>
+    <string name="end_game">End game</string>
 </resources>
