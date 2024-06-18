@@ -25,10 +25,11 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class OverlayFragment extends Fragment {
     private View rootView;
-    public final String TAG = "Networking";
+    public static final String TAG = "Networking";
     private boolean playerName;
     ConnectionService connectionService;
     CompositeDisposable compositeDisposable;
+    Button spinButton;
 
     public OverlayFragment() {
         // Required empty public constructor
@@ -45,9 +46,11 @@ public class OverlayFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_overlay, container, false);
         compositeDisposable = new CompositeDisposable();
 
-        Button spinButton = rootView.findViewById(R.id.spinButton);
+        spinButton = rootView.findViewById(R.id.spinButton);
         Button cheatButton = rootView.findViewById(R.id.cheatButton);
         Button legendButton = rootView.findViewById(R.id.legendBTN);
+        Button endGameButton = rootView.findViewById(R.id.endGameBTN);
+
 
         GameActivity activity = (GameActivity) requireActivity();
 
@@ -58,11 +61,7 @@ public class OverlayFragment extends Fragment {
 
                 connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {
                     String uuid = connectionService.getUuidLiveData().getValue();
-                    if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
-                        spinButton.setVisibility(View.VISIBLE);
-                    } else {
-                        spinButton.setVisibility(View.GONE);
-                    }
+                    makeSpinButtonVisible(uuid, lobby);
 
                     updateStatistics(lobby);
                 });
@@ -88,10 +87,29 @@ public class OverlayFragment extends Fragment {
                         transactionOverLay.commit();
                     }
                 });
+
+                endGameButton.setOnClickListener(v -> {
+                    if (isAdded()) {
+                        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+                        WinScreenFragment winScreenFragment = new WinScreenFragment();
+                        transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
+                        transactionOverLay.addToBackStack(null);
+                        transactionOverLay.commit();
+                    }
+                });
+
             }
         });
 
         return rootView;
+    }
+
+    private void makeSpinButtonVisible(String uuid, LobbyDTO lobby){
+        if (uuid != null && uuid.equals(lobby.getCurrentPlayer().getPlayerUUID())) {
+            spinButton.setVisibility(View.VISIBLE);
+        } else {
+            spinButton.setVisibility(View.GONE);
+        }
     }
 
     private void updateStatistics(LobbyDTO lobby) {
