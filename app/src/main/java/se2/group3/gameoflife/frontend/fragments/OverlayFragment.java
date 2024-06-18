@@ -88,15 +88,18 @@ public class OverlayFragment extends Fragment {
                     }
                 });
 
-                endGameButton.setOnClickListener(v -> {
-                    if (isAdded()) {
-                        FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
-                        WinScreenFragment winScreenFragment = new WinScreenFragment();
-                        transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
-                        transactionOverLay.addToBackStack(null);
-                        transactionOverLay.commit();
-                    }
-                });
+                endGameButton.setOnClickListener(view -> compositeDisposable.add(connectionService.send("/app/lobby/endGameSooner", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                            if (isAdded()) {
+                                FragmentTransaction transactionOverLay = requireActivity().getSupportFragmentManager().beginTransaction();
+                                WinScreenFragment winScreenFragment = new WinScreenFragment();
+                                transactionOverLay.replace(R.id.fragmentContainerView2, winScreenFragment);
+                                transactionOverLay.addToBackStack(null);
+                                transactionOverLay.commit();
+                            }
+                        }, error -> Log.e(TAG, "Error end game sooner:  " + error))));
 
             }
         });
