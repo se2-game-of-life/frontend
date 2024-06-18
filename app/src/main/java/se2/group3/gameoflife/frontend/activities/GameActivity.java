@@ -260,7 +260,6 @@ public class GameActivity extends AppCompatActivity {
 
         try {
             CellDTO cell = cellDTOHashMap.get(currentCellPosition);
-            assert cell != null;
             cellType = cell.getType();
         } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
