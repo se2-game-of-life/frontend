@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,6 +56,29 @@
             android:layout_weight="15"
             android:text="@string/actionCell"
             android:textAllCaps="false"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/cashCellDraw"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/cell_payday_background" />
+
+        <TextView
+            android:id="@+id/cashCellDescribtion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:textAllCaps="false"
+            android:text="@string/cashCell"
             android:textStyle="bold" />
     </LinearLayout>
 
