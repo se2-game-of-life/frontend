@@ -12,8 +12,8 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
@@ -31,7 +31,7 @@ class GameBoardViewModelUnitTest {
 
     @Test
     void testGetCellDTOHashMap() {
-        HashMap<Integer, CellDTO> cellMap = gameBoardViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellMap = gameBoardViewModel.getCellDTOHashMap();
         assertEquals(0, cellMap.size());
     }
 
@@ -48,7 +48,7 @@ class GameBoardViewModelUnitTest {
         when(boardDTO.getCells()).thenReturn(cells);
 
         gameBoardViewModel.setCellDTOHashMap(boardDTO);
-        HashMap<Integer, CellDTO> cellMap = gameBoardViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellMap = gameBoardViewModel.getCellDTOHashMap();
 
         assertEquals(2, cellMap.size());
         assertEquals(cell1, cellMap.get(1));

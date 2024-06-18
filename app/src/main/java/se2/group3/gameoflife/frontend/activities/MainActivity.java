@@ -15,14 +15,13 @@ import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.viewmodels.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    private MainViewModel mainViewModel;
     private TextView textUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         Button check = findViewById(R.id.buttonCheck);
         check.setOnClickListener(v -> {

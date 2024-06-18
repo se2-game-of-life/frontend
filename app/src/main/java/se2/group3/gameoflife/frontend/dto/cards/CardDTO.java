@@ -7,5 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CardDTO {
     //this class will stay empty, as it is only used to group the other DTOs
     @JsonCreator
-    public CardDTO() {}
+    public CardDTO() {
+        //empty constructor
+    }
 }

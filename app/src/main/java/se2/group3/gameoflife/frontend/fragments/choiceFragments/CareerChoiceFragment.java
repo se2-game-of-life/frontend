@@ -27,7 +27,7 @@ import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class CareerChoiceFragment extends Fragment {
-    public final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private View rootView;
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
@@ -37,10 +37,6 @@ public class CareerChoiceFragment extends Fragment {
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onDestroy() {

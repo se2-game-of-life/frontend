@@ -31,7 +31,7 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 
 public class LobbyActivity extends AppCompatActivity {
 
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
     private boolean isBound = false;
@@ -111,8 +111,8 @@ public class LobbyActivity extends AppCompatActivity {
                     startActivity(intent);
                 }, error -> Log.e(TAG, "Error Sending Start Lobby: " + error))));
 
-        serviceBound.observe(this, isBound -> {
-            if (isBound) {
+        serviceBound.observe(this, isConnectionServiceBound -> {
+            if (isConnectionServiceBound) {
                 connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
                     compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
                             .subscribeOn(Schedulers.io())

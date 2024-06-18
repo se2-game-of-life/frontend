@@ -29,10 +29,6 @@ public class WinScreenFragment extends Fragment {
     CompositeDisposable compositeDisposable;
     private boolean playerName;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onDestroy() {

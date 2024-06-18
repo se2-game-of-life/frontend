@@ -22,9 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Random;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -42,7 +41,6 @@ import se2.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragm
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment;
 import se2.group3.gameoflife.frontend.fragments.choiceFragments.TeleportChoiceFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 import se2.group3.gameoflife.frontend.networking.VibrationCallback;
 import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
@@ -65,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
         }
     };
 
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
     private boolean isBound = false;
@@ -124,8 +122,8 @@ public class GameActivity extends AppCompatActivity {
             return insets;
         });
 
-        serviceBound.observe(this, isBound -> {
-            if (isBound) {
+        serviceBound.observe(this, isConnectionServiceBound -> {
+            if (isConnectionServiceBound) {
                 connectionService.getLiveData(LobbyDTO.class).observe(this, v -> startVibrationFeature(this::vibrate));
                 Log.d(TAG, "Attempting to load Decision fragment!");
                 getSupportFragmentManager().beginTransaction()
@@ -169,14 +167,6 @@ public class GameActivity extends AppCompatActivity {
         v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
-    public void getConnectionService(ConnectionServiceCallback callback) {
-        serviceBound.observe(this, isBound -> {
-            if (isBound) {
-                connectionService.getLiveData(LobbyDTO.class).observe(this, v -> callback.onCallback(connectionService));
-            }
-        });
-    }
-
     public ConnectionService getService() {
         return connectionService;
     }
@@ -189,14 +179,16 @@ public class GameActivity extends AppCompatActivity {
     private void makeDecision(LobbyDTO lobbyDTO) {
         List<CareerCardDTO> careerCardDTOS = lobbyDTO.getCareerCardDTOS();
         List<HouseCardDTO> houseCardDTOS = lobbyDTO.getHouseCardDTOS();
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO currentPlayer = lobbyDTO.getCurrentPlayer();
         int currentCellPosition = currentPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position - make decision " + currentCellPosition);
         String cellType;
 
         try {
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+            CellDTO cell = cellDTOHashMap.get(currentCellPosition);
+            assert cell != null;
+            cellType = cell.getType();
         } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in makeDecision: " + e.getMessage());
             return;
@@ -260,14 +252,16 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void handleCell(LobbyDTO lobbyDTO){
-        HashMap<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
+        Map<Integer, CellDTO> cellDTOHashMap = gameViewModel.getCellDTOHashMap();
         PlayerDTO previousPlayer = findPreviousPlayer(lobbyDTO);
         int currentCellPosition = previousPlayer.getCurrentCellPosition();
         Log.d(TAG, "Current cell position: " + currentCellPosition);
         String cellType;
 
         try {
-            cellType = cellDTOHashMap.get(currentCellPosition).getType();
+            CellDTO cell = cellDTOHashMap.get(currentCellPosition);
+            assert cell != null;
+            cellType = cell.getType();
         } catch (NullPointerException e) {
             Log.e(TAG, "CellDTO error in handleCell: " + e.getMessage());
             return;

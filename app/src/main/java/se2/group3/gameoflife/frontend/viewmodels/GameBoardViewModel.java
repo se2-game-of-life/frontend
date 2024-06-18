@@ -3,6 +3,7 @@ package se2.group3.gameoflife.frontend.viewmodels;
 import androidx.lifecycle.ViewModel;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import se2.group3.gameoflife.frontend.dto.BoardDTO;
 import se2.group3.gameoflife.frontend.dto.CellDTO;
@@ -13,7 +14,7 @@ public class GameBoardViewModel extends ViewModel {
     private final HashMap<Integer, CellDTO> cellDTOHashMap = new HashMap<>();
     private LobbyDTO oldLobbyDTO;
 
-    public HashMap<Integer, CellDTO> getCellDTOHashMap() {
+    public Map<Integer, CellDTO> getCellDTOHashMap() {
         return cellDTOHashMap;
     }
 

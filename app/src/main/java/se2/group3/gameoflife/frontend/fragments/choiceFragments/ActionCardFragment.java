@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 
 
-import io.reactivex.disposables.CompositeDisposable;
 import se2.group3.gameoflife.frontend.R;
 import se2.group3.gameoflife.frontend.activities.GameActivity;
 import se2.group3.gameoflife.frontend.dto.LobbyDTO;
@@ -24,17 +23,14 @@ import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.dto.cards.ActionCardDTODTO;
 import se2.group3.gameoflife.frontend.fragments.OverlayFragment;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.viewmodels.GameBoardViewModel;
 
 public class ActionCardFragment extends Fragment {
 
-    private static String playername = "";
-    private final static String PLAYERNAME = "";
+    private String playername = "";
+    private static final String NAME = "";
     private static final String TAG = "NETWORKING";
     private View rootView;
-    private GameBoardViewModel gameViewModel;
     private ConnectionService connectionService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     public ActionCardFragment() {
@@ -45,7 +41,7 @@ public class ActionCardFragment extends Fragment {
         ActionCardFragment fragment = new ActionCardFragment();
         Bundle args = new Bundle();
 
-        args.putString(PLAYERNAME, playername);
+        args.putString(NAME, playername);
 
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +51,7 @@ public class ActionCardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            playername = getArguments().getString(PLAYERNAME);
+            playername = getArguments().getString(NAME);
         }
     }
     @Override
@@ -89,9 +85,7 @@ public class ActionCardFragment extends Fragment {
 
                         Button actionCardBTN = rootView.findViewById(R.id.ok);
 
-                        actionCardBTN.setOnClickListener(v -> {
-                            navigateToOverlayFragment();
-                        });
+                        actionCardBTN.setOnClickListener(v -> navigateToOverlayFragment());
 
                     }
                 }

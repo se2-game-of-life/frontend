@@ -25,9 +25,9 @@ import se2.group3.gameoflife.frontend.networking.ConnectionService;
 public class StopCellFragment extends Fragment {
     private View rootView;
 
-    private static final String CELLTYPE = "celltype";
+    private static final String TYPE = "celltype";
     private String cellType;
-    private final String TAG = "Networking";
+    private static final String TAG = "Networking";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
 
@@ -38,7 +38,7 @@ public class StopCellFragment extends Fragment {
     public static StopCellFragment newInstance(String cellType) {
         StopCellFragment fragment = new StopCellFragment();
         Bundle args = new Bundle();
-        args.putString(CELLTYPE, cellType);
+        args.putString(TYPE, cellType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +47,7 @@ public class StopCellFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            cellType = getArguments().getString(CELLTYPE);
+            cellType = getArguments().getString(TYPE);
         }
     }
 
@@ -83,6 +83,8 @@ public class StopCellFragment extends Fragment {
                 cost.setText("Cost: 0");
                 gain.setText("Who doesn't want to retire early...?");
                 break;
+            default:
+                Log.e(TAG, "Unknown Stop Cell Type");
         }
 
         return rootView;

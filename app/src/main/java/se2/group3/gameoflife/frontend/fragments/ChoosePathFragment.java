@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,14 +17,12 @@ import io.reactivex.schedulers.Schedulers;
 import se2.group3.gameoflife.frontend.R;
 
 import se2.group3.gameoflife.frontend.activities.GameActivity;
-import se2.group3.gameoflife.frontend.dto.LobbyDTO;
 import se2.group3.gameoflife.frontend.networking.ConnectionService;
-import se2.group3.gameoflife.frontend.networking.ConnectionServiceCallback;
 
 
 public class ChoosePathFragment extends Fragment {
 
-    private final String TAG = "ConnectionService";
+    private static final String TAG = "ConnectionService";
     private ConnectionService connectionService;
     private CompositeDisposable compositeDisposable;
 
