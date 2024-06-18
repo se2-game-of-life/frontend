@@ -97,6 +97,7 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
             String uuid = connectionService.getUuidLiveData().getValue();
@@ -114,6 +115,13 @@ public class MenuActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
             setContentView(R.layout.activity_join_game);
+
+            findViewById(R.id.backButtonJoinLobby).setOnClickListener(v1 -> {
+                Intent intent = new Intent(MenuActivity.this, MenuActivity.class);
+                startActivity(intent);
+            });
+
+
             findViewById(R.id.GObutton).setOnClickListener(v1 -> {
                 String playerName = getIntent().getStringExtra("username");
                 if(playerName == null) Log.e(TAG, "Error with the username intent!");
