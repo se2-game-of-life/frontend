@@ -89,10 +89,14 @@ public class WinScreenFragment extends Fragment {
 
         for (Button playerButton : playerButtons) {
             if (playerButton.getText().equals(playerDTO.getPlayerName())) {
-                playerButton.setText( "College: " + playerDTO.isCollegeDegree() + "\nJob: " + playerDTO.getCareerCard().getName() +
-                         "\n#Pegs: " + playerDTO.getNumberOfPegs() +
-                        "\n#houses: " + playerDTO.getHouses().size());
-
+                if (playerDTO.getCareerCard() == null) {
+                    playerButton.setText("College: " + playerDTO.isCollegeDegree() + "\nJob: none " + "\n#Pegs: " + playerDTO.getNumberOfPegs() +
+                            "\n#houses: " + playerDTO.getHouses().size());
+                } else {
+                    playerButton.setText("College: " + playerDTO.isCollegeDegree() + "\nJob: " + playerDTO.getCareerCard().getName() +
+                            "\n#Pegs: " + playerDTO.getNumberOfPegs() +
+                            "\n#houses: " + playerDTO.getHouses().size());
+                }
             }
         }
         playerName = false;
