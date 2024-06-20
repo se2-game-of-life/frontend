@@ -87,6 +87,7 @@ public class WinScreenFragment extends Fragment {
             PlayerDTO player = players.get(i);
             Button playerButton = playerButtons[i];
             playerButton.setText(player.getPlayerName());
+            playerButton.setTextSize(12);
         }
         playerName = true;
     }
@@ -97,6 +98,7 @@ public class WinScreenFragment extends Fragment {
 
         for (Button playerButton : playerButtons) {
             if (playerButton.getText().equals(playerDTO.getPlayerName())) {
+                playerButton.setTextSize(8);
                 if (playerDTO.getCareerCard() == null) {
                     playerButton.setText("College: " + playerDTO.isCollegeDegree() + "\nJob: none " + "\n#Pegs: " + playerDTO.getNumberOfPegs() +
                             "\n#houses: " + playerDTO.getHouses().size());
