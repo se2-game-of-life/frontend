@@ -50,8 +50,8 @@ public class GameActivity extends AppCompatActivity {
 
     private GameBoardViewModel gameViewModel;
     private boolean gameHasStarted = false;
-    private static final int MIN_INTERVAL = 1000;
-    private static final int MAX_INTERVAL = 5000;
+    private static final int MIN_INTERVAL = 60000;
+    private static final int MAX_INTERVAL = 100000;
     private final Random random = new Random();
     private final Handler handler = new Handler();
 
