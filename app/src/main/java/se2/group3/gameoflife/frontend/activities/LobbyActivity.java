@@ -106,7 +106,7 @@ public class LobbyActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
-                        Intent intent = new Intent(LobbyActivity.this, MenuActivity.class);
+                        Intent intent = new Intent(LobbyActivity.this, MainActivity.class);
                         startActivity(intent);
                     }, error -> Log.e(TAG, "Error Sending Leave Lobby: " + error)));
         });

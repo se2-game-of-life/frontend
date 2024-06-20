@@ -25,6 +25,7 @@
                 android:background="@drawable/edittext_background"
                 android:text="@string/end_game"
                 android:textColor="@color/purple_700"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.996"
