@@ -138,35 +138,22 @@ public class LobbyActivity extends AppCompatActivity {
             Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
             startActivity(intent);
         }
+        Button[] playerButtons = new Button[4];
+        playerButtons[0] = findViewById(R.id.player1Button);
+        playerButtons[1] = findViewById(R.id.player2Button);
+        playerButtons[2] = findViewById(R.id.player3Button);
+        playerButtons[3] = findViewById(R.id.player4Button);
+        playerButtons[0].setVisibility(View.INVISIBLE);
+        playerButtons[1].setVisibility(View.INVISIBLE);
+        playerButtons[2].setVisibility(View.INVISIBLE);
+        playerButtons[3].setVisibility(View.INVISIBLE);
 
         TextView lobbyID = findViewById(R.id.lobbyID);
         lobbyID.setText(String.format("ID: %s", lobbyDTO.getLobbyID()));
-        int numberPlayers = lobbyDTO.getPlayers().size();
         List<PlayerDTO> players = lobbyDTO.getPlayers();
-        for (int i = 1; i <= numberPlayers; i++){
-            switch(i){
-                case 1:
-                    Button player1 = findViewById(R.id.player1Button);
-                    player1.setText(players.get(0).getPlayerName());
-                    player1.setVisibility(View.VISIBLE);
-                    break;
-                case 2:
-                    Button player2 = findViewById(R.id.player2Button);
-                    player2.setText(players.get(1).getPlayerName());
-                    player2.setVisibility(View.VISIBLE);
-                    break;
-                case 3:
-                    Button player3 = findViewById(R.id.player3Button);
-                    player3.setText(players.get(2).getPlayerName());
-                    player3.setVisibility(View.VISIBLE);
-                    break;
-                case 4:
-                    Button player4 = findViewById(R.id.player4Button);
-                    player4.setText(players.get(3).getPlayerName());
-                    player4.setVisibility(View.VISIBLE);
-                    break;
-                default:
-            }
+        for (int i = 0; i < players.size(); i++){
+            playerButtons[i].setText(players.get(i).getPlayerName());
+            playerButtons[i].setVisibility(View.VISIBLE);
         }
     }
 }
