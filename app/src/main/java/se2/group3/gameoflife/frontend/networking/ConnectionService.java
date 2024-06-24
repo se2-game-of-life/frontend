@@ -39,7 +39,7 @@ public class ConnectionService extends Service {
         super.onCreate();
         compositeDisposable = new CompositeDisposable();
 
-        this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://10.0.2.2:8080/gameoflife");
+        this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://se2-demo.aau.at:53207/gameoflife");
         stompClient.connect();
         this.subscriptionHashMap = new HashMap<>();
         this.liveDataHashMap = new HashMap<>();
