@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background1"
     android:orientation="vertical"
-    tools:context=".fragments.choiceFragments.StopCellFragment">
+    tools:context="se.group3.gameoflife.frontend.fragments.choiceFragments.StopCellFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

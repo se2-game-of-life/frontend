@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/board3"
-    tools:context=".fragments.GameBoardFragment">
+    tools:context="se.group3.gameoflife.frontend.fragments.GameBoardFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
