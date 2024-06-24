@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background1"
     android:orientation="vertical"
-    tools:context="se.group3.gameoflife.frontend.fragments.choiceFragments.HouseChoiceFragment">
+    tools:context="se.group3.gameoflife.frontend.fragments.choice_fragments.HouseChoiceFragment">
 
 
     <TextView

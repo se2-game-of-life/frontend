@@ -145,12 +145,12 @@ public class WinScreenFragment extends Fragment {
 
     private void updateStatistics(LobbyDTO lobby) {
         List<PlayerDTO> players;
-        String TAG = "Networking";
+        String networking = "Networking";
 
         try{
             players = lobby.getPlayers();
         } catch(NullPointerException e){
-            Log.e(TAG, "Player list is null or empty");
+            Log.e(networking, "Player list is null or empty");
             return;
         }
 

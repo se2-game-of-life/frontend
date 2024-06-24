@@ -1,4 +1,4 @@
-package se.group3.gameoflife.frontend.fragments.choiceFragments;
+package se.group3.gameoflife.frontend.fragments.choice_fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
