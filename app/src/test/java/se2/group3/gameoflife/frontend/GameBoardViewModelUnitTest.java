@@ -56,6 +56,24 @@ class GameBoardViewModelUnitTest {
     }
 
     @Test
+    void testSetCellDTOHashMap_null() {
+        BoardDTO boardDTO = mock(BoardDTO.class);
+        List<List<CellDTO>> cells = new ArrayList<>();
+        List<CellDTO> row = new ArrayList<>();
+        CellDTO cell1 = new CellDTO("1", 1,"ACTION", List.of(2),2,2);
+        row.add(cell1);
+        row.add(null);
+        cells.add(row);
+        when(boardDTO.getCells()).thenReturn(cells);
+
+        gameBoardViewModel.setCellDTOHashMap(boardDTO);
+        Map<Integer, CellDTO> cellMap = gameBoardViewModel.getCellDTOHashMap();
+
+        assertEquals(1, cellMap.size());
+        assertEquals(cell1, cellMap.get(1));
+    }
+
+    @Test
     void testGetOldLobbyDTO() {
         assertNull(gameBoardViewModel.getOldLobbyDTO());
     }

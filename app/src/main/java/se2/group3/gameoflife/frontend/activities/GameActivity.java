@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -49,8 +50,8 @@ public class GameActivity extends AppCompatActivity {
 
     private GameBoardViewModel gameViewModel;
     private boolean gameHasStarted = false;
-    private static final int MIN_INTERVAL = 1000;
-    private static final int MAX_INTERVAL = 5000;
+    private static final int MIN_INTERVAL = 60000;
+    private static final int MAX_INTERVAL = 100000;
     private final Random random = new Random();
     private final Handler handler = new Handler();
 
@@ -144,6 +145,13 @@ public class GameActivity extends AppCompatActivity {
                     }
 
                 });
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //deactivate back button
             }
         });
     }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -74,6 +75,13 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //deactivate back button
+            }
+        });
+
         compositeDisposable = new CompositeDisposable();
 
         EdgeToEdge.enable(this);
@@ -88,6 +96,7 @@ public class MenuActivity extends AppCompatActivity {
             Intent intent = new Intent(MenuActivity.this, MainActivity.class);
             startActivity(intent);
         });
+
 
         findViewById(R.id.buttonCreateNewGame).setOnClickListener(v -> {
             String playerName = getIntent().getStringExtra("username");
@@ -106,6 +115,13 @@ public class MenuActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonJoinGame).setOnClickListener(v -> {
             setContentView(R.layout.activity_join_game);
+
+            findViewById(R.id.backButtonJoinLobby).setOnClickListener(v1 -> {
+                Intent intent = new Intent(MenuActivity.this, MenuActivity.class);
+                startActivity(intent);
+            });
+
+
             findViewById(R.id.GObutton).setOnClickListener(v1 -> {
                 String playerName = getIntent().getStringExtra("username");
                 if(playerName == null) Log.e(TAG, "Error with the username intent!");

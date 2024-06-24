@@ -55,7 +55,7 @@ public class GameBoardFragment extends Fragment {
         assert activity != null;
 
         activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-            if (isBound) {
+            if (Boolean.TRUE.equals(isBound)) {
                 Log.d(TAG, "Bound");
                 connectionService = activity.getService();
                 LobbyDTO lobby = connectionService.getLiveData(LobbyDTO.class).getValue();
@@ -255,16 +255,16 @@ public class GameBoardFragment extends Fragment {
             // Determine which player's dot to update based on playerNumber
             switch (playerNumber) {
                 case 1:
-                    cellView.clearPlayer1Dot(R.drawable.player1_dot);
+                    cellView.clearPlayer1Dot();
                     break;
                 case 2:
-                    cellView.clearPlayer2Dot(R.drawable.player2_dot);
+                    cellView.clearPlayer2Dot();
                     break;
                 case 3:
-                    cellView.clearPlayer3Dot(R.drawable.player3_dot);
+                    cellView.clearPlayer3Dot();
                     break;
                 case 4:
-                    cellView.clearPlayer4Dot(R.drawable.player4_dot);
+                    cellView.clearPlayer4Dot();
                     break;
                 default:
                     Log.e(TAG, "Invalid player number: " + playerNumber);

@@ -60,4 +60,5 @@
     <string name="cashCell">Cash Cell: If you pass this field you will receive your salary. If you land on this field, you will also receive your bonus salary. It is pay day!</string>
     <string name="cellQuestion">Cells?</string>
     <string name="actioncard">ACTIONCARD</string>
+    <string name="end_game">End game</string>
 </resources>
