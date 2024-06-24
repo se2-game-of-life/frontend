@@ -55,7 +55,7 @@ public class OverlayFragment extends Fragment {
         GameActivity activity = (GameActivity) requireActivity();
 
         activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-            if(isBound) {
+            if(Boolean.TRUE.equals(isBound)) {
                 connectionService = activity.getService();
                 assert connectionService != null;
 

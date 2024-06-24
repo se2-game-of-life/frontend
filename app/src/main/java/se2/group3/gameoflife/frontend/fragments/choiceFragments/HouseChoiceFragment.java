@@ -37,10 +37,6 @@ public class HouseChoiceFragment extends Fragment {
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onDestroy() {
@@ -65,7 +61,7 @@ public class HouseChoiceFragment extends Fragment {
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
             activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-                if (isBound) {
+                if (Boolean.TRUE.equals(isBound)) {
                     connectionService = activity.getService();
                     if (connectionService != null) {
                         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();

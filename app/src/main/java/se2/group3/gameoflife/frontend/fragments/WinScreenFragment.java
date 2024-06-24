@@ -54,7 +54,7 @@ public class WinScreenFragment extends Fragment {
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
             activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-                if (isBound) {
+                if (Boolean.TRUE.equals(isBound)) {
                     connectionService = activity.getService();
                     if (connectionService != null) {
                         connectionService.getLiveData(LobbyDTO.class).observe(getViewLifecycleOwner(), lobby -> {

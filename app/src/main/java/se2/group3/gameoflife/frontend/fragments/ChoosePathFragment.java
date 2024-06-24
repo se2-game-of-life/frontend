@@ -44,7 +44,7 @@ public class ChoosePathFragment extends Fragment {
         Button collegeBTN = rootView.findViewById(R.id.btnCollege);
 
         activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-            if (isBound) {
+            if (Boolean.TRUE.equals(isBound)) {
                 connectionService = activity.getService();
                 assert connectionService != null;
 

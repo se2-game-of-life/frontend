@@ -59,7 +59,7 @@ public class CareerChoiceFragment extends Fragment {
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
             activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-                if (isBound) {
+                if (Boolean.TRUE.equals(isBound)) {
                     connectionService = activity.getService();
                     if (connectionService != null) {
                     LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
