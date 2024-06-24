@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background1"
     android:orientation="vertical"
-    tools:context=".fragments.WinScreenFragment">
+    tools:context="se.group3.gameoflife.frontend.fragments.WinScreenFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

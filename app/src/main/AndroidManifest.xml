@@ -20,21 +20,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <service android:name=".networking.ConnectionService" />
+        <service android:name="se.group3.gameoflife.frontend.networking.ConnectionService" />
         <activity
-            android:name=".activities.GameActivity"
+            android:name="se.group3.gameoflife.frontend.activities.GameActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.MenuActivity"
+            android:name="se.group3.gameoflife.frontend.activities.MenuActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.LobbyActivity"
+            android:name="se.group3.gameoflife.frontend.activities.LobbyActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="se.group3.gameoflife.frontend.activities.MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background1"
     android:orientation="vertical"
-    tools:context=".fragments.choiceFragments.TeleportChoiceFragment">
+    tools:context="se.group3.gameoflife.frontend.fragments.choice_fragments.TeleportChoiceFragment">
 
     <TextView
         android:id="@+id/teleportDescription"

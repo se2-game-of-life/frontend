@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background1"
-    tools:context=".activities.GameActivity">
+    tools:context="se.group3.gameoflife.frontend.activities.GameActivity">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="se2.group3.gameoflife.frontend.fragments.ChoosePathFragment"
+            android:name="se.group3.gameoflife.frontend.fragments.ChoosePathFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -23,7 +23,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView2"
-            android:name="se2.group3.gameoflife.frontend.fragments.OverlayFragment"
+            android:name="se.group3.gameoflife.frontend.fragments.OverlayFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
