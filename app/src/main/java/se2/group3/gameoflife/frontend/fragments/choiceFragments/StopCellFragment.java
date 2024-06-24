@@ -97,7 +97,7 @@ public class StopCellFragment extends Fragment {
         GameActivity activity = (GameActivity) getActivity();
         if (activity != null) {
             activity.getIsBound().observe(getViewLifecycleOwner(), isBound -> {
-                if (isBound) {
+                if (Boolean.TRUE.equals(isBound)) {
                     connectionService = activity.getService();
                     if (connectionService != null) {
                         Button yesBTN = rootView.findViewById(R.id.stopCellYesBTN);
