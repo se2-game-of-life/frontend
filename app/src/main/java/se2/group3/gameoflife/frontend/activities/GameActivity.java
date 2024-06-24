@@ -124,7 +124,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         serviceBound.observe(this, isConnectionServiceBound -> {
-            if (isConnectionServiceBound) {
+            if (Boolean.TRUE.equals(isConnectionServiceBound)) {
                 connectionService.getLiveData(LobbyDTO.class).observe(this, v -> startVibrationFeature(this::vibrate));
                 Log.d(TAG, "Attempting to load Decision fragment!");
                 getSupportFragmentManager().beginTransaction()

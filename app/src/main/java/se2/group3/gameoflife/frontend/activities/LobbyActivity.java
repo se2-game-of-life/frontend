@@ -120,7 +120,7 @@ public class LobbyActivity extends AppCompatActivity {
                 }, error -> Log.e(TAG, "Error Sending Start Lobby: " + error))));
 
         serviceBound.observe(this, isConnectionServiceBound -> {
-            if (isConnectionServiceBound) {
+            if (Boolean.TRUE.equals(isConnectionServiceBound)) {
                 connectionService.getLiveData(LobbyDTO.class).observe(this, lobby -> {
                     compositeDisposable.add(connectionService.subscribe("/topic/lobbies/" + lobby.getLobbyID(), LobbyDTO.class)
                             .subscribeOn(Schedulers.io())

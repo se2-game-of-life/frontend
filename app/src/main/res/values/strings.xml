@@ -27,7 +27,6 @@
     <string name="choosePath">Do you want to enter the workforce right away or do you want to go to college for 100k to possibly get a better paying job later?</string>
     <string name="CollegePath">Go to college!</string>
     <string name="CareerPath">Start a career!</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="job_none">Job: none</string>
     <string name="money">"Money: "</string>
