@@ -76,15 +76,6 @@ public class TeleportChoiceFragment extends Fragment {
                         Button teleportBTN = rootView.findViewById(R.id.teleportBTN);
                         Button stayBTN = rootView.findViewById(R.id.stayBTN);
 
-                        String uuid = connectionService.getUuidLiveData().getValue();
-                        if (uuid != null && uuid.equals(lobbyDTO.getCurrentPlayer().getPlayerUUID())) {
-                            teleportBTN.setVisibility(View.VISIBLE);
-                            stayBTN.setVisibility(View.VISIBLE);
-                        } else {
-                            teleportBTN.setVisibility(View.GONE);
-                            stayBTN.setVisibility(View.GONE);
-                        }
-
                         teleportBTN.setOnClickListener(v -> compositeDisposable.add(connectionService.send("/app/lobby/choice", true)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
