@@ -75,7 +75,7 @@ public class ActionCardFragment extends Fragment {
                     if (connectionService != null) {
                         LobbyDTO lobbyDTO = connectionService.getLiveData(LobbyDTO.class).getValue();
                         if (lobbyDTO == null || lobbyDTO.getHouseCardDTOS() == null) {
-                            Log.e(TAG, "LobbyDTO is null in HouseChoiceFragment.");
+                            Log.e(TAG, "LobbyDTO is null in ActionCardFragment.");
                             return;
                         }
 

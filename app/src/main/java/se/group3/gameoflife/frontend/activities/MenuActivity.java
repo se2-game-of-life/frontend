@@ -117,7 +117,7 @@ public class MenuActivity extends AppCompatActivity {
             setContentView(R.layout.activity_join_game);
 
             findViewById(R.id.backButtonJoinLobby).setOnClickListener(v1 -> {
-                Intent intent = new Intent(MenuActivity.this, MenuActivity.class);
+                Intent intent = new Intent(MenuActivity.this, MainActivity.class);
                 startActivity(intent);
             });
 
